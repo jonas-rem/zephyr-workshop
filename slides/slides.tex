@@ -27,29 +27,74 @@
 
 \begin{frame}[fragile]{What is Zephyr?}
 
-  \begin{block}{An RTOS for IoT}
+  \begin{columns}
+
+    \begin{column}{0.6\textwidth}
+      \begin{block}{An RTOS for IoT}
+        \begin{itemize}
+          \item multiple supported architectures (ARM, RISC-V, x86...)
+          \item Multi-threading
+          \item Power Management
+        \end{itemize}
+      \end{block}
+      \begin{block}{and much more!}
+        \begin{itemize}
+          \item Open Source Bluetooth Low Energy Stack
+          \item Networking, USB, Filesystems, Cryptography
+          \item Shell, Logging, Sensors, Display, Audio
+        \end{itemize}
+      \end{block}
+      \begin{block}{Ideal to build IoT products}
+        \begin{itemize}
+          \item Well supported for a wide range of hardware
+          \item Vendor neutral steering by Linux Foundation
+          \item Coding Style and Concepts from the Linux Kernel
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{0.4\textwidth}
+      \begin{figure}
+        \includegraphics[width=0.73\textwidth]{images/zephyr_logo.png}
+      \end{figure}
+    \end{column}
+
+  \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{How to get started?}
+
+  \begin{block}{Documentation}
     \begin{itemize}
-	\item multiple supported architectures (ARM, RISC-V, x86...)
-	\item Multi-threading
-	\item Power Management
+      \item Documentation: {\scriptsize \url{https://docs.zephyrproject.org/latest/}}
+      \item Getting Started Guide: {\scriptsize \url{https://docs.zephyrproject.org/latest/develop/getting_started/}}
+      \item Supported Boards: {\scriptsize \url{https://docs.zephyrproject.org/latest/boards/}}
+      \item Samples and Demos: {\scriptsize \url{https://docs.zephyrproject.org/latest/samples/}}
     \end{itemize}
   \end{block}
-  \begin{block}{and much more!}
+  \begin{block}{Source}
     \begin{itemize}
-	\item Open Source Bluetooth Low Energy Stack
-	\item Networking, USB, Filesystems, Cryptography
-	\item Shell, Logging, Sensors, Display, Audio
-    \end{itemize}
-  \end{block}
-  \begin{block}{Ideal to build IoT products}
-    \begin{itemize}
-	\item Well supported for a wide range of hardware
-	\item Vendor neutral steering by Linux Foundation
-	\item Coding Style and Concepts from the Linux Kernel
+      \item Zephyr source (GitHub): {\scriptsize \url{https://github.com/zephyrproject-rtos/zephyr}}
+      \item Out-of-tree application example: {\scriptsize \url{https://github.com/zephyrproject-rtos/zephyr}}
     \end{itemize}
   \end{block}
 \end{frame}
 
+%******************************************************************************
+\section{Setting up the Development Environment}
+
+\begin{frame}[fragile]{Setting up the Development Environment}
+
+  \begin{block}{Types of Requirements}
+    \begin{itemize}
+      \item Linux, macOS or Windows 10/11
+      \item Installation Requirements (CMake, Python3..)
+      \item Python Requirements (west, pyocd..)
+      \item Zephyr SDK that provides Toolchains (gcc, gdb, newlib..)
+    \end{itemize}
+  \end{block}
+  Everything is described in the Zephyr Getting Started Guide.
+\end{frame}
 
 %*****************************************************************************
 \begin{frame}[standout]
