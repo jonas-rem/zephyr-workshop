@@ -96,6 +96,105 @@
   Everything is described in the Zephyr Getting Started Guide.
 \end{frame}
 
+%******************************************************************************
+\section{Samples, Applications and Products}
+
+\begin{frame}[fragile]{Samples in Zephyr}
+
+  \begin{block}{Samples}
+    \begin{itemize}
+      \item Zephyr provides a wide range of samples
+      \item Samples are located in \texttt{zephyr/samples/}
+      \item Isolated functionality or feature
+    \end{itemize}
+  \end{block}
+  \begin{block}{Tests}
+    \begin{itemize}
+      \item Tests are located in \texttt{zephyr/tests/}
+      \item Isolated test cases for a feature or hardware
+      \item Useful to test e.g. a device driver
+    \end{itemize}
+  \end{block}
+  \begin{block}{Applications}
+    \begin{itemize}
+      \item ZSWatch - Open Source Smart Watch: {\scriptsize \url{https://github.com/jakkra/ZSWatch}}
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Why Zephyr for products}
+
+    TBD: Reasons for Zephyr in Products
+
+  \begin{block}{Examples}
+    \begin{itemize}
+       \item Overview: {\scriptsize \url{https://www.zephyrproject.org/products-running-zephyr/}}
+       \item Wildlife Tracking and Protection (OpenCollar)
+       \item Wind Turbines (Vestas)
+       \item Hearing Aid (Oticon)
+       \item Wastewater Pump Monitoring (BeST Sensor, German Railways - DB)
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+%******************************************************************************
+\section{Hands-on Examples}
+
+\begin{frame}[fragile]{Examples for this Workshop}
+
+  Five different examples that show a (small) subset of Zephyr features.
+
+  \begin{block}{Examples}
+    \begin{enumerate}
+       \item Hello World
+       \item Timer
+       \item Threads
+       \item Shell
+       \item Sensor
+       \item Bluetooth Low Energy
+    \end{enumerate}
+  \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{01\_hello\_world}
+
+  \begin{itemize}
+     \item Structure of a Zephyr Application
+     \item Zephyr Repository: \texttt{zephyr/samples/hello\_world}
+  \end{itemize}
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+      \begin{block}{Build}
+        \begin{itemize}
+          \item {\scriptsize west build -b native\_posix samples/hello\_world -p}
+        \end{itemize}
+      \end{block}
+
+     \begin{block}{Run}
+        \begin{itemize}
+          \item {\scriptsize ./build/zephyr/zephyr.exe}
+        \end{itemize}
+      \end{block}
+
+    \column{0.5\textwidth}
+
+      \metroset{block=fill}
+
+      \begin{exampleblock}{Expected terminal output}
+
+        {\fontsize{7}{9.6}\selectfont
+          \begin{verbatim}
+*** Booting Zephyr OS build zephyr-v3.4.0 ***
+Hello World! native_posix
+          \end{verbatim}
+        }
+      \end{exampleblock}
+
+  \end{columns}
+
+\end{frame}
+
 %*****************************************************************************
 \begin{frame}[standout]
   Questions?
