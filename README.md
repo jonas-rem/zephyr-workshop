@@ -36,7 +36,7 @@ west update
 west build -b reel_board samples/01_hello_world -p
 
 # Or for a simulation that can run on the host system
-west build -b native_posix samples/01_hello_world -p
+west build -b qemu_cortex_m0 samples/01_hello_world -p
 ```
 
 Once the sample is build, run the following command to flash/run it:
@@ -45,6 +45,6 @@ Once the sample is build, run the following command to flash/run it:
 # on a board
 west flash
 
-# native_posix
-./build/zephyr/zephyr.exe
+# qemu simulation
+west build -t run
 ```
