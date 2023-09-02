@@ -239,7 +239,6 @@ uart:~$
           \end{verbatim}
         }
       \end{exampleblock}
-
   \end{columns}
 
 \end{frame}
@@ -263,13 +262,62 @@ Threads:
 	Total execution cycles: 144111 (0 %)
 	stack size 2048, unused 896, usage 1152 / 2048 (56 %)
 
- 0x200006b0 idle      
+ 0x200006b0 idle
 	options: 0x1, priority: 15 timeout: 0
 	Total execution cycles: 588177458 (99 %)
 	stack size 256, unused 164, usage 92 / 256 (35 %)
       \end{verbatim}
     }
   \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{05\_sensor}
+
+  \begin{itemize}
+     \item TI HDC1010: I2C Temperature and Humidity Sensor
+     \item Zephyr repository: \texttt{zephyr/samples/sensor/ti\_hdc/}
+  \end{itemize}
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.45\textwidth}
+      \begin{block}{Build}
+        \begin{itemize}
+          \item {\scriptsize west build -b reel\_board samples/05\_sensor -p}
+        \end{itemize}
+      \end{block}
+
+     \begin{block}{Flash}
+        \begin{itemize}
+          \item {\scriptsize west flash}
+        \end{itemize}
+      \end{block}
+
+     \begin{block}{Show Terminal output}
+        \begin{itemize}
+           \item {\scriptsize reel board is connected via USB-Serial}
+           \item {\scriptsize Check serial device (tty dev/com port)}
+           \item {\scriptsize connect to board via terminal (minicom, tio,..)}
+        \end{itemize}
+      \end{block}
+
+    \column{0.55\textwidth}
+
+      \begin{exampleblock}{Expected terminal output (shortened)}
+      \metroset{block=fill}
+        {\fontsize{7}{9.6}\selectfont
+          \begin{verbatim}
+*** Booting Zephyr OS build zephyr-v3.4.0 ***
+Running on arm!
+Dev 0x8584 name ti_hdc@43 is ready!
+Fetching...
+Temp = 26.356506 C, RH = 59.747314 %
+Fetching...
+Temp = 26.406860 C, RH = 59.149169 %
+          \end{verbatim}
+        }
+      \end{exampleblock}
+  \end{columns}
 
 \end{frame}
 
@@ -299,16 +347,14 @@ Threads:
         \begin{itemize}
 	  \item {\scriptsize reel board is connected via USB-Serial}
 	  \item {\scriptsize Check serial device (tty dev/com port)}
-	  \item {\scriptsize connect to board via terminal (minicom, tio,..}
+	  \item {\scriptsize connect to board via terminal (minicom, tio,..)}
         \end{itemize}
       \end{block}
 
     \column{0.55\textwidth}
 
+      \begin{exampleblock}{Expected terminal output (shortened)}
       \metroset{block=fill}
-
-  \begin{exampleblock}{Expected terminal output (shortened)}
-
         {\fontsize{7}{9.6}\selectfont
           \begin{verbatim}
 *** Booting Zephyr OS build zephyr-v3.4.0 ***
@@ -324,7 +370,6 @@ Advertising successfully started
           \end{verbatim}
         }
       \end{exampleblock}
-
   \end{columns}
 
 \end{frame}
@@ -334,10 +379,8 @@ Advertising successfully started
   \begin{columns}[T,onlytextwidth]
     \column{0.30\textwidth}
 
+      \begin{exampleblock}{Terminal output}
       \metroset{block=fill}
-
-  \begin{exampleblock}{Terminal output}
-
         {\fontsize{7}{9.6}\selectfont
           \begin{verbatim}
 [..]
