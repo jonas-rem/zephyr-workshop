@@ -19,3 +19,4 @@ manifest:
           - hal_stm32
           - hal_nxp
           - hal_ti
+          - tinycrypt
