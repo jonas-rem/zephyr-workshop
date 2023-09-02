@@ -167,13 +167,13 @@
     \column{0.5\textwidth}
       \begin{block}{Build}
         \begin{itemize}
-          \item {\scriptsize west build -b native\_posix samples/hello\_world -p}
+          \item {\scriptsize west build -b qemu\_cortex\_m0 samples/01\_hello\_world -p}
         \end{itemize}
       \end{block}
 
      \begin{block}{Run}
         \begin{itemize}
-          \item {\scriptsize ./build/zephyr/zephyr.exe}
+          \item {\scriptsize west build -t run}
         \end{itemize}
       \end{block}
 
@@ -186,10 +186,178 @@
         {\fontsize{7}{9.6}\selectfont
           \begin{verbatim}
 *** Booting Zephyr OS build zephyr-v3.4.0 ***
-Hello World! native_posix
+Hello World! qemu_cortex_m0
           \end{verbatim}
         }
       \end{exampleblock}
+
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{04\_shell}
+
+  \begin{itemize}
+     \item Interactive Shell with user-defined commands
+     \item Zephyr Repository: \texttt{zephyr/samples/subsys/shell/shell\_module}
+  \end{itemize}
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+      \begin{block}{Build}
+        \begin{itemize}
+          \item {\scriptsize west build -b qemu\_cortex\_m0 samples/04\_shell -p}
+        \end{itemize}
+      \end{block}
+
+     \begin{block}{Run}
+        \begin{itemize}
+          \item {\scriptsize west build -t run}
+          \item {\scriptsize -> press "tab" to show commands}
+        \end{itemize}
+      \end{block}
+
+    \column{0.5\textwidth}
+
+      \metroset{block=fill}
+
+      \begin{exampleblock}{Expected terminal output}
+
+        {\fontsize{7}{9.6}\selectfont
+          \begin{verbatim}
+uart:~$ 
+  bypass              clear
+  date                demo
+  device              devmem
+  dynamic             help
+  history             kernel
+  log                 log_test
+  nrf_clock_control   resize
+  retval              section_cmd
+  shell               shell_uart_release
+  stats               version
+          \end{verbatim}
+        }
+      \end{exampleblock}
+
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{04\_shell}
+
+  \metroset{block=fill}
+\begin{exampleblock}{List of threads running on the system (shortened)}
+
+    {\fontsize{7}{9.6}\selectfont
+      \begin{verbatim}
+uart:~$ kernel threads 
+Threads:
+ 0x200008a0 sysworkq  
+	options: 0x0, priority: -1 timeout: 0
+	Total execution cycles: 137 (0 %)
+	stack size 1024, unused 856, usage 168 / 1024 (16 %)
+
+*0x20000390 shell_uart
+	options: 0x0, priority: 14 timeout: 0
+	Total execution cycles: 144111 (0 %)
+	stack size 2048, unused 896, usage 1152 / 2048 (56 %)
+
+ 0x200006b0 idle      
+	options: 0x1, priority: 15 timeout: 0
+	Total execution cycles: 588177458 (99 %)
+	stack size 256, unused 164, usage 92 / 256 (35 %)
+      \end{verbatim}
+    }
+  \end{exampleblock}
+
+\end{frame}
+
+\begin{frame}[fragile]{06\_ble}
+
+  \begin{itemize}
+     \item BLE Peripheral device, temperature monitor
+     \item Zephyr repository: \texttt{zephyr/samples/bluetooth/peripheral\_ht}
+     \item App to connect: nRF Connect for Mobile (Android, iOS)
+  \end{itemize}
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.45\textwidth}
+      \begin{block}{Build}
+        \begin{itemize}
+          \item {\scriptsize west build -b reel\_board samples/06\_ble -p}
+        \end{itemize}
+      \end{block}
+
+     \begin{block}{Flash}
+        \begin{itemize}
+          \item {\scriptsize west flash}
+        \end{itemize}
+      \end{block}
+
+     \begin{block}{Show Terminal output}
+        \begin{itemize}
+	  \item {\scriptsize reel board is connected via USB-Serial}
+	  \item {\scriptsize Check serial device (tty dev/com port)}
+	  \item {\scriptsize connect to board via terminal (minicom, tio,..}
+        \end{itemize}
+      \end{block}
+
+    \column{0.55\textwidth}
+
+      \metroset{block=fill}
+
+  \begin{exampleblock}{Expected terminal output (shortened)}
+
+        {\fontsize{7}{9.6}\selectfont
+          \begin{verbatim}
+*** Booting Zephyr OS build zephyr-v3.4.0 ***
+bt_hci_core: HW Platform: Nordic Semiconductor
+bt_hci_core: HW Variant: nRF52x
+bt_hci_core: Firmware: Standard BT controller 3.4
+bt_hci_core: Identity: CC:42:FB:73:2F:36 (random)
+bt_hci_core: HCI: version 5.4 rev 0x0000, mfg 0x05f1
+bt_hci_core: LMP: version 5.4 subver 0xffff
+Bluetooth initialized
+temp device is 0x26500, name is temp@4000c000
+Advertising successfully started
+          \end{verbatim}
+        }
+      \end{exampleblock}
+
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}[fragile]{06\_ble - Connect to device via 'nRF Connect for Mobile'}
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.30\textwidth}
+
+      \metroset{block=fill}
+
+  \begin{exampleblock}{Terminal output}
+
+        {\fontsize{7}{9.6}\selectfont
+          \begin{verbatim}
+[..]
+Connected
+temperature is 28C
+Indication success
+Indication complete
+          \end{verbatim}
+        }
+      \end{exampleblock}
+
+    \column{0.30\textwidth}
+      \begin{figure}
+        \includegraphics[width=0.8\textwidth]{images/nrf_connect_scan.png}
+      \end{figure}
+    \column{0.30\textwidth}
+      \begin{figure}
+        \includegraphics[width=0.8\textwidth]{images/nrf_connect_ble_connected.png}
+      \end{figure}
+
 
   \end{columns}
 
