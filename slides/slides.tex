@@ -11,7 +11,7 @@
 \title{Zephyr in Action}
 \subtitle{Real-World Product Development - An Interactive Workshop}
 \date{\today}
-\author{Jonas Remmert}
+\author{Jonas Remmert, Phytec Messtechnik GmbH}
 
 \begin{document}
 
@@ -147,8 +147,8 @@
   \begin{block}{Examples}
     \begin{enumerate}
        \item Hello World
-       \item Timer
-       \item Threads
+       \item Logging
+       \item Workqueues (and runtime context)
        \item Shell
        \item Sensor
        \item Bluetooth Low Energy
@@ -190,10 +190,93 @@ Hello World! qemu_cortex_m0
           \end{verbatim}
         }
       \end{exampleblock}
-
   \end{columns}
-
 \end{frame}
+
+
+\begin{frame}[fragile]{02\_logging}
+
+  \begin{itemize}
+     \item Logging API
+     \item Zephyr Repository: \texttt{zephyr/samples/subsys/logging}
+  \end{itemize}
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+      \begin{block}{Build}
+        \begin{itemize}
+          \item {\scriptsize west build -b qemu\_cortex\_m0 samples/02\_logging}
+        \end{itemize}
+      \end{block}
+
+     \begin{block}{Run}
+        \begin{itemize}
+          \item {\scriptsize west build -t run}
+        \end{itemize}
+      \end{block}
+
+    \column{0.5\textwidth}
+
+      \metroset{block=fill}
+
+      \begin{exampleblock}{Expected terminal output}
+
+        {\fontsize{6}{9.6}\selectfont
+          \begin{verbatim}
+ *** Booting Zephyr OS build zephyr-v3.4.0 ***
+Hello World! qemu_cortex_m0
+[00:00.001,570] <err> hello_world: error str
+[00:00.001,593] <dbg> hello_world: main: debug str
+[00:00.001,605] <inf> hello_world: info str
+[..]
+          \end{verbatim}
+        }
+      \end{exampleblock}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{02\_workqueues}
+
+  \begin{itemize}
+     \item Work items getting called from a queue
+     \item Offload work from interrupt context
+  \end{itemize}
+
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+      \begin{block}{Build}
+        \begin{itemize}
+          \item {\scriptsize west build -b qemu\_cortex\_m0 samples/03\_workqueues}
+        \end{itemize}
+      \end{block}
+
+     \begin{block}{Run}
+        \begin{itemize}
+          \item {\scriptsize west build -t run}
+        \end{itemize}
+      \end{block}
+
+    \column{0.5\textwidth}
+
+      \metroset{block=fill}
+
+      \begin{exampleblock}{Expected terminal output}
+
+        {\fontsize{6}{9.6}\selectfont
+          \begin{verbatim}
+ *** Booting Zephyr OS build zephyr-v3.4.0 ***
+Hello World! qemu_cortex_m0
+[00:00.001,570] <err> hello_world: error str
+[00:00.001,593] <dbg> hello_world: main: debug str
+[00:00.001,605] <inf> hello_world: info str
+[..]
+          \end{verbatim}
+        }
+      \end{exampleblock}
+  \end{columns}
+\end{frame}
+
 
 \begin{frame}[fragile]{04\_shell}
 
