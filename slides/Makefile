@@ -1,4 +1,4 @@
-TEXFILE = slides.tex
+TEXFILE = workshop_slides.tex
 
 all: pdf clean
 
