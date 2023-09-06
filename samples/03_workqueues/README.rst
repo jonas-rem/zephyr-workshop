@@ -1,33 +1,16 @@
-.. _hello_world:
+Workqueues
+##########
 
-Hello World
-###########
+A sample application that demonstrates how to use workqueues. The application
+executes different work items in different workqueues. The work item
+(my_work_handler) prints the runtime context in which it is running (e.g.
+sysworkq) and the priority of the underlaying thread.
 
-Overview
-********
+Negative priorities represent cooperative priorities that can not be
+interrupted. Positive priorities represent preemptible threads, so threads that
+can be interrupted. The lower the thread priority the higher the assigned
+number. In this scheme, the idle thread has the lowest priority and therefore
+the highest assigned numer.
 
-A simple sample that can be used with any :ref:`supported board <boards>` and
-prints "Hello World" to the console.
-
-Building and Running
-********************
-
-This application can be built and executed on QEMU as follows:
-
-.. zephyr-app-commands::
-   :zephyr-app: samples/hello_world
-   :host-os: unix
-   :board: qemu_x86
-   :goals: run
-   :compact:
-
-To build for another board, change "qemu_x86" above to that board's name.
-
-Sample Output
-=============
-
-.. code-block:: console
-
-    Hello World! x86
-
-Exit QEMU by pressing :kbd:`CTRL+A` :kbd:`x`.
+Resources:
+- https://docs.zephyrproject.org/latest/kernel/services/threads/index.html#thread-priorities

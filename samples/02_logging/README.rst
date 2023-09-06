@@ -1,33 +1,8 @@
-.. _hello_world:
+Logging Sample
+##############
 
-Hello World
-###########
+This sample shows how to use the logging module. It prints different types of
+logging messages to the console.
 
-Overview
-********
-
-A simple sample that can be used with any :ref:`supported board <boards>` and
-prints "Hello World" to the console.
-
-Building and Running
-********************
-
-This application can be built and executed on QEMU as follows:
-
-.. zephyr-app-commands::
-   :zephyr-app: samples/hello_world
-   :host-os: unix
-   :board: qemu_x86
-   :goals: run
-   :compact:
-
-To build for another board, change "qemu_x86" above to that board's name.
-
-Sample Output
-=============
-
-.. code-block:: console
-
-    Hello World! x86
-
-Exit QEMU by pressing :kbd:`CTRL+A` :kbd:`x`.
+Small details can be observed, e.g. that logging messages of the type 'DBG'
+also print the function name from which they are emitted.

@@ -14,7 +14,6 @@ K_THREAD_STACK_DEFINE(my_stack_area, MY_STACK_SIZE);
 
 struct k_work_q my_work_q;
 
-
 /*
  * This work item gets executed in the context a workqueue. The workqueue itself
  * can run in different thread contexts.
