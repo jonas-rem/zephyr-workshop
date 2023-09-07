@@ -11,7 +11,8 @@
 \title{Zephyr in Action}
 \subtitle{Real-World Product Development - An Interactive Workshop}
 \date{\today}
-\author{Jonas Remmert, Phytec Messtechnik GmbH}
+\author{Jonas Remmert}
+\institute{Phytec Messtechnik GmbH - in Collaboration with PHYTEC Embedded Pvt. Ltd.}
 
 \begin{document}
 
@@ -48,7 +49,7 @@
         \begin{itemize}
           \item Well supported for a wide range of hardware
           \item Vendor neutral steering by Linux Foundation
-          \item Coding Style and Concepts from the Linux Kernel
+          \item Coding style and concepts from the Linux Kernel
         \end{itemize}
       \end{block}
     \end{column}
@@ -88,8 +89,8 @@
   \begin{block}{Types of Requirements}
     \begin{itemize}
       \item Linux, macOS or Windows 10/11
-      \item Installation Requirements (CMake, Python3..)
-      \item Python Requirements (west, pyocd..)
+      \item Installation requirements (CMake, Python3..)
+      \item Python requirements (west, pyocd..)
       \item Zephyr SDK that provides Toolchains (gcc, gdb, newlib..)
     \end{itemize}
   \end{block}
@@ -122,9 +123,7 @@
   \end{block}
 \end{frame}
 
-\begin{frame}[fragile]{Why Zephyr for products}
-
-    TBD: Reasons for Zephyr in Products
+\begin{frame}[fragile]{Zephyr for products}
 
   \begin{block}{Examples}
     \begin{itemize}
@@ -134,6 +133,9 @@
        \item Hearing Aid (Oticon)
        \item Wastewater Pump Monitoring (BeST Sensor, German Railways - DB)
     \end{itemize}
+
+  Do not miss the talk tomorrow at 6 PM: "Why BeST uses OpenSource and Zephyr RTOS"
+
   \end{block}
 \end{frame}
 
@@ -154,6 +156,38 @@
        \item Bluetooth Low Energy
     \end{enumerate}
   \end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Prerequisities to run the Samples}
+
+  \begin{itemize}
+     \item Samples located in the Zephyr repository: jremmert-phytec-iot/zephyr-workshop
+     \item Initialize the repository with west or clone into your existing workspace
+  \end{itemize}
+
+    \metroset{block=fill}
+     \begin{exampleblock}{Initialize without existing workspace}
+      {\fontsize{7}{8.6}\selectfont
+        \begin{verbatim}
+west init -m https://github.com/jremmert-phytec-iot/zephyr-workshop --mr main zephyrproject
+# update Zephyr modules
+cd zephyrproject
+west update
+        \end{verbatim}
+      }
+    \end{exampleblock}
+
+     \begin{exampleblock}{Add Repository to existing workspace}
+      {\fontsize{7}{8.6}\selectfont
+        \begin{verbatim}
+cd zephyrproject
+git clone https://github.com/jremmert-phytec-iot/zephyr-workshop
+# Change west config manifest file location to the zephyr-workshop repository
+west config manifest.path zephyr-workshop
+west update
+        \end{verbatim}
+      }
+    \end{exampleblock}
 \end{frame}
 
 \begin{frame}[fragile]{01\_hello\_world}
