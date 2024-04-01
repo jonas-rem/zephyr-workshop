@@ -69,9 +69,11 @@ static void led_fn(void)
 	LOG_INF("LED module started\n");
 	while (1) {
 		if (sys_active) {
-			gpio_pin_set(led.port, led.pin, 1);
+			gpio_pin_set_dt(&led, 1);
+			printk("LED on\n");
 			k_sleep(K_MSEC(300));
-			gpio_pin_set(led.port, led.pin, 0);
+			gpio_pin_set_dt(&led, 0);
+			printk("LED off\n");
 			k_sleep(K_MSEC(300));
 			ret = zbus_sub_wait(&led_subscriber, &chan, K_NO_WAIT);
 		} else {
