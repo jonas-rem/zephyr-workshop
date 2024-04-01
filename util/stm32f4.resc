@@ -1,0 +1,20 @@
+:name: STM32F4 Discovery
+:description: This script runs a binary on STM32F4 Discovery.
+
+
+using sysbus
+$name?="STM32F4_Discovery"
+mach create $name
+machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
+
+cpu PerformanceInMips 125
+
+$bin?=@build/zephyr/zephyr.elf
+
+logLevel 3
+
+showAnalyzer sysbus.usart2
+sysbus LoadELF $bin
+start
+
+uart_connect sysbus.usart2
