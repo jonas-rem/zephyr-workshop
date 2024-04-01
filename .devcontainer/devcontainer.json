@@ -18,7 +18,12 @@
 		      west init -l oot_repo
 		      west update
 		      west zephyr-export
-		      pip install -r zephyr/scripts/requirements.txt --break-system-packages",
+		      pip install -r zephyr/scripts/requirements.txt --break-system-packages
+		      wget https://github.com/renode/renode/releases/download/v1.15.0/renode_1.15.0_amd64.deb
+		      dpkg -i renode_1.15.0_amd64.deb
+		      apt-get -f install -y
+		      rm renode_1.15.0_amd64.deb
+		      ",
   "remoteEnv": { "LC_ALL": "C" },
   "customizations": {
     "vscode": {
