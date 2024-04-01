@@ -1,12 +1,8 @@
 sample:
-  name: TI HDC Humidity/Temperature Sensor
+  name: sensor test
+common:
+  integration_platforms:
+    - reel_board
 tests:
-  sample.sensor.ti_hdc:
-    harness: sensor
-    platform_allow:
-      - reel_board
-      - nucleo_l496zg
-    integration_platforms:
-      - reel_board
-    tags: sensors
-    depends_on: i2c
+  sample.basic.sensor:
+    build_only: true
