@@ -1,0 +1,10 @@
+menu "Application"
+
+rsource "src/modules/led/Kconfig.led"
+rsource "src/modules/button/Kconfig.button"
+
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu

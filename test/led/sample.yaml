@@ -1,0 +1,19 @@
+sample:
+  description: LED module sample
+  name: led_module_sample
+common:
+  tags: introduction
+  integration_platforms:
+    - reel_board
+    - frdm_k64f
+    - nucleo_wb55rg
+    - nucleo_l496zg
+    - mimxrt1010_evk
+    - nucleo_l452re
+    - nrf5340dk/nrf5340/cpuapp
+    # The following platforms are not supported in twister currently
+    #- nrf52833dk_nrf52833
+    #- atsamr21_xpro
+tests:
+  sample.basic.led:
+    tags: introduction

@@ -1,0 +1,9 @@
+menu "LED Test"
+
+rsource "../../app/src/modules/led/Kconfig.led"
+
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu

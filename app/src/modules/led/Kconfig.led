@@ -1,0 +1,11 @@
+config LED_MODULE_THREAD_STACK_SIZE
+	int "Thread stack size"
+	default 1024
+
+config LED_MODULE_THREAD_STACK_PRIO
+	int "Thread stack priority"
+	default 1
+
+module = LED_MODULE
+module-str = LED
+source "subsys/logging/Kconfig.template.log_config"
