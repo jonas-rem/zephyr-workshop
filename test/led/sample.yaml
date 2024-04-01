@@ -11,6 +11,7 @@ common:
     - mimxrt1010_evk
     - nucleo_l452re
     - nrf5340dk/nrf5340/cpuapp
+    - stm32f4_disco
     # The following platforms are not supported in twister currently
     #- nrf52833dk_nrf52833
     #- atsamr21_xpro
