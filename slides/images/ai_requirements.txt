@@ -1,0 +1,30 @@
+I'm preparing for a 3h Zephyr Project workshop. 
+
+This is my typical template slide that I use with latex beamer. Per default you can leave the image on thee
+right side out for now, I will add them later.
+
+\begin{frame}[fragile]{}
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+%-----------------------------------------
+      \begin{itemize}
+        \item 
+        \item 
+        \item 
+      \end{itemize}
+%-----------------------------------------
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \begin{figure}
+        %\includegraphics[width=0.8\textwidth]{}
+        \caption{}
+      \end{figure}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+Note the rules of a good presentation, stick to them if possible:
+- max 6 paragraphs
+- max 6 words per paragraph
+
+I'm an embedded developer, the presentation is for beginner and intermediate level developer and executives.

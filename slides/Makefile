@@ -1,12 +1,12 @@
 TEXFILE = workshop_slides.tex
 
-all: pdf clean
+all: pdf
 
 pdf:
-	lualatex $(TEXFILE)
+	lualatex --shell-escape $(TEXFILE)
 	@if ( grep -q "Rerun to get" $(TEXFILE:.tex=.log) ); then \
 		echo "Rerunning LaTeX..."; \
-		lualatex $(TEXFILE); \
+		lualatex --shell-escape $(TEXFILE); \
 	fi
 
 clean:
