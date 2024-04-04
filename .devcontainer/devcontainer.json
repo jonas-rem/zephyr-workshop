@@ -23,6 +23,7 @@
 		      dpkg -i renode_1.15.0_amd64.deb
 		      apt-get -f install -y
 		      rm renode_1.15.0_amd64.deb
+		      cd zephyr-workshop
 		      ",
   "remoteEnv": { "LC_ALL": "C" },
   "customizations": {
@@ -34,6 +35,7 @@
       },
       "extensions": [
         "ms-vscode.cpptools-extension-pack",
+        "plorefice.devicetree"
       ]
     }
   }

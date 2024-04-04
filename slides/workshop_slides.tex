@@ -925,12 +925,6 @@ temperature is 24C
 \subsection{Hands-on 2}
 \begin{frame}[fragile]{Test the Samples - Hands-on 2}
   \begin{columns}
-    \begin{column}{0.6\textwidth}
-     Navigate to the zephyr-workshop repository.
-      \begin{itemize}
-        \item \scriptsize cd zephyr-workshop
-      \end{itemize}
-
       Build and run the samples\footnotemark[1]:
       \begin{itemize}
         \item \scriptsize west build -b qemu\_cortex\_m0 samples/02\_logging -p
@@ -987,7 +981,7 @@ zephyrproject
 ├── zephyr
 │   ├── samples
 │   ├── west.yml
-└── zephyr-workshop (app)
+└── zephyr-workshop
     ├── west.yml
     └── samples
         └── 01_hello_world
@@ -1283,9 +1277,9 @@ arduino_i2c: &i2c0 {
     \begin{column}{0.6\textwidth}
        Take a random board. Find out if it is supported (Zephyr Docs).
 
-       Build the blinky sample for your board:
+       Build the blinky sample for your board, replace <board>:
        \begin{itemize}
-               \item \scriptsize\texttt{west build -b <board> zephyr/samples/basic/blinky -p}
+               \item \tiny\texttt{west build -b <board> ../zephyr/samples/basic/blinky -p}
        \end{itemize}
 
        Flash\footnotemark[1] and check if the led is blinking:
@@ -1301,9 +1295,9 @@ arduino_i2c: &i2c0 {
       \end{figure}
     \end{column}
   \end{columns}
-        \footnotetext[1]{Flashing is not supported from Codespaces. Download
-        \texttt{build/zephyr/zephyr.hex}, send the file to j.remmert@phytec.de
-        or copy to a USB stick and I will flash it for you.}
+	\footnotetext[1]{Flashing is not supported from Codespaces. Download
+	\texttt{zephyr-workshop/build/zephyr/zephyr.elf}, send the file to
+	\texttt{<mail>} or copy to a USB stick and I will flash it for you.}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Application Development}
@@ -1487,7 +1481,7 @@ ZBUS_CHAN_ADD_OBS(button_ch, button_test, DEFAULT_OBS_PRIO);
       Zephyr Test Framework (Ztest)
       \begin{description}
         \item [twister] Test runner for Zephyr
-        \item [Harness] ztest, test, console, pytest, gtest,robot
+        \item [Harness] ztest, test, console, pytest, gtest, robot
       \end{description}
 
       In this example, the integration test feature is used
