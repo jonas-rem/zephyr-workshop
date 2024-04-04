@@ -1,4 +1,3 @@
-#include <zephyr/kernel.h>
 #include <zephyr/zbus/zbus.h>
 #include <zephyr/shell/shell.h>
 
@@ -7,9 +6,11 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(app, CONFIG_LED_MODULE_LOG_LEVEL);
 
-static bool sys_active = true;
+/* Boot to State Standby */
+static enum sys_states sys_state = SYS_STANDBY;
 
-static void led_msg(enum sys_msg msg)
+
+static void led_msg(enum sys_states msg)
 {
 	int err;
 
@@ -21,33 +22,42 @@ static void led_msg(enum sys_msg msg)
 
 static void button_msg_cb(const struct zbus_channel *chan)
 {
-	const enum sys_msg *msg_type;
+	const enum sys_events *msg_type;
 
 	/* Get message from channel. */
 	msg_type = zbus_chan_const_msg(chan);
 
-	switch (*msg_type) {
-	case SYS_BUTTON_PRESSED:
-		sys_active = !sys_active;
-		if (sys_active) {
-			LOG_INF("System active");
-			led_msg(SYS_ACTIVE);
-		} else {
-			LOG_INF("System sleep");
-			led_msg(SYS_SLEEP);
-		}
+	if (*msg_type != SYS_BUTTON_PRESSED) {
+		/* Ignore other messages */
+		return;
+	}
+
+	/* Assign new system state */
+	switch (sys_state) {
+	case SYS_SLEEP:
+		sys_state = SYS_STANDBY;
+		LOG_INF("System state standby");
 		break;
+	case SYS_STANDBY:
+		sys_state = SYS_SLEEP;
+		LOG_INF("System state sleep");
+		break;
+	/* Add your code here */
+
+	/* */
 	default:
-		/* Ignore nonrelevant messages */
+		return;
 		break;
 	}
+
+	led_msg(sys_state);
 }
 
 static int cmd_button(const struct shell *sh, size_t argc, char **argv,
 		    void *data)
 {
 	int err;
-	enum sys_msg msg;
+	enum sys_events msg;
 
 	msg = SYS_BUTTON_PRESSED;
 
@@ -71,7 +81,8 @@ SHELL_CMD_REGISTER(my_app, &my_app_cmds, "my App test", NULL);
 
 int main(void)
 {
-	LOG_INF("System %s", sys_active ? "active" : "sleep");
+	/* Notify the LED module about the initial system state */
+	led_msg(sys_state);
 
 	return 0;
 }

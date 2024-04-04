@@ -9,7 +9,7 @@ LOG_MODULE_REGISTER(app, CONFIG_BUTTON_MODULE_LOG_LEVEL);
 
 void button_test_msg_cb(const struct zbus_channel *chan)
 {
-	const enum sys_msg *msg_type;
+	const enum sys_events *msg_type;
 
 	/* Get message from channel. */
 	msg_type = zbus_chan_const_msg(chan);

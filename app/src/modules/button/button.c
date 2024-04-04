@@ -24,7 +24,7 @@ static struct k_work_delayable send_event_work;
 static void send_event_work_handler(struct k_work *work)
 {
 	int err;
-	enum sys_msg msg;
+	enum sys_events msg;
 
 	/* Due to button bouncing, check if button was pressed or released */
 	if (gpio_pin_get(button.port, button.pin) == 0) {

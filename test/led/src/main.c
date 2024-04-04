@@ -1,4 +1,3 @@
-#include <zephyr/kernel.h>
 #include <zephyr/zbus/zbus.h>
 #include <zephyr/shell/shell.h>
 
@@ -7,7 +6,7 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(app, CONFIG_LED_MODULE_LOG_LEVEL);
 
-static void led_msg(enum sys_msg msg)
+static void led_msg(enum sys_states msg)
 {
 	int err;
 
@@ -22,12 +21,19 @@ static int cmd_led(const struct shell *sh, size_t argc, char **argv,
 {
 	int val = (intptr_t)data;
 
-	if (val == 0) {
+	switch (val) {
+	case 0:
 		led_msg(SYS_SLEEP);
-	} else if (val == 1) {
-		led_msg(SYS_ACTIVE);
-	} else {
+		break;
+	case 1:
+		led_msg(SYS_STANDBY);
+		break;
+	/* Add your code here */
+
+	/* */
+	default:
 		shell_print(sh, "Invalid argument");
+		break;
 	}
 
 	return 0;
@@ -35,7 +41,10 @@ static int cmd_led(const struct shell *sh, size_t argc, char **argv,
 
 SHELL_SUBCMD_DICT_SET_CREATE(sub_led_cmds, cmd_led,
 	(sys_sleep, 0, "System is sleeping"),
-	(sys_active, 1, "System is active")
+	(sys_standby, 1, "System is in standby")
+	/* Add your code here */
+
+	/* */
 );
 
 SHELL_STATIC_SUBCMD_SET_CREATE(my_app_cmds,

@@ -1,4 +1,3 @@
-#include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/zbus/zbus.h>
 
@@ -6,7 +5,7 @@
 
 
 ZBUS_CHAN_DEFINE(button_ch,		/* Name */
-		 enum sys_msg,		/* Message type */
+		 enum sys_events,	/* Message type */
 		 NULL,			/* Validator */
 		 NULL,			/* User data */
 		 ,			/* Observers */
@@ -14,7 +13,7 @@ ZBUS_CHAN_DEFINE(button_ch,		/* Name */
 );
 
 ZBUS_CHAN_DEFINE(led_ch,		/* Name */
-		 enum sys_msg,		/* Message type */
+		 enum sys_states,	/* Message type */
 		 NULL,			/* Validator */
 		 NULL,			/* User data */
 		 ,			/* Observers */

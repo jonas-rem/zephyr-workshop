@@ -21,39 +21,25 @@ static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(LED0_NODE, gpios);
 ZBUS_SUBSCRIBER_DEFINE(led_subscriber, 4);
 ZBUS_CHAN_ADD_OBS(led_ch, led_subscriber, DEFAULT_OBS_PRIO);
 
-
-static bool read_sys_msg(void)
+static enum sys_states read_sys_msg(void)
 {
 	int ret;
-	enum sys_msg msg;
+	enum sys_states msg;
 
 	ret = zbus_chan_read(&led_ch, &msg, K_NO_WAIT);
-	if (ret == 0) {
-		switch (msg) {
-		case SYS_ACTIVE:
-			LOG_INF("Signal system active\n");
-			return true;
-			break;
-		case SYS_SLEEP:
-			LOG_INF("Signal system sleep\n");
-			return false;
-			break;
-		default:
-			LOG_ERR("Invalid message");
-			return false;
-			break;
-		}
-	} else {
+	if (ret != 0) {
 		LOG_ERR("zbus_chan_read, error: %d", ret);
 		return false;
 	}
+
+	return msg;
 }
 
 /* LED Task Function */
 static void led_fn(void)
 {
 	const struct zbus_channel *chan;
-	bool sys_active = true;
+	enum sys_states sys_state;
 	int ret;
 
 	if (!gpio_is_ready_dt(&led)) {
@@ -66,24 +52,40 @@ static void led_fn(void)
 		return;
 	}
 
+	/* Boot to State Sleep */
+	sys_state = SYS_SLEEP;
+
 	LOG_INF("LED module started\n");
 	while (1) {
-		if (sys_active) {
-			gpio_pin_set_dt(&led, 1);
-			printk("LED on\n");
-			k_sleep(K_MSEC(300));
+		switch (sys_state) {
+		case SYS_SLEEP:
 			gpio_pin_set_dt(&led, 0);
 			printk("LED off\n");
-			k_sleep(K_MSEC(300));
-			ret = zbus_sub_wait(&led_subscriber, &chan, K_NO_WAIT);
-		} else {
+			/* Nothing to do, blocking wait to save energy */
 			ret = zbus_sub_wait(&led_subscriber, &chan, K_FOREVER);
-			/* Wait a short moment for the system to wake up from
-			 * sleep */
-			k_sleep(K_MSEC(1));
+			break;
+		case SYS_STANDBY:
+			gpio_pin_set_dt(&led, 1);
+			printk("LED on\n");
+			k_sleep(K_MSEC(50));
+			gpio_pin_set_dt(&led, 0);
+			printk("LED off\n");
+			k_sleep(K_MSEC(500));
+			/* Blinking led, blocking wait not possible */
+			ret = zbus_sub_wait(&led_subscriber, &chan, K_NO_WAIT);
+			break;
+		/* Add your code here */
+
+		/* */
+		default:
+			break;
 		}
 		if (ret == 0) {
-			sys_active = read_sys_msg();
+			/* Wait a short moment for the system to wake up from
+			 * sleep.
+			 */
+			k_sleep(K_MSEC(1));
+			sys_state = read_sys_msg();
 		}
 	}
 }
