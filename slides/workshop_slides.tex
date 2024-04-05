@@ -925,6 +925,7 @@ temperature is 24C
 \subsection{Hands-on 2}
 \begin{frame}[fragile]{Test the Samples - Hands-on 2}
   \begin{columns}
+    \begin{column}{0.6\textwidth}
       Build and run the samples\footnotemark[1]:
       \begin{itemize}
         \item \scriptsize west build -b qemu\_cortex\_m0 samples/02\_logging -p
@@ -1646,6 +1647,88 @@ Run the integration tests with twister
     \item Allows for interactive debugging, system state inspection, and automated testing
     \item Open Source, actively developed by Antmicro
   \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Hands-On 4: Extension to 3 States - test}
+  \begin{minted}[
+    linenos,
+    numbersep=15pt,
+    framesep=2mm,
+    bgcolor=lightgray!20,
+    baselinestretch=1,
+    fontsize=\tiny,
+    firstnumber=1,
+    stepnumber=5,
+  ]{diff}
+test/led/src/main.c
+@@ -29,7 +29,9 @@ static int cmd_led(const struct shell *sh, size_t argc, char **argv,
+                led_msg(SYS_STANDBY);
+                break;
+        /* Add your code here */
++       case 2:
++               led_msg(SYS_ACTIVE);
++               break;
+        /* */
+        default:
+                shell_print(sh, "Invalid argument");
+@@ -41,9 +43,9 @@ static int cmd_led(const struct shell *sh, size_t argc, char **argv,
+ SHELL_SUBCMD_DICT_SET_CREATE(sub_led_cmds, cmd_led,
+        (sys_sleep, 0, "System is sleeping"),
+-       (sys_standby, 1, "System is in standby")
++       (sys_standby, 1, "System is in standby"),
+        /* Add your code here */
++       (sys_active, 2, "System is active")
+        /* */
+ );
+  \end{minted}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Hands-On 4: Extension to 3 States - app}
+  \begin{minted}[
+    linenos,
+    numbersep=15pt,
+    framesep=2mm,
+    bgcolor=lightgray!20,
+    baselinestretch=1,
+    fontsize=\tiny,
+    firstnumber=1,
+    stepnumber=5,
+  ]{diff}
+app/src/common/message_channel.h
+@@ -20,6 +20,10 @@ enum sys_states {
+        /* Add your code here */
++       SYS_ACTIVE,
+        /* */
+ };
+app/src/main.c
+@@ -39,11 +39,14 @@ static void button_msg_cb(const struct zbus_channel *chan)
+                break;
+        case SYS_STANDBY:
++               sys_state = SYS_ACTIVE;
++               LOG_INF("System state active");
+                break;
+        /* Add your code here */
++       case SYS_ACTIVE:
++               sys_state = SYS_SLEEP;
++               LOG_INF("System state sleep");
++               break;
+        /* */
+        default:
+                return;
+app/src/modules/led/led.c
+@@ -75,7 +75,12 @@ static void led_fn(void)
+                        break;
+                /* Add your code here */
++               case SYS_ACTIVE:
++                       gpio_pin_set_dt(&led, 1);
++                       printk("LED on\n");
++                       /* Nothing to do, blocking wait to save energy */
++                       ret = zbus_sub_wait(&led_subscriber, &chan, K_FOREVER);
++                       break;
+                /* */
+                default:
+                        break;
+  \end{minted}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
