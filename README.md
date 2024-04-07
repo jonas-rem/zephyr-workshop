@@ -5,6 +5,10 @@ new to Zephyr. This repository includes slides firmware samples and a modular
 application. It links to existing references on how to get started and explains
 basic RTOS concepts with examples.
 
+The slides will guide you through the content and the hands-on parts of the
+workshop. Please check out the pdf version of the slides at the [releases
+section](https://github.com/jonas-rem/zephyr-workshop/releases)
+
 Resources to quickly get started with Zephyr:
 
 - [Zephyr Documentation](https://docs.zephyrproject.org/latest/)
