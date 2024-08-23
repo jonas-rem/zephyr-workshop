@@ -1,5 +1,5 @@
 {
-  "image": "ubuntu:23.10",
+  "image": "ubuntu:24.04",
   "workspaceMount": "source=${localWorkspaceFolder},target=/zephyrproject/zephyr-workshop,type=bind",
   "workspaceFolder": "/zephyrproject",
   "onCreateCommand": "apt update
