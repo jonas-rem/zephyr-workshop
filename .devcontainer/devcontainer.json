@@ -19,10 +19,11 @@
 		      west update
 		      west zephyr-export
 		      pip install -r zephyr/scripts/requirements.txt --break-system-packages
-		      wget https://github.com/renode/renode/releases/download/v1.15.2/renode_1.15.2_amd64.deb
-		      dpkg -i renode_1.15.2_amd64.deb
-		      apt-get -f install -y
-		      rm renode_1.15.2_amd64.deb
+		      mkdir renode_portable
+		      wget https://builds.renode.io/renode-latest.linux-portable.tar.gz
+		      tar xf  renode-latest.linux-portable.tar.gz -C renode_portable --strip-components=1
+		      echo \"export PATH='/zephyrproject/renode_portable:$PATH'\" >> ~/.bashrc
+		      rm renode-latest.linux-portable.tar.gz
 		      cd zephyr-workshop
 		      ",
   "remoteEnv": { "LC_ALL": "C" },
