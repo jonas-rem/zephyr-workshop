@@ -105,19 +105,22 @@
   \end{columns}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Areas of Work and Contributions}
+\begin{frame}[fragile]{Areas of Work}
   \begin{columns}
     \begin{column}{0.5\textwidth}
       \begin{description}
-        \item[Zephyr:] Contributor to Zephyr Project
         \item[Hardware:] Customer-specific hardware solutions, focus on low-power embedded systems
         \item[nRF9160 SoC:] Developmment of IoT applications using the Nordic nRF9160 SoC for both hardware and firmware
+        \item[Zephyr:] Contributor to the Zephyr Project
+	\item[Example:] Pump Monitor, developed in collaboration with \textbf{BeST Berliner Sensortechnik GmbH}
       \end{description}
     \end{column}
     \begin{column}{0.4\textwidth}
       \begin{figure}
-        \includegraphics[width=0.8\textwidth]{images/jrov2201.jpg}
-        \caption{Pump Monitor, developed in collaboration with BeST Berliner Sensortechnik GmbH}
+        \includegraphics[width=0.7\textwidth]{images/jrov2201.jpg}
+      \end{figure}
+      \begin{figure}
+        \includegraphics[width=0.45\textwidth]{images/jrov2201_housing.png}
       \end{figure}
     \end{column}
   \end{columns}
@@ -127,19 +130,19 @@
   \begin{columns}[]
     \begin{column}{0.6\textwidth}
       \begin{itemize}
-        \item Merge theory with hands-on practice
+        \item Combine theory with hands-on practice
         \item Introduction to Zephyr RTOS
-        \item Zephyr setup guide
+        \item Setting up the SDK
           \begin{itemize}
-            \item Local setup
-            \item GitHub Codespaces configuration
+            \item On a Local Machine
+            \item GitHub Codespaces
           \end{itemize}
         \item Exploring some of Zephyr's key features
         \item Hands-on Sessions
           \begin{enumerate}
             \item Development environment setup
-            \item Build and test samples
-            \item Build Zephyr for different boards
+            \item Build and run samples
+            \item Build Zephyr applications for different boards
             \item Extend an application
           \end{enumerate}
       \end{itemize}
@@ -169,7 +172,7 @@
       \begin{itemize}
         \item More than an RTOS, IoT ecosystm
         \item Microcontrollers, wireless SoCs to multicore SoCs
-        \item Alternative to vendor-specific SDKs
+        \item Alternative to vendor SDKs
         \item Industry increasingly adopts Zephyr
         \item Set to be primary IoT ecosystem, if resource constraints do not allow to run Linux
       \end{itemize}
@@ -194,11 +197,11 @@
   \begin{columns}
     \begin{column}{0.6\textwidth}
       \begin{itemize}
-        \item Managed by Linux Foundation
-        \item Vendor-neutrality ensures fairness and interoperability
-        \item Technical Steering Committee (TSC) leadership
-        \item Open Source enhances software supply chain security
-        \item Collaborative, community-driven innovation
+        \item Governed by the Linux Foundation
+        \item Vendor-neutrality: fairness and interoperability
+        \item Technical Steering Committee (TSC) and Working Groups (WG) make technical decisions
+        \item Security and tooling (e.g. SBOM) as integral part
+        \item Safety certification ongoing
       \end{itemize}
     \end{column}
     \begin{column}{0.4\textwidth}
@@ -217,6 +220,7 @@
        \item Overview: {\scriptsize \url{https://www.zephyrproject.org/products-running-zephyr/}}
        \item Wildlife Tracking and Protection (OpenCollar)
        \item Wind Turbines (Vestas)
+       \item Irrigation (Gardena)
        \item Hearing Aid (Oticon)
        \item Wastewater Pump Monitoring (BeST Berliner Sensortechnik, German Railways - DB)
     \end{itemize}
@@ -230,7 +234,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Getting Started Guide}
   \begin{figure}
-    \includegraphics[width=0.9\textwidth]{images/zephyr_getting_started.png}
+    \includegraphics[width=\textwidth]{images/zephyr_getting_started.png}
     \caption*{\scriptsize\href{https://docs.zephyrproject.org/latest/getting_started/index.html}{https://docs.zephyrproject.org/latest/getting\_started/index.html}}
   \end{figure}
 \end{frame}
