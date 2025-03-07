@@ -1,4 +1,17 @@
 *.pdf
 build/
 .cache/
-twister-out/
+twister-out*/
+
+
+# latex build artifacts
+_minted
+svg-inkscape/
+*.aux
+*.bbl
+*.log
+*.out
+*.nav
+*.snm
+*.toc
+*.vrb
