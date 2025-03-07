@@ -1637,6 +1637,44 @@ Run the integration tests with twister
 \appendix
 \section*{Backup Slides}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Debugging: git bisect}
+  \begin{itemize}
+      \item Something worked in the past, but does not work anymore
+      \item \textbf{Example:} The lvgl sample worked on the reel\_board in v4.0.0, but not with the current main (7fc9c26fb0d)
+      \begin{listing}[H]
+        \begin{minted}[
+          framesep=2mm,
+          bgcolor=lightgray!20,
+          baselinestretch=1.1,
+          fontsize=\tiny,
+        ]{console}
+(host)# git bisect start
+(host)# git bisect good v4.0.0
+(host)# git bisect bad 7fc9c26fb0d
+(host)# west update && west build -b reel_board@2 samples/subsys/display/lvgl/ -p && west flash
+-> After flashing, test console and display to see if the sample works
+(host)# git bisect good|bad
+
+  ... (repeat binary search for log2(N) steps, typically 8-12 steps required)
+
+(host)$ git bisect good
+1ea35e237cc0aa26b8a3517144528e9781a56781 is the first bad commit
+commit 1ea35e237cc0aa26b8a3517144528e9781a56781
+Author: ######## ########## <##########@gmail.com>
+Date:   Thu Jan 25 11:09:06 2024 +0100
+
+    west.yml: Update lvgl module to v9.2.0
+
+    Update the west yaml to point to the new LVGL version.
+
+ west.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+        \end{minted}
+          \caption{\footnotesize{Find the commit that caused a bug with \textit{git bisect}}}
+      \end{listing}
+  \end{itemize}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Renode: Technical Overview}
   \begin{itemize}
     \item Testing of embedded systems in a reproducible virtual environment
