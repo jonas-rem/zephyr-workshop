@@ -240,16 +240,19 @@
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Setting up a Local Development Environment}
-Linux, macOS and Windows are supported!
+Linux, macOS and Windows \footnotemark  are supported!
 
 Components:
   \begin{description}
     \item [Packages] git, cmake, python ..
     \item [Zephyr SDK] Toolchains for different architectures (compiler assembler..)
-    \item [Python Tools] west, Install via requirements.txt in virtualenv
+    \item [Python Tools] west, Install packages from requirements.txt in a virtual environment
     \item [IDE] Text editor, IDE (e.g. VSCode)
     \item [Repositories] Zephyr, modules via west
   \end{description}
+	\footnotetext{Windows is supported, but will complicate development for
+	Embedded Systems (e.g. no onboard package manager, often inconsistent
+	Python environment setups).}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Testing the Local Development Environment}
@@ -268,7 +271,7 @@ Components:
       stepnumber=5,
     ]{shell}
 cd ~/zephyrproject/zephyr
-west build -b reel_boad samples/basic/blinky -p
+west build -b reel_board samples/basic/blinky -p
 west flash
     \end{minted}
     \begin{minted}[
@@ -284,9 +287,10 @@ west flash
 cd ~/zephyrproject/zephyr
 west build -b native_sim samples/hello_world/ -p
 west build -t run
-->
-*** Booting Zephyr OS build v3.6.0 ***
-Hello World! native_sim
+
+
+*** Booting Zephyr OS build v4.1.0 ***
+Hello World! native_sim/native
     \end{minted}
 %-----------------------------------------
     \end{column}
@@ -344,7 +348,7 @@ Hello World! native_sim
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Recommendations from my Experience}
-Virtual Machines in combination with hardware can bring their own problems.
+Virtual Machines in combination with embedded hw can bring their own problems.
 
 Prioritize a local environment over a cloud environment
   \begin{itemize}
@@ -469,26 +473,26 @@ samples/01_hello_world/
       stepnumber=5,
     ]{shell}
 west build -b qemu_cortex_m0 samples/01_hello_world/ -p
--- Found host-tools: zephyr 0.16.5 (/home/jonas/Downloads/zephyr-sdk-0.16.5-1)
--- Found toolchain: zephyr 0.16.5 (/home/jonas/Downloads/zephyr-sdk-0.16.5-1)
+-- Found host-tools: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
+-- Found toolchain: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
 [..]
 Parsing /home/jonas/git/zephyrproject/zephyr/Kconfig
 -- The C compiler identification is GNU 12.2.0
 -- The CXX compiler identification is GNU 12.2.0
 -- The ASM compiler identification is GNU
--- Using ccache: /usr/bin/ccache
--- Configuring done (2.5s)
--- Generating done (0.0s)
+-- Found assembler: /home/jonas/zephyr-sdk-0.17.0/arm-zephyr-eabi/bin/arm-zephyr-eabi-gcc
+-- Configuring done (3.0s)
+-- Generating done (0.1s)
 -- Build files have been written to: /home/jonas/git/zephyrproject/zephyr-workshop/build
 -- west build: building application
-[1/123] Preparing syscall dependency handling
+[1/117] Preparing syscall dependency handling
 
-[2/123] Generating include/generated/version.h
--- Zephyr version: 3.6.0 (/home/jonas/git/zephyrproject/zephyr), build: v3.6.0
-[122/123] Linking C executable zephyr/zephyr.elf
+[2/117] Generating include/generated/zephyr/version.h
+-- Zephyr version: 4.1.0 (/home/jonas/git/zephyrproject/zephyr), build: v4.1.0
+[117/117] Linking C executable zephyr/zephyr.elf
 Memory region         Used Size  Region Size  %age Used
-           FLASH:       14414 B       256 KB      5.50%
-             RAM:        3928 B        16 KB     23.97%
+           FLASH:        8094 B       256 KB      3.09%
+             RAM:          4 KB        64 KB      6.25%
         IDT_LIST:          0 GB        32 KB      0.00%
     \end{minted}
   \caption{\scriptsize{Console Output}}
@@ -507,8 +511,8 @@ Memory region         Used Size  Region Size  %age Used
             \item \texttt{zephyr.elf|hex|bin}
             \item \texttt{zephyr.map}
             \item \texttt{autoconf.h} (Kconfig options)
-            \item \texttt{libapp.a} (Application library)
-            \item \texttt{Kconfig.dts} (Device tree conf)
+            \item \texttt{autoconf.h} (Generated devicetree header)
+            \item \texttt{Kconfig.dts} (devicetree conf)
           \end{itemize}
       \end{description}
 %-----------------------------------------
@@ -524,7 +528,9 @@ build/
 └── zephyr
     ├── include
     │   └── generated
-    │      ├── autoconf.h
+    │      └── zephyr
+    │         ├── autoconf.h
+    │         ├── devicetree_generated.h
     ├── zephyr.dts
     ├── zephyr.elf|bin|hex
     ├── zephyr_final.map
@@ -546,8 +552,8 @@ build/
       firstnumber=1,
       stepnumber=5,
     ]{shell}
-*** Booting Zephyr OS build v3.6.0-214-gf1011b3c8265 ***
-Hello World! qemu_cortex_m0
+*** Booting Zephyr OS build v4.1.0 ***
+Hello World! qemu_cortex_m3/ti_lm3s6965
     \end{minted}
   \caption{\scriptsize{Console Output}}
   \end{listing}
@@ -616,23 +622,23 @@ int main(void)
       firstnumber=1,
       stepnumber=5,
     ]{shell}
-*** Booting Zephyr OS build v3.6.0-1981-g1f55be8b42df ***
+*** Booting Zephyr OS build v4.1.0 ***
 Hello World! qemu_cortex_m0
-[00:00:00.002,446] <err> hello_world: error string
-[00:00:00.002,653] <dbg> hello_world: main: debug string
-[00:00:00.002,675] <inf> hello_world: info string
-[00:00:00.002,698] <dbg> hello_world: main: int8_t 1, uint8_t 2
-[00:00:00.002,718] <dbg> hello_world: main: int16_t 16, uint16_t 17
-[00:00:00.002,736] <dbg> hello_world: main: int32_t 32, uint32_t 33
-[00:00:00.002,758] <dbg> hello_world: main: int64_t 64, uint64_t 65
-[00:00:00.002,814] <dbg> hello_world: main: char !
-[00:00:00.003,164] <dbg> hello_world: main: s str static str c str
-[00:00:00.003,346] <dbg> hello_world: main: d str dynamic str
-[00:00:00.003,399] <dbg> hello_world: main: mixed str dynamic str --- dynamic str --- _ --- _
-[00:00:00.003,440] <dbg> hello_world: main: mixed c/s ! static str dynamic str static str !
-[00:00:00.003,458] <dbg> hello_world: main: pointer 0x5b1a
-[00:00:00.003,489] <dbg> hello_world: main: HeXdUmP!
-                        48 45 58 44 55 4d 50 21  20 23 40                |HEXDUMP!  #@     
+[00:00:00.001,691] <err> hello_world: error string
+[00:00:00.001,843] <dbg> hello_world: main: debug string
+[00:00:00.001,859] <inf> hello_world: info string
+[00:00:00.001,874] <dbg> hello_world: main: int8_t 1, uint8_t 2
+[00:00:00.001,887] <dbg> hello_world: main: int16_t 16, uint16_t 17
+[00:00:00.001,899] <dbg> hello_world: main: int32_t 32, uint32_t 33
+[00:00:00.001,921] <dbg> hello_world: main: int64_t 64, uint64_t 65
+[00:00:00.001,956] <dbg> hello_world: main: char !
+[00:00:00.002,383] <dbg> hello_world: main: s str static str c str
+[00:00:00.002,567] <dbg> hello_world: main: d str dynamic str
+[00:00:00.002,607] <dbg> hello_world: main: mixed str dynamic str --- dynamic str --- da --- da
+[00:00:00.002,640] <dbg> hello_world: main: mixed c/s ! static str dynamic str static str !
+[00:00:00.002,653] <dbg> hello_world: main: pointer 0x5c3e
+[00:00:00.002,674] <dbg> hello_world: main: HeXdUmP!
+                                      48 45 58 44 55 4d 50 21  20 23 40                |HEXDUMP!  #@
 
     \end{minted}
   \end{listing}
@@ -662,25 +668,25 @@ Hello World! qemu_cortex_m0
       firstnumber=1,
       stepnumber=5,
     ]{shell}
-*** Booting Zephyr OS build v3.6.0-1981-g1f55be8b42df ***
+ *** Booting Zephyr OS build v4.1.0 ***
 Work Item Executed - runtime context:
- Thread Name: main 
- Thread Priority: 0 
+ Thread Name: main
+ Thread Priority: 0
 
 Work Item Executed - runtime context:
- Thread Name: sysworkq 
- Thread Priority: -1 
+ Thread Name: sysworkq
+ Thread Priority: -1
 
 Work Item Executed - runtime context:
- Thread Name: my_work_q_thread 
- Thread Priority: 5 
+ Thread Name: my_work_q_thread
+ Thread Priority: 5
 
 Timer Expired!!
 Work Item Executed - runtime context:
  ISR Context!
 
 Work Item Executed - runtime context:
- Thread Name: sysworkq 
+ Thread Name: sysworkq
  Thread Priority: -1
     \end{minted}
   \end{listing}
@@ -742,36 +748,38 @@ CONFIG_STATS_SHELL=y
       firstnumber=1,
       stepnumber=5,
     ]{shell}
-uart:~$
+uart:~$ 
   bypass              clear               date
   demo                device              devmem
   dynamic             help                history
-  kernel              log_test            rem
-uart:~$ kernel threads
+  kernel              log                 log_test
+  rem                 resize              retval
+  section_cmd         shell               shell_uart_release
+  stats               version
+uart:~$ kernel thread list
 Threads:
- 0x20000c70 sysworkq
-	options: 0x0, priority: -1 timeout: 0
-	state: pending, entry: 0x7315
-	Total execution cycles: 207 (0 %)
+*0x20000720 shell_uart
+	options: 0x0, priority: 14 timeout: 0
+	state: queued, entry: 0x3ed9
+	Total execution cycles: 22360 (0 %)
+	stack size 2048, unused 932, usage 1116 / 2048 (54 %)
+
+ 0x20001288 sysworkq
+	options: 0x1, priority: -1 timeout: 0
+	state: pending, entry: 0x7169
+	Total execution cycles: 163 (0 %)
 	stack size 1024, unused 808, usage 216 / 1024 (21 %)
 
-*0x200006d0 shell_uart
+ 0x20000218 logging
 	options: 0x0, priority: 14 timeout: 0
-	state: queued, entry: 0x3c8d
-	Total execution cycles: 19143 (0 %)
-	stack size 2048, unused 924, usage 1124 / 2048 (54 %)
-
- 0x200001c8 logging
-	options: 0x0, priority: 14 timeout: 0
-	state: pending, entry: 0x19d1
-	Total execution cycles: 289 (0 %)
+	state: pending, entry: 0x1861
+	Total execution cycles: 237 (0 %)
 	stack size 768, unused 576, usage 192 / 768 (25 %)
 
- 0x20000a80 idle
+ 0x20000fd0 idle
 	options: 0x1, priority: 15 timeout: 0
-	state: , entry: 0xad31
-	Total execution cycles: 7795318 (99 %)
-	stack size 256, unused 168, usage 88 / 256 (34 %)
+	state: , entry: 0xb6c1
+	Total execution cycles: 47021886 (99 %)
     \end{minted}
   \end{listing}
 \end{frame}
@@ -825,12 +833,13 @@ printk("Temp = %d.%06d C, RH = %d.%06d %%\n",
       firstnumber=1,
       stepnumber=5,
     ]{shell}
-*** Booting Zephyr OS build v3.6.0-1981-g1f55be8b42df ***
-Dev 0x8090 name ti_hdc@43 is ready!
+*** Booting Zephyr OS build v4.1.0 ***
+Running on arm!
+Dev 0x801c name ti_hdc@43 is ready!
 Fetching...
-Temp = 23.778381 C, RH = 51.892089 %
+Temp = 22.852966 C, RH = 38.793945 %
 Fetching...
-Temp = 23.869018 C, RH = 51.470947 %
+Temp = 22.842895 C, RH = 38.897705 %
 Fetching...
     \end{minted}
   \end{listing}
@@ -885,15 +894,15 @@ CONFIG_CBPRINTF_FP_SUPPORT=y
       firstnumber=1,
       stepnumber=5,
     ]{shell}
-*** Booting Zephyr OS build v3.6.0-1981-g1f55be8b42df ***
-[00:00:00.375,701] <inf> bt_hci_core: HW Platform: Nordic Semiconductor (0x0002)
-[00:00:00.375,732] <inf> bt_hci_core: HW Variant: nRF52x (0x0002)
-[00:00:00.375,762] <inf> bt_hci_core: Firmware: Standard Bluetooth controller (0x00) Version 3.6 Build 99
-[00:00:00.376,495] <inf> bt_hci_core: Identity: CC:42:FB:73:2F:36 (random)
-[00:00:00.376,525] <inf> bt_hci_core: HCI: version 5.4 (0x0d) revision 0x0000, manufacturer 0x05f1
-[00:00:00.376,556] <inf> bt_hci_core: LMP: version 5.4 (0x0d) subver 0xffff
+*** Booting Zephyr OS build v4.1.0 ***
+[00:00:00.380,645] <inf> bt_hci_core: HW Platform: Nordic Semiconductor (0x0002)
+[00:00:00.380,676] <inf> bt_hci_core: HW Variant: nRF52x (0x0002)
+[00:00:00.380,706] <inf> bt_hci_core: Firmware: Standard Bluetooth controller (0x00) Version 4.1 Build 0
+[00:00:00.381,347] <inf> bt_hci_core: Identity: D0:6F:6B:78:0C:E8 (random)
+[00:00:00.381,378] <inf> bt_hci_core: HCI: version 5.4 (0x0d) revision 0x0000, manufacturer 0x05f1
+[00:00:00.381,408] <inf> bt_hci_core: LMP: version 5.4 (0x0d) subver 0xffff
 Bluetooth initialized
-temp device is 0x26824, name is temp@4000c000
+temp device is 0x28b5c, name is temp@4000c000
 Advertising successfully started
 Connected
 temperature is 24C
@@ -903,7 +912,7 @@ Indication complete
 Indication success
 Indication complete
 temperature is 23.75C
-temperature is 24C
+temperature is 23.75C
     \end{minted}
   \end{listing}
 \end{frame}
@@ -1552,9 +1561,6 @@ INFO - Run completed
   \end{listing}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% TODO:
-% - Add renode support,
-% - Prepare the applicaiton for 3 states
 \subsection{Hands-on 4}
 \begin{frame}[fragile]{Extend the Application - Hands-on 4}
   \begin{columns}
