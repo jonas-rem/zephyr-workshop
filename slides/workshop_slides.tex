@@ -120,7 +120,7 @@
         \includegraphics[width=0.7\textwidth]{images/jrov2201.jpg}
       \end{figure}
       \begin{figure}
-        \includegraphics[width=0.45\textwidth]{images/jrov2201_housing.png}
+        \includegraphics[width=0.45\textwidth]{images/jrov2201_housing.jpg}
       \end{figure}
     \end{column}
   \end{columns}
@@ -747,7 +747,6 @@ arduino_i2c: &i2c0 {
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
->>>>>>> 2dfb8fd (slides: change footnote numbering to automatic)
 \section{Code Examples and Subsystems}
 % Explain simple code examples
 % Showcase the Codespaces environment to everyone
@@ -1295,15 +1294,37 @@ temperature is 23.75C
   \end{columns}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Hands-on 2}
-\begin{frame}[fragile]{Test the Samples - Hands-on 2}
+\begin{frame}[fragile]{07\_display\_cfb Sample - Controle the passive Display}
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+      \begin{description}
+        \item [Description] Character Framebuffer Sample \footnotemark
+        \item [Sample] Writes text to the display
+      \end{description}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \begin{figure}
+        \includegraphics[width=\textwidth]{images/reel_board_passive_display.jpg}
+        \caption*{Updated display on the reel board}
+      \end{figure}
+    \end{column}
+  \end{columns}
+  \footnotetext{Equivalent in the Zephyr main Repository: zephyr/samples/subsys/display/cfb.}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Hands-on 3}
+\begin{frame}[fragile]{Test the Samples - Hands-on 3}
   \begin{columns}
     \begin{column}{0.6\textwidth}
       Build and run the samples\footnotemark:
       \begin{itemize}
         \item \scriptsize west build -b qemu\_cortex\_m0 samples/02\_logging -p
         \item \scriptsize west build -t run
+	\item \scriptsize \texttt{or}
+        \item \scriptsize west build -b reel\_board@2 samples/02\_logging -p
+        \item \scriptsize west flash
       \end{itemize}
+      Update the displayed name on the passive display
     \end{column}
     \begin{column}{0.4\textwidth}
         {\fontsize{7}{7}\selectfont
@@ -1314,365 +1335,15 @@ samples
 ├── 03_workqueues
 ├── 04_shell
 ├── 05_sensor
-└── 06_ble
+├── 06_ble
+└── 07_display_cfb
         \end{verbatim}
       }
     \end{column}
   \end{columns}
   \footnotetext{\textbf{Note:} The sensor and ble samples require a board to run.}
+>>>>>>> ece9698 (slides: adapt slides to demonstrate with reel board)
 \end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Workspace Application and Hardware Abstraction}
-% Out of Tree Build
-% Explain devicetree
-% Conditional Compilation (Different Code for different Boards)
-% Coding Session 2 - Test on multiple boards
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Workspace Application}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-%-----------------------------------------
-      \textbf{Workspace application} or \textbf{Out of tree} build \footnotemark[1]
-
-      Separate application from Zephyr repository
-      \begin{itemize}
-        \item Independent version control for app
-        \item Different Licences for app?
-        \item Maintain references to Zephyr, Modules.. in app repo
-        \item Update Zephyr version independently from app
-      \end{itemize}
-
-      Examples at \footnotemark[2] \footnotemark[3]
-%-----------------------------------------
-    \end{column}
-    \begin{column}{0.4\textwidth}
-        {\fontsize{7}{7}\selectfont
-          \begin{verbatim}
-zephyrproject
-├── modules
-│   └── hal
-├── zephyr
-│   ├── samples
-│   ├── west.yml
-└── zephyr-workshop
-    ├── west.yml
-    └── samples
-        └── 01_hello_world
-            ├── CMakeLists.txt
-            ├── prj.conf
-            ├── README.rst
-            ├── sample.yaml
-            └── src
-       \end{verbatim}
-        }
-    \end{column}
-  \end{columns}
-        \footnotetext[1]{\tiny\url{https://docs.zephyrproject.org/latest/develop/application/index.html}}
-        \footnotetext[2]{\tiny\url{https://github.com/zephyrproject-rtos/example-application}}
-        \footnotetext[2]{\tiny\url{https://github.com/jonas-rem/zephyr-workshop}}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Enabled by \texttt{west} and Manifest files}
-  Manifests references repositories and modules \footnotemark[1]
-
-  \begin{listing}[H]
-    \begin{minted}[
-      linenos,
-      numbersep=15pt,
-      framesep=2mm,
-      bgcolor=lightgray!20,
-      baselinestretch=1.1,
-      fontsize=\scriptsize,
-      firstnumber=1,
-      stepnumber=5,
-    ]{yaml}
-manifest:
-  remotes:
-    - name: zephyrproject-rtos
-      url-base: https://github.com/zephyrproject-rtos
-
-  projects:
-    - name: zephyr
-      remote: zephyrproject-rtos
-      revision: v3.6.0
-      import:
-        name-allowlist:
-          - cmsis
-          - hal_nordic
-          - hal_nxp
-          - [..]
-    \end{minted}
-    \caption{\scriptsize{\texttt{west.yaml} Manifest file in the zephyr-workshop repository}}
-  \end{listing}
-  \footnotetext[1]{\tiny\url{https://docs.zephyrproject.org/latest/develop/west/manifest.html}}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Understanding and Using \texttt{west}}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-      \texttt{west} repository management tool, developed by the Zephyr community
-      \begin{itemize}
-        \item Inspired by Google's Repo tool and git submodules
-        \item Cloning Zephyr repo, dependencies, modules
-        \item Keeping project repositories synchronized
-        \item In addition building, flashing, and debugging support
-      \end{itemize}
-
-    \end{column}
-    \begin{column}{0.4\textwidth}
-        {\fontsize{6}{6}\selectfont
-  \begin{listing}[H]
-    \begin{minted}[
-      framesep=2mm,
-      bgcolor=lightgray!20,
-      baselinestretch=1.1,
-      fontsize=\tiny,
-    ]{shell}
-# Navigate to the project root
-$ cd zephyrproject
-
-# Update all repositories
-$ west update
-
-=== updating zephyr (zephyr):
-HEAD is now at 468eb56cf24 [..]
-=== updating cmsis (modules/hal/cmsis):
-HEAD is now at 4b96cbb [..]
-=== updating hal_atmel (modules/hal/atmel):
-HEAD is now at aad79bf [..]
-    \end{minted}
-  \end{listing}
-        }
-    \end{column}
-  \end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Application Structure - Use Case I}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-      \begin{description}
-         \item[Who] User creates one application for testing
-         \item[What] One variant of an application
-         \item[Solution] Make changes inside the Zephyr tree for simplicity \footnotemark
-      \end{description}
-    \end{column}
-    \begin{column}{0.4\textwidth}
-      \begin{figure}
-        \hspace*{1.5cm}
-        \includesvg[width=0.8\textwidth]{images/application_topologies_1.svg}
-      \end{figure}
-    \end{column}
-  \end{columns}
-  \footnotetext{Not recommended production, use an out-of-tree build instead. This makes it easier to upgrade to more recent Zephyr versions.}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Application Structure - Use Case II}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-      \begin{description}
-         \item[Who] One company developing one product
-         \item [What] Two variants of the product
-         \item Different sensors, pin assignments, but similar application
-         \item[Solution] Devicetrees for each variant
-         \item board\_a.dts: {\scriptsize\texttt{west build -b board\_a app}}
-         \item board\_b.dts: {\scriptsize\texttt{west build -b board\_b app}}
-      \end{description}
-    \end{column}
-    \begin{column}{0.4\textwidth}
-      \begin{figure}
-        \hspace*{0.4cm}
-        \includesvg[width=\textwidth]{images/application_topologies_2.svg}
-      \end{figure}
-    \end{column}
-  \end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Application Structure - Use Case III}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-      \begin{description}
-         \item[Who] One company developing multiple products
-         \item[What] Different applications
-         \item[Solution] Seperate applications
-         \item Use same Zephyr version for all applications if you can
-      \end{description}
-    \end{column}
-    \begin{column}{0.4\textwidth}
-      \begin{figure}
-        \hspace*{-0.5cm}
-        \includesvg[width=1.17\textwidth]{images/application_topologies_3.svg}
-      \end{figure}
-    \end{column}
-  \end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Application Structure - Use Case IV}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-      \begin{description}
-         \item[Who] Service provider developing different products for multiple companies
-         \item[What] Development states and lifecycle for products differ
-         \item[Solution] Individual manifest files for each product
-         \item Create your own modules, share code inbetween projects
-         \item Quickly setup and reference projecs with west
-      \end{description}
-    \end{column}
-    \begin{column}{0.4\textwidth}
-      \begin{figure}
-        \hspace*{-0.5cm}
-        \includesvg[width=1.17\textwidth]{images/application_topologies_4.svg}
-      \end{figure}
-    \end{column}
-  \end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Zephyr Hardware Abstraction}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-%-----------------------------------------
-      \begin{description}
-          \item [Vendor HALs] Hardware abstraction available from vendors.
-                  Abstracted via Zephyr APIs and drivers
-          \item [Devicetree] Decouples the application from the hardware
-          \item [Architecture] ARM, RISC-V, x86, ARC, NIOS II, Tensilica, Xtensa
-          \item [Other] 600+ boards, 180+ sensors
-      \end{description}
-%-----------------------------------------
-    \end{column}
-    \begin{column}{0.4\textwidth}
-      \begin{listing}[H]
-        \begin{minted}[
-          framesep=2mm,
-          bgcolor=lightgray!20,
-          baselinestretch=1.1,
-          fontsize=\tiny,
-        ]{console}
-zephyrproject/zephyr:~$ ls arch/
-arc    CMakeLists.txt  mips   riscv  xtensa
-arm    common          nios2  sparc
-arm64  Kconfig         posix  x86
-
-zephyrproject:~$ ls modules/hal/
-altera        espressif   nordic      silabs
-ambiq         ethos_u     nuvoton     st
-atmel         gigadevice  nxp         stm32
-cirrus-logic  infineon    openisa     telink
-[..]
-
-zephyrproject/zephyr:~$ ls boards/
-96boards               firefly       qemu
-actinius               gd            rak
-adafruit               google        raspberrypi
-digilent               nordic        u-blox
-enjoydigital           phytec        wemos
-espressif              pine64        wiznet
-[..]
-
-zephyrproject/zephyr:~$ ls drivers/sensor/
-adxl367                max30101
-hs300x                 sht4x
-ina3221                tcs3400
-isl29035               th02
-lps22hb                vl53l1x
-[..]
-        \end{minted}
-      \end{listing}
-    \end{column}
-  \end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Zephyr Hardware Abstraction - devicetree}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-      Describes the available hardware
-        \begin{itemize}
-          \item Proven concept used in the Linux kernel
-          \item Single source for hardware information
-          \item Drivers and source are hardware independent
-        \end{itemize}
-
-      In Zephyr: C header generation at compile time
-    \end{column}
-    \begin{column}{0.4\textwidth}
-      \begin{figure}
-        \hspace*{-0.5cm}
-        \includesvg[width=0.6\textwidth]{images/devicetree-logo.svg}
-              \caption*{devicetree Logo\footnotemark}
-      \end{figure}
-      \footnotetext{\tiny\url{https://www.devicetree.org/}}
-    \end{column}
-  \end{columns}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Zephyr Hardware Abstraction - devicetree}
-  \begin{listing}[H]
-    \begin{minted}[
-      framesep=2mm,
-      bgcolor=lightgray!20,
-      baselinestretch=1.1,
-      fontsize=\tiny,
-    ]{dts}
-arduino_i2c: &i2c0 {
-        compatible = "nordic,nrf-twim";
-        status = "okay";
-        clock-frequency = <I2C_BITRATE_FAST>;
-
-        pinctrl-0 = <&i2c0_default>;
-        pinctrl-1 = <&i2c0_sleep>;
-        pinctrl-names = "default", "sleep";
-        mma8642fc: mma8652fc@1d {
-                compatible = "nxp,fxos8700","nxp,mma8652fc";
-                reg = <0x1d>;
-                int1-gpios = <&gpio0 24 GPIO_ACTIVE_LOW>;
-                int2-gpios = <&gpio0 25 GPIO_ACTIVE_LOW>;
-        };
-
-        ti_hdc@43 {
-                compatible = "ti,hdc","ti,hdc1010";
-                reg = <0x43>;
-                drdy-gpios = <&gpio0 22 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        };
-
-        apds9960@39 {
-                compatible = "avago,apds9960";
-                reg = <0x39>;
-                int-gpios = <&gpio0 23 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        };
-};
-    \end{minted}
-          \caption{\scriptsize{devicetree node for the reel board: \texttt{boards/phytec/reel\_board/dts/reel\_board.dtsi}}}
-  \end{listing}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Hands-on 3}
-\begin{frame}[fragile]{Let's build Zephyr for multiple boards! - Hands-on 3}
-  \begin{columns}
-    \begin{column}{0.6\textwidth}
-       Take a random board. Find out if it is supported (Zephyr Docs).
-
-       Build the blinky sample for your board, replace <board>:
-       \begin{itemize}
-               \item \tiny\texttt{west build -b <board> ../zephyr/samples/basic/blinky -p}
-       \end{itemize}
-
-       Flash\footnotemark[1] and check if the led is blinking:
-       \begin{itemize}
-         \item \scriptsize\texttt{west flash}
-       \end{itemize}
-
-    \end{column}
-    \begin{column}{0.4\textwidth}
-      \begin{figure}
-        \includegraphics[width=1.1\textwidth]{images/boards.jpg}
-        \caption*{Boards from different vendors}
-      \end{figure}
-    \end{column}
-  \end{columns}
-	\footnotetext[1]{Flashing is not supported from Codespaces. Download
-	\texttt{zephyr-workshop/build/zephyr/zephyr.elf}, send the file to
-	\texttt{<mail>} or copy to a USB stick and I will flash it for you.}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Application Development}
 % zbus, IPC, Threads
 % Work with modularization, utlize the build system
@@ -1921,8 +1592,8 @@ INFO - Run completed
   \end{listing}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Hands-on 4}
-\begin{frame}[fragile]{Extend the Application - Hands-on 4}
+\subsection{Hands-on 4 (Simulation)}
+\begin{frame}[fragile]{Extend the Application - Hands-on 4 (with Renode)}
   \begin{columns}
     \begin{column}{0.6\textwidth}
       Currently there are two system states: \textbf{standby}, \textbf{sleep}.
@@ -1950,8 +1621,9 @@ Build led test or app
 Start Simulation with Renode with last build binary:
 # renode util/stm32f4.resc --disable-gui --console
 
-Siumlate Button Press via Shell:
+Test via Shell:
 (target)# my_app button button_press
+(target)# my_app led sys_standby
 
 Simulate Button Press via Renode (not used here)
 (STM32F4_Disco)# sysbus.gpioPortA.UserButton Press
@@ -1966,7 +1638,7 @@ Run the integration tests with twister
       \end{listing}
     \end{column}
   \end{columns}
-  \footnotetext[1]{You can start with the LED module and the test firmware at \texttt{test\//led}.}
+  \footnotetext[1]{\texttt{Hint:} start with the LED module and the test firmware at \texttt{test\//led}.}
 \footnotetext[2]{\texttt{Renode} is an Open Source simulation framework for embedded systems from Antmicro.}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2015,7 +1687,6 @@ Test via Shell:
     \footnotetext{\texttt{Hint:} start with the LED module and the test firmware at \texttt{test\//led}.}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
->>>>>>> 2dfb8fd (slides: change footnote numbering to automatic)
 \section{Summary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[fragile]{Key Points from the Workshop\footnotemark}
