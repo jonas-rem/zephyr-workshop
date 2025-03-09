@@ -1059,7 +1059,7 @@ Work Item Executed - runtime context:
 	\item [Description] Shell subsystem example\footnotemark
 	\item [Shell] Command line interface
 	\item Command history, completion, help
-	\item Great for testing and debugging
+	\item Great for hardware validation, testing and debugging
 	\item [Sample] Provides a basic shell
       \end{description}
     \end{column}
@@ -1087,6 +1087,10 @@ CONFIG_THREAD_RUNTIME_STATS=y
 CONFIG_THREAD_RUNTIME_STATS_USE_TIMING_FUNCTIONS=y
 CONFIG_STATS=y
 CONFIG_STATS_SHELL=y
+CONFIG_SENSOR=y
+CONFIG_SENSOR_SHELL=y
+CONFIG_SENSOR_INFO=y
+CONFIG_I2C_SHELL=y
     \end{minted}
     \caption{\scriptsize{Excerpt from samples/04\_shell/prj.conf}}
   \end{listing}
@@ -1140,6 +1144,80 @@ Threads:
 	options: 0x1, priority: 15 timeout: 0
 	state: , entry: 0xb6c1
 	Total execution cycles: 47021886 (99 %)
+    \end{minted}
+  \end{listing}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{04\_shell Sample - I2C Shell}
+  \begin{listing}[H]
+    \begin{minted}[
+      linenos,
+      numbersep=15pt,
+      framesep=2mm,
+      bgcolor=lightgray!20,
+      baselinestretch=1.1,
+      fontsize=\tiny,
+      firstnumber=1,
+      stepnumber=5,
+    ]{shell}
+uart:~$ i2c -h
+i2c - I2C commands
+Subcommands:
+  scan         : Scan I2C devices
+                 Usage: scan <device>
+  recover      : Recover I2C bus
+                 Usage: recover <device>
+  read         : Read bytes from an I2C device
+                 Usage: read <device> <addr> <reg> [<bytes>]
+  read_byte    : Read a byte from an I2C device
+                 Usage: read_byte <device> <addr> <reg>
+  direct_read  : Read byte stream directly from an I2C device without writing a
+                 register address first
+                 Usage: direct_read <device> <addr> [<bytes>]
+  write        : Write bytes to an I2C device
+                 Usage: write <device> <addr> <reg> [<byte1>, ...]
+  write_byte   : Write a byte to an I2C device
+                 Usage: write_byte <device> <addr> <reg> <value>
+  speed        : Configure I2C bus speed
+                 Usage: speed <device> <speed>
+
+uart:~$ i2c scan i2c@40003000
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:             -- -- -- -- -- -- -- -- -- -- -- -- 
+10: -- -- -- -- -- -- -- -- -- -- -- -- -- 1d -- -- 
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+30: -- -- -- -- -- -- -- -- -- 39 -- -- -- -- -- -- 
+40: -- -- -- 43 -- -- -- -- -- -- -- -- -- -- -- -- 
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+60: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+70: -- -- -- -- -- -- -- --                         
+3 devices found on i2c@40003000
+    \end{minted}
+  \end{listing}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{04\_shell Sample - Sensor Shell}
+  \begin{listing}[H]
+    \begin{minted}[
+      linenos,
+      numbersep=15pt,
+      framesep=2mm,
+      bgcolor=lightgray!20,
+      baselinestretch=1.1,
+      fontsize=\tiny,
+      firstnumber=1,
+      stepnumber=5,
+    ]{shell}
+uart:~$ sensor info
+device name: apds9960@39, vendor: Avago Technologies, model: apds9960, friendly name: (null)
+device name: mma8652fc@1d, vendor: NXP Semiconductors, model: fxos8700, friendly name: (null)
+device name: ti_hdc@43, vendor: Texas Instruments, model: hdc, friendly name: (null)
+device name: temp@4000c000, vendor: Nordic Semiconductor, model: nrf-temp, friendly name: (null)
+
+uart:~$ sensor get ti_hdc@43
+channel type=13(ambient_temp) index=0 shift=6 num_samples=1 value=132211120605ns (26.427000)
+channel type=16(humidity) index=0 shift=6 num_samples=1 value=132211120605ns (36.364745)
     \end{minted}
   \end{listing}
 \end{frame}
@@ -1233,6 +1311,9 @@ CONFIG_BT_BAS=y
 CONFIG_BT_DEVICE_NAME="Zephyr Health Thermometer"
 CONFIG_BT_DEVICE_APPEARANCE=768
 CONFIG_CBPRINTF_FP_SUPPORT=y
+CONFIG_SENSOR_SHELL=y
+CONFIG_SENSOR_INFO=y
+CONFIG_I2C_SHELL=y
     \end{minted}
     \caption{\scriptsize{Excerpt from samples/06\_ble/prj.conf}}
   \end{listing}
@@ -1592,7 +1673,7 @@ INFO - Run completed
   \end{listing}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Hands-on 4 (Simulation)}
+\subsection*{Hands-on 4 (Simulation)}
 \begin{frame}[fragile]{Extend the Application - Hands-on 4 (with Renode)}
   \begin{columns}
     \begin{column}{0.6\textwidth}
@@ -1642,18 +1723,14 @@ Run the integration tests with twister
 \footnotetext[2]{\texttt{Renode} is an Open Source simulation framework for embedded systems from Antmicro.}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  \footnotetext{\texttt{Hint:} Start with the LED module and the test firmware at \texttt{test\//led} and test via Shell commands.}
-\footnotetext{\texttt{Renode} is an Open Source simulation framework for embedded systems from Antmicro.}
-\end{frame}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Hands-on 4 (reel board)}
+\subsection{Hands-on 4}
 \begin{frame}[fragile]{Extend the Application - Hands-on 4 (with reel board)}
   \begin{columns}
     \begin{column}{0.6\textwidth}
       Currently there are two system states: \textbf{standby}, \textbf{sleep}.
       Extend the application with a third state: \textbf{active}. Iterate
       through states via buttonpress:
-      \textbf{standby}->\textbf{sleep}->\textbf{active}\footnotemark[1]
+      \textbf{standby}->\textbf{sleep}->\textbf{active}\footnotemark
       \begin{description}
         \item [Sleep] LED off
         \item [Standby] LED blinking
@@ -1687,9 +1764,37 @@ Test via Shell:
     \footnotetext{\texttt{Hint:} start with the LED module and the test firmware at \texttt{test\//led}.}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Summary}
+\subsection{Hands-on 5}
+\begin{frame}[fragile]{BLE Sensor Improvements - Hands-on 5}
+  \begin{columns}
+    \begin{column}{0.6\textwidth}
+       The BLE sample \texttt{06\_ble} measures the temperatur with the
+       integrated temp sensor in the nRF52840 Die. This is imprecise and a
+       higher precision is possible by using the TI HDC1010 sensor. Change
+       the sample accordingly\footnotemark:
+       \begin{itemize}
+        \item Confirm that the sensor is working (Sensor Shell)
+        \item Enable the Sensor API
+        \item Change the sensor device and get HDC1010 from DTS
+        \item \scriptsize\texttt{SENSOR\_CHAN\_DIE\_TEMP} -> \scriptsize\texttt{SENSOR\_CHAN\_AMBIENT\_TEMP}
+       \end{itemize}
+       Can you confirm a faster reaction time?
+    \end{column}
+    \begin{column}{0.4\textwidth}
+      \begin{listing}[H]
+      \begin{figure}
+       \includegraphics[width=0.9\textwidth]{images/reel_board_hdc1010.jpg}
+        \caption*{TI HDC1010 Temperatur and Humidity Sensor}
+      \end{figure}
+      \end{listing}
+    \end{column}
+  \end{columns}
+	\footnotetext{\texttt{Hint:} Check the sensor sample \texttt{05\_sensor} for reference. Only a few lines need to be changed.}
+\end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}[fragile]{Key Points from the Workshop\footnotemark}
+\section*{Summary}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Key Points from the Workshop}
   \begin{columns}
     \begin{column}{0.6\textwidth}
 %-----------------------------------------
@@ -1852,6 +1957,48 @@ app/src/modules/led/led.c
                 /* */
                 default:
                         break;
+  \end{minted}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Hands-On 5: Change Sensor to HDC1010}
+  \begin{minted}[
+    linenos,
+    numbersep=15pt,
+    framesep=2mm,
+    bgcolor=lightgray!20,
+    baselinestretch=1,
+    fontsize=\tiny,
+    firstnumber=1,
+    stepnumber=5,
+  ]{diff}
+diff --git a/samples/06_ble/prj.conf b/samples/06_ble/prj.conf
+@@ -8,3 +8,4 @@ CONFIG_BT_BAS=y
+ CONFIG_BT_DEVICE_NAME="Zephyr Health Thermometer"
+ CONFIG_BT_DEVICE_APPEARANCE=768
+ CONFIG_CBPRINTF_FP_SUPPORT=y
++CONFIG_SENSOR=y
+diff --git a/samples/06_ble/src/hts.c b/samples/06_ble/src/hts.c
+@@ -25,8 +25,10 @@
+ #include <zephyr/bluetooth/uuid.h>
+ #include <zephyr/bluetooth/gatt.h>
+ 
++#include <zephyr/drivers/sensor.h>
++
+ #ifdef CONFIG_TEMP_NRF5
+-static const struct device *temp_dev = DEVICE_DT_GET_ANY(nordic_nrf_temp);
++static const struct device *temp_dev = DEVICE_DT_GET_ANY(ti_hdc);
+ #else
+ static const struct device *temp_dev;
+ #endif
+@@ -104,7 +106,7 @@ void hts_indicate(void)
+                        printk("sensor_sample_fetch failed return: %d\n", r);
+                }
+ 
+-               r = sensor_channel_get(temp_dev, SENSOR_CHAN_DIE_TEMP,
++               r = sensor_channel_get(temp_dev, SENSOR_CHAN_AMBIENT_TEMP,
+                                       &temp_value);
+                if (r) {
+                        printk("sensor_channel_get failed return: %d\n", r);
   \end{minted}
 \end{frame}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
