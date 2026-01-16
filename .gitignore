@@ -15,3 +15,8 @@ svg-inkscape/
 *.snm
 *.toc
 *.vrb
+
+# Sphinx doc
+_build
+*.pygtex
+*.pygstyle
