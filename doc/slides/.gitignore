@@ -1,0 +1,12 @@
+# Slidev artifacts
+node_modules/
+dist/
+package-lock.json
+
+# Tooling
+.tox/
+.claude/
+
+# OS metadata
+.DS_Store
+Thumbs.db

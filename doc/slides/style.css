@@ -1,0 +1,242 @@
+/* Custom styles for Zephyr Workshop Slides */
+/* Using slidev-theme-academic - minimal overrides */
+
+:root {
+  --color-dark-teal: #23373b;
+  --color-header-bg: #3b3b3b;
+  --color-text-grey: #999999;
+  --color-white: #fafafa;
+
+  /* List and group spacing */
+  --list-item-spacing: 0.1rem;
+  --group-spacing: 0.75rem;
+}
+
+/* Ensure images don't have shadows/borders unless needed */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Footnotes / small text */
+.slidev-vclick-target {
+  transition: none;
+}
+
+/* --- Layout & Component Adjustments --- */
+
+/* Standard Slide Layout (excluding special pages) */
+.slidev-layout:not(.cover):not(.section):not(.intro) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding-top: 4.5rem; /* Space for the header */
+  color: var(--color-dark-teal);
+}
+
+/* Fix: Group image and caption tightly for all figure components */
+figure.flex.flex-col {
+  height: auto !important;
+  justify-content: center !important;
+}
+
+/* Figure and manual captions (images, code excerpts) */
+figcaption.mt-3.text-center.text-xs,
+.slidev-layout div.text-xs,
+.slidev-layout p.text-xs,
+.slidev-layout div.text-sm.opacity-50,
+.slidev-layout p.text-sm.opacity-50 {
+  font-size: 0.9rem !important;
+  font-weight: 300 !important;
+  text-align: center !important;
+  margin-top: 0.75rem !important;
+  opacity: 1 !important;
+  color: var(--color-dark-teal) !important;
+}
+
+/* Header Bar */
+.slidev-layout:not(.cover):not(.section):not(.intro) h2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--color-header-bg);
+  color: var(--color-white);
+  padding: 0.8rem 3rem;
+  margin: 0;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  z-index: 10;
+}
+
+/* Body Headings */
+.slidev-layout:not(.cover):not(.section):not(.intro) h3,
+.slidev-layout:not(.cover):not(.section):not(.intro) h4,
+.slidev-layout:not(.cover):not(.section):not(.intro) strong {
+  color: var(--color-dark-teal);
+}
+
+/* Body Text Typography */
+.slidev-layout:not(.cover):not(.section):not(.intro) ul,
+.slidev-layout:not(.cover):not(.section):not(.intro) ol,
+.slidev-layout:not(.cover):not(.section):not(.intro) p,
+.slidev-layout:not(.cover):not(.section):not(.intro) li {
+  font-size: 1.25rem;
+  font-weight: 380;
+  line-height: 1.6;
+}
+
+/* Base paragraph and list margins */
+.slidev-layout:not(.cover):not(.section):not(.intro) p {
+  margin-top: 0;
+  margin-bottom: 0.25rem;
+}
+
+.slidev-layout:not(.cover):not(.section):not(.intro) ul {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* Bold text */
+.slidev-layout strong,
+.slidev-layout b {
+  font-weight: 500 !important;
+}
+
+/* Bullet Points */
+.slidev-layout:not(.cover):not(.section):not(.intro) ul {
+  /* Revert to default list style but keep basic spacing if needed */
+  list-style-type: disc;
+  padding-left: 1.5rem; /* Standard indentation */
+  margin-left: 0;
+}
+
+.slidev-layout:not(.cover):not(.section):not(.intro) ul li {
+  /* Reset custom positioning */
+  position: static;
+  padding-left: 0;
+  margin-bottom: var(--list-item-spacing);
+}
+
+/* Remove custom pseudo-element marker */
+.slidev-layout:not(.cover):not(.section):not(.intro) ul li::before {
+  content: none;
+}
+
+/* Style the native marker */
+.slidev-layout:not(.cover):not(.section):not(.intro) li::marker {
+  color: var(--color-dark-teal);
+  font-size: 0.8em; /* Slightly smaller than text */
+}
+
+/* List/paragraph group spacing - tight connection between header and list */
+.slidev-layout:not(.cover):not(.section):not(.intro) p + ul {
+  margin-top: 0.25rem !important;
+}
+
+/* Space before next group's header */
+.slidev-layout:not(.cover):not(.section):not(.intro) ul + p {
+  margin-top: var(--group-spacing) !important;
+}
+
+/* First paragraph in a container doesn't need top margin */
+.slidev-layout:not(.cover):not(.section):not(.intro) div > p:first-child {
+  margin-top: 0 !important;
+}
+
+/* --- Section & Cover Pages --- */
+
+.slidev-layout.cover h1,
+.slidev-layout.section h1,
+.slidev-layout.cover h2,
+.slidev-layout.section h2 {
+  color: var(--color-header-bg);
+}
+
+/* Section Transition Pages */
+.slidev-layout.section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.slidev-layout.section h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.3;
+}
+
+/* Footnotes */
+.footnotes, .footnote, .footnote p {
+  color: var(--color-text-grey) !important;
+  opacity: 1 !important;
+  font-weight: 300;
+  font-size: 0.625rem; /* ~10px - smaller footnote text */
+}
+
+/* Footnote container - left aligned, tighter to bottom, with separator */
+.slidev-layout .absolute.bottom-0 {
+  margin: 0 0.75rem;
+  width: calc(100% - 1.5rem);
+}
+
+.slidev-layout .absolute.bottom-0::before {
+  content: '';
+  display: block;
+  width: 25%;
+  height: 1px;
+  background-color: var(--color-text-grey);
+}
+
+.slidev-layout .absolute.bottom-0 ul {
+  padding: 0.25rem 0 !important;
+  margin: 0;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  gap: 0 !important; /* Remove vertical gap between footnote items */
+}
+
+/* Footnote list items */
+.slidev-layout .absolute.bottom-0 li {
+  font-size: 0.65rem !important;
+  line-height: 1.1; /* Tighter line height to minimize gap */
+}
+
+/* Footnote superscript numbers */
+.footnote sup {
+  font-weight: 500;
+  margin-right: 0.15rem;
+}
+
+/* Footnote links */
+.footnote a {
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.footnote a:hover {
+  color: #1d4ed8;
+}
+
+/* Global link styling - blue without underline */
+.slidev-layout a {
+  color: #2563eb !important;
+  text-decoration: none !important;
+  background-image: none !important;
+  border-bottom: none !important;
+}
+
+.slidev-layout a:hover {
+  font-weight: 500;
+}
+
+/* Figure footnote reference number (from theme's figure layout) */
+.slidev-layout figcaption sup,
+.slidev-layout .figure-caption sup {
+  color: var(--color-dark-teal);
+  font-weight: 500;
+}
+
