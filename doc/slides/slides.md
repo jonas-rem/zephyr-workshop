@@ -13,7 +13,7 @@ info: |
   [github.com/jonas-rem/zephyr-workshop](https://github.com/jonas-rem/zephyr-workshop)
 keywords: zephyr,rtos,embedded,iot
 exportFilename: zephyr-workshop-slides
-download: true
+download: false
 lineNumbers: false
 drawings:
   persist: false
