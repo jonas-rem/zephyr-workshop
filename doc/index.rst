@@ -6,9 +6,14 @@ Zephyr-Workshop
 .. toctree::
    :caption: Introduction
    :maxdepth: 2
-   :hidden:
 
    src/introduction
+
+.. toctree::
+   :caption: slides
+   :maxdepth: 2
+
+   src/slides
 
 .. toctree::
    :caption: Workshop
