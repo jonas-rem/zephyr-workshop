@@ -16,19 +16,38 @@ Resources to quickly get started with Zephyr:
 - [Samples and Demos](https://docs.zephyrproject.org/latest/samples/)
 - [Zephyr GitHub Repository](https://github.com/zephyrproject-rtos/zephyr)
 
-## Slides 📊
+## Documentation and Slides 📖
 
-The slides can be downloaded as pdf file under the releases. They explain
-Zephyr fundamentals and how to get started with the hands-on part of the
-workshop.
+The workshop includes both a web-based documentation (Sphinx) and a slide presentation (Slidev). The slides are integrated into the documentation.
 
-The presentation slides are written with Latex Beamer and the
-[mtheme](https://github.com/matze/mtheme/tree/master). To build the
-presentation and generate a PDF file, execute `make`.
+### Building the Documentation
+
+The documentation is located in the `doc` folder. To build the full documentation including the integrated slides, use `tox`:
+
+```shell
+cd doc
+# Build integrated HTML documentation (Sphinx + Slides)
+tox -e html
+# Or for live preview with autobuild
+tox -e docs
+```
+
+The output will be available in `doc/_build/html/index.html`.
+
+### Slides 📊
+
+The presentation slides are located in `doc/slides` and are written with [Slidev](https://sli.dev/). They are automatically built and included when building the documentation, but they can also be built standalone:
+
+```shell
+cd doc
+tox -e slides
+```
+
+The standalone build output is located in `doc/slides/dist/zephyr-workshop_slides`.
 
 ### Presentation License
 
-The content in the `/slides` directory is licensed under the Creative Commons
+The content in the `doc/slides` directory is licensed under the Creative Commons
 Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). A full copy of
 the license text is available in the `LICENSE_PRESENTATION` file at the root of
 this repository.
