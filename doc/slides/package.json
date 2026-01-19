@@ -10,6 +10,9 @@
     "@slidev/cli": "^0.50.0",
     "slidev-theme-academic": "^2.1.0"
   },
+  "overrides": {
+    "esbuild": "^0.25.0"
+  },
   "devDependencies": {
     "playwright-chromium": "^1.57.0"
   }
