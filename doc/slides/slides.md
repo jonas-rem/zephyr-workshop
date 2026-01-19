@@ -6,6 +6,7 @@ coverAuthor: Jonas Remmert
 coverAuthorUrl: https://github.com/jonas-rem
 coverDate: ""
 title: Hands-on Zephyr Project Workshop
+routerMode: hash
 info: |
   ## Hands-on Zephyr Project Workshop
   Navigating Low Power IoT Development with Practical Examples
