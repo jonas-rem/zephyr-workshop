@@ -6,14 +6,22 @@ author = "Jonas Remmert"
 # -- General configuration ----------------------------------------------------
 extensions = []
 
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store", ".tox", "**/.tox", "slides"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    ".tox",
+    "**/.tox",
+    "slides",
+    "slides_dist",
+]
 
 # -- Options for HTML output --------------------------------------------------
 html_theme = "sphinx_rtd_theme"
 html_title = project
 # html_favicon = "_static/images/favicon.png"
 html_static_path = ["_static"]
-html_extra_path = ["slides/dist"]
+html_extra_path = ["slides_dist"]
 
 html_theme_options = {
     # "logo_only": True,
