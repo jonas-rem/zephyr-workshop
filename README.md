@@ -32,7 +32,10 @@ tox -e html
 tox -e docs
 ```
 
-The output will be available in `doc/_build/html/index.html`.
+The output will be available in `doc/_build/html/index.html`. 
+
+> [!NOTE]
+> Slidev uses ES Modules and cannot be opened directly via the `file://` protocol. You must serve the documentation via a web server (e.g., using `tox -e docs` for local preview).
 
 ### Slides 📊
 
@@ -43,7 +46,7 @@ cd doc
 tox -e slides
 ```
 
-The standalone build output is located in `doc/slides/dist/zephyr-workshop_slides`.
+The standalone build output is located in `doc/slides_dist/zephyr-workshop_slides`.
 
 ### Presentation License
 
