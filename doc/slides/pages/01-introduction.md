@@ -15,6 +15,38 @@ level: 1
 - **Experience:** RTOS (FreeRTOS, Zephyr), NXP MCUX, hardware development
 
 ---
+
+## Workshop Goals
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+
+- Combine theory with hands-on practice
+- Introduction to Zephyr RTOS
+- Setting up the SDK
+  - On a Local Machine
+  - GitHub Codespaces
+- Exploring key features
+- Hands-on development
+
+</div>
+
+<div class="flex flex-col items-center justify-center">
+  <img src="/images/zephyr_logo.png" class="h-40" />
+</div>
+
+</div>
+
+---
+
+## Audience Check
+
+- What are your goals for the Workshop?
+- Have you used an RTOS before?
+- Your experience with Zephyr?
+
+---
 ---
 
 ## Areas of Work
@@ -48,9 +80,10 @@ level: 1
 
 - Governed by the Linux Foundation
 - Vendor-neutrality: fairness and interoperability
-- Technical Steering Committee (TSC) and Working Groups (WG) make technical decisions
+- Technical Steering Committee (TSC) and Working Groups (WG)
 - Security and tooling (e.g. SBOM) as integral part
-- Safety certification ongoing
+- **Alternative to vendor SDKs**
+- **Safety certification ongoing**
 
 </div>
 
