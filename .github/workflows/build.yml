@@ -1,0 +1,33 @@
+name: Build Samples
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/zephyrproject-rtos/ci:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Initialize West
+        run: |
+          west init -l .
+          west update --narrow -o=--depth=1
+          west zephyr-export
+
+      - name: Install Dependencies
+        run: |
+          pip install -r zephyr/scripts/requirements.txt
+
+      - name: Build and Test
+        run: |
+          west twister -T app/ -T test/ --integration
