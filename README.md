@@ -18,11 +18,13 @@ Resources to quickly get started with Zephyr:
 
 ## Documentation and Slides 📖
 
-The workshop includes both a web-based documentation (Sphinx) and a slide presentation (Slidev). The slides are integrated into the documentation.
+The workshop includes both a web-based documentation (Sphinx) and a slide
+presentation (Slidev). The slides are integrated into the documentation.
 
 ### Building the Documentation
 
-The documentation is located in the `doc` folder. To build the full documentation including the integrated slides, use `tox`:
+The documentation is located in the `doc` folder. To build the full
+documentation including the integrated slides, use `tox`:
 
 ```shell
 cd doc
@@ -32,28 +34,42 @@ tox -e html
 tox -e docs
 ```
 
-The output will be available in `doc/_build/html/index.html`. 
+The output will be available in `doc/_build/html/index.html`.
 
 > [!NOTE]
-> Slidev uses ES Modules and cannot be opened directly via the `file://` protocol. You must serve the documentation via a web server (e.g., using `tox -e docs` for local preview).
+> Slidev uses ES Modules and cannot be opened directly via the `file://`
+> protocol. You must serve the documentation via a web server
+> (e.g., using `tox -e docs` for local preview).
 
 ### Slides 📊
 
-The presentation slides are located in `doc/slides` and are written with [Slidev](https://sli.dev/). They are automatically built and included when building the documentation, but they can also be built standalone:
+The presentation slides are located in `doc/slides` and are written with
+[Slidev](https://sli.dev/). They are automatically built and included when
+building the documentation, but they can also be built standalone:
 
 ```shell
 cd doc
 tox -e slides
 ```
 
-The standalone build output is located in `doc/slides_dist/zephyr-workshop_slides`.
+The standalone build output is located in
+`doc/slides_dist/zephyr-workshop_slides`.
+
+#### Live Preview (Development)
+For the best experience when editing slides, use the Slidev development server which provides instant hot-reloading:
+
+```shell
+cd doc/slides
+npm install
+npm run dev
+```
 
 ### Presentation License
 
-The content in the `doc/slides` directory is licensed under the Creative Commons
-Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). A full copy of
-the license text is available in the `LICENSE_PRESENTATION` file at the root of
-this repository.
+The content in the `doc/slides` directory is licensed under the Creative
+Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). A full
+copy of the license text is available in the `LICENSE_PRESENTATION` file at the
+root of this repository.
 
 ## Firmware 🛠
 
@@ -71,20 +87,7 @@ Zephyr's Zbus. The application is located at ´app´, related tests are in the
 ´tests´ folder.
 
 The application should run on most supported boards as it only uses a button
-and an led. However, if you do not have a hardware available, you can run the
-application with Renode. The Renode configuration is located in the `utils`
-folder. For running the application in Renode, you have to build for the
-`stm32f4_disco` board.
-
-You can build the application as follows:
-```shell
-west build -b stm32f4_disco app -p
-```
-
-And run in Renode:
-```shell
-renode util/stm32f4.resc --disable-gui --console
-```
+and an led.
 
 To run and explore integration tests with twister, you can build the tests and
 application for mulitple boards:
