@@ -9,13 +9,14 @@ manifest:
   projects:
     - name: zephyr
       remote: zephyrproject-rtos
-      revision: v3.7.1
+      revision: main
       import:
         # By using name-allowlist we can clone only the modules that are
         # strictly needed by the application.
         name-allowlist:
           #- lvgl      # Uncomment to include LittlevGL for the git bisect demo
           - cmsis      # required by the ARM port
+          - cmsis_6
           - mbedtls
           - hal_nordic
           - hal_stm32
