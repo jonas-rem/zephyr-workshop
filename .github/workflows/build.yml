@@ -11,8 +11,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Use ci-base image and install only the required toolchain to save disk
+    # space
     container:
-      image: ghcr.io/zephyrproject-rtos/ci:latest
+      image: ghcr.io/zephyrproject-rtos/ci-base:latest
 
     steps:
       - name: Checkout
@@ -26,7 +28,13 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          pip install -r zephyr/scripts/requirements.txt
+          pip install -r ../zephyr/scripts/requirements.txt
+
+      - name: Setup SDK
+        # Install only the ARM toolchain to minimize download size and disk
+        # usage
+        run: |
+          west sdk install --toolchains arm-zephyr-eabi
 
       - name: Build and Test
         run: |
