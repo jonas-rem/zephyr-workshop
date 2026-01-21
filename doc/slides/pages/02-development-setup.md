@@ -148,6 +148,17 @@ GitHub Codespaces<sup>1</sup>
 
 ---
 
+## Recommendations from Experience
+
+Virtual Machines in combination with embedded hardware can bring their own problems.
+
+**Prioritize a local environment over a cloud environment**
+- Hardware is better accessible
+- Better integration of your own tools
+- Check vendor tools that can enhance your Zephyr Dev Environment
+
+---
+
 ## Hands-on 1 - Codespaces Setup
 
 <div class="grid grid-cols-2 gap-4">

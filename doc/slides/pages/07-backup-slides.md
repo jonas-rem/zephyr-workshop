@@ -55,37 +55,7 @@ Date:   Thu Jan 25 11:09:06 2024 +0100
 layout: default
 ---
 
-## Renode: Technical Overview
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-<v-clicks>
-
-- Testing of embedded systems in a reproducible virtual environment
-- Simulation of unmodified binaries for target hardware
-- Simulates entire SoCs, including CPUs, peripherals, and interconnects
-
-</v-clicks>
-</div>
-
-<div>
-<v-clicks>
-
-- Enables complex network simulations, both wired and wireless
-- Allows for interactive debugging, system state inspection, and automated testing
-- Open Source, actively developed by Antmicro
-
-</v-clicks>
-</div>
-
-</div>
-
----
-layout: default
----
-
-## Hands-On 4: Extension to 3 States - test
+## Hands-On 4: Extension to 3 States - Solution (Test)
 
 ```diff
 test/led/src/main.c

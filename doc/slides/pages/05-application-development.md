@@ -63,6 +63,166 @@ level: 1
 </div>
 
 ---
+
+## Modular Development
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+
+- **General:** Code reuse, maintainability, readability
+- **IPC:** Communication e.g. via Zbus
+- **Context:** Each module can be controlled independently
+- **Testing:** Modules can be tested separately
+
+</div>
+
+<div>
+
+```text
+app/
+├── CMakeLists.txt
+├── Kconfig
+├── prj.conf
+└── src
+    ├── common
+    │   ├── CMakeLists.txt
+    │   ├── message_channel.c
+    │   └── message_channel.h
+    ├── main.c
+    └── modules
+        ├── button
+        │   ├── button.c
+        │   ├── CMakeLists.txt
+        │   └── Kconfig.button
+        └── led
+            ├── led.c
+            ├── CMakeLists.txt
+            └── Kconfig.led
+```
+
+</div>
+
+</div>
+
+---
+
+## Testing Modules
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+
+**Isolated testing of modules**
+- Add subsystems like `shell`, `ztest` for test cases
+- Tests reference modules via CMake
+- Interfaces abstracted via Zbus
+
+**Example Test Structure:**
+```text
+test/
+├── button
+│   ├── CMakeLists.txt
+│   ├── prj.conf
+│   └── src/main.c
+└── led
+    ├── CMakeLists.txt
+    └── src/main.c
+```
+
+</div>
+
+<div>
+
+```cmake
+# test/button/CMakeLists.txt
+target_sources(app PRIVATE src/main.c)
+add_subdirectory(../../app/src/common common)
+add_subdirectory(../../app/src/modules/button button)
+```
+
+```c
+// test/button/src/main.c
+void button_test_msg_cb(const struct zbus_channel *chan) {
+    const enum sys_msg *msg = zbus_chan_const_msg(chan);
+    if (*msg == SYS_BUTTON_PRESSED) {
+        LOG_INF("Button pressed!");
+    }
+}
+ZBUS_LISTENER_DEFINE(button_test, button_test_msg_cb);
+ZBUS_CHAN_ADD_OBS(button_ch, button_test, 1);
+```
+
+</div>
+
+</div>
+
+---
+
+## Automated Testing with Twister
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+
+**Zephyr Test Runner (Twister)**
+- `west twister` - Automates building and running tests
+- Supports multiple platforms (real HW or simulation)
+- Integration tests via `sample.yaml`
+
+**Run Integration Tests:**
+```shell
+west twister -T app/ -T test/ --integration
+```
+
+</div>
+
+<div>
+
+**Example `sample.yaml`:**
+```yaml
+integration_platforms:
+  - reel_board
+  - frdm_k64f
+  - nrf52840dk/nrf52840
+```
+
+**Output:**
+```text
+INFO - Total complete: 24/24 100%
+INFO - 24 of 24 configurations passed
+INFO - Run completed
+```
+
+</div>
+
+</div>
+
+---
+
+## Hands-on 4: Extend the Application
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+
+Currently: **standby**, **sleep**.
+**Task:** Add a third state: **active**.
+Cycle via button: `standby` -> `sleep` -> `active`
+
+- **Sleep:** LED off
+- **Standby:** LED blinking
+- **Active:** LED on
+
+</div>
+
+<div class="flex flex-col items-center justify-center">
+  <img src="/images/zbus_application.svg" class="h-60" />
+</div>
+
+</div>
+
+---
 ---
 
 ## Hands-on 5: BLE Sensor Improvements
