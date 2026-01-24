@@ -1,0 +1,56 @@
+# EditorConfig: https://editorconfig.org/
+root = true
+
+# All files
+[*]
+charset = utf-8
+end_of_line = lf
+max_line_length = 80
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# C source and header files
+[*.{c,h}]
+indent_style = tab
+indent_size = 8
+tab_width = 8
+
+# Markdown
+[*.md]
+indent_style = space
+indent_size = 2
+
+# reStructuredText
+[*.rst]
+indent_style = space
+indent_size = 3
+
+# YAML
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+# CMake
+[{CMakeLists.txt,*.cmake}]
+indent_style = space
+indent_size = 2
+
+# Device tree
+[*.{dts,dtsi,overlay}]
+indent_style = tab
+indent_size = 8
+
+# Kconfig
+[Kconfig*]
+indent_style = tab
+indent_size = 8
+
+# Python
+[*.py]
+indent_style = space
+indent_size = 4
+
+# Shell Script
+[*.sh]
+indent_style = space
+indent_size = 4
