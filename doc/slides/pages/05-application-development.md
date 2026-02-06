@@ -56,7 +56,7 @@ level: 1
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/zbus_application.svg" class="h-60 object-contain" />
+  <img src="/images/zbus_application.png" class="h-60 object-contain" />
   <div class="text-xs text-center mt-2">Minimal modular application with zbus</div>
 </div>
 
@@ -217,7 +217,7 @@ Cycle via button: `standby` -> `sleep` -> `active`
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/zbus_application.svg" class="h-60" />
+  <img src="/images/zbus_application.png" class="h-60" />
 </div>
 
 </div>
