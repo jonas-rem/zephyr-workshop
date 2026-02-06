@@ -4,6 +4,7 @@ sample:
 common:
   tags: introduction
   integration_platforms:
+    - native_sim
     - reel_board
     - frdm_k64f
     - nucleo_wb55rg
