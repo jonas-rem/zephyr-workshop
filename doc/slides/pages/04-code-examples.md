@@ -43,8 +43,7 @@ level: 1
 **Build and run:**
 
 ```shell
-west build -b qemu_cortex_m0 \
-  samples/01_hello_world -p
+west build -b native_sim samples/01_hello_world -p
 west build -t run
 ```
 
@@ -115,7 +114,7 @@ int main(void)
 ## 01_hello_world Application Build Output
 
 ```shell
-west build -b qemu_cortex_m0 samples/01_hello_world/ -p
+west build -b native_sim samples/01_hello_world/ -p
 -- Found host-tools: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
 -- Found toolchain: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
 [..]
@@ -191,7 +190,7 @@ build/
 
 ```shell
 *** Booting Zephyr OS build v4.1.0 ***
-Hello World! qemu_cortex_m3/ti_lm3s6965
+Hello World! native_sim
 ```
 
 ---
@@ -251,7 +250,7 @@ int main(void)
 
 ```
 *** Booting Zephyr OS build v4.1.0 ***
-Hello World! qemu_cortex_m0
+Hello World! native_sim
 [00:00:00.001,691] <err> hello_world: error string
 [00:00:00.001,843] <dbg> hello_world: main: debug string
 [00:00:00.001,859] <inf> hello_world: info string
@@ -633,16 +632,14 @@ Indication complete
 Build and run the samples<sup>1</sup>:
 
 ```shell
-west build -b qemu_cortex_m0 \
-  samples/02_logging -p
+west build -b native_sim samples/02_logging -p
 west build -t run
 ```
 
 **or**
 
 ```shell
-west build -b reel_board@2 \
-  samples/02_logging -p
+west build -b reel_board@2 samples/02_logging -p
 west flash
 ```
 

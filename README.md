@@ -138,8 +138,8 @@ west update
 # e.g. for reel_board
 west build -b reel_board samples/01_hello_world -p
 
-# Or for a simulation that can run on the host system
-west build -b qemu_cortex_m0 samples/01_hello_world -p
+# Or for native execution on the host system
+west build -b native_sim samples/01_hello_world -p
 ```
 
 Once the sample is build, run the following command to flash/run it:
@@ -148,6 +148,6 @@ Once the sample is build, run the following command to flash/run it:
 # on a board
 west flash
 
-# qemu simulation
+# native_sim execution
 west build -t run
 ```

@@ -12,16 +12,16 @@ prints "Hello World" to the console.
 Building and Running
 ********************
 
-This application can be built and executed on QEMU as follows:
+This application can be built and executed on native_sim as follows:
 
 .. zephyr-app-commands::
    :zephyr-app: samples/hello_world
    :host-os: unix
-   :board: qemu_x86
+   :board: native_sim
    :goals: run
    :compact:
 
-To build for another board, change "qemu_x86" above to that board's name.
+To build for another board, change "native_sim" above to that board's name.
 
 Sample Output
 =============
@@ -30,4 +30,4 @@ Sample Output
 
     Hello World! x86
 
-Exit QEMU by pressing :kbd:`CTRL+A` :kbd:`x`.
+Exit native_sim by pressing :kbd:`CTRL+C`.
