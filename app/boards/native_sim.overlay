@@ -1,0 +1,29 @@
+/**
+ * Native Sim Overlay for Application
+ *
+ * This overlay adds a button (sw0) alias for the native_sim board
+ * to enable the button module to compile and run.
+ * Also enables uart1 for shell on separate console.
+ */
+
+/ {
+	aliases {
+		sw0 = &button0;
+	};
+
+	chosen {
+		zephyr,shell-uart = &uart1;
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+		button0: button_0 {
+			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+			label = "User button";
+		};
+	};
+};
+
+&uart1 {
+	status = "okay";
+};
