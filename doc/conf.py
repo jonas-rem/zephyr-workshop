@@ -1,6 +1,6 @@
 # -- Project information ------------------------------------------------------
 project = "Zephyr Workshop"
-copyright = "2026 Jonas Remmert"
+copyright = "2026 Jonas Remmert, Licensed under CC BY-SA 4.0"
 author = "Jonas Remmert"
 
 # -- General configuration ----------------------------------------------------
