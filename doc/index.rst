@@ -21,3 +21,4 @@ Zephyr-Workshop
    :hidden:
 
    src/setup
+   src/application
