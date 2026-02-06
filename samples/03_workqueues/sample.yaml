@@ -2,7 +2,7 @@ sample:
   name: workqueue test
 common:
   integration_platforms:
-    - native_posix
+    - native_sim
 tests:
   sample.basic.workqueue:
     build_only: true

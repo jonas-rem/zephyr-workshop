@@ -1,6 +1,8 @@
 common:
   harness: display
   tags: display
+  integration_platforms:
+    - native_sim
 sample:
   description: Character framebuffer test
   name: cfb sample

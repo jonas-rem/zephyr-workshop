@@ -4,14 +4,15 @@ sample:
 common:
   tags: introduction
   integration_platforms:
+    - native_sim
     - reel_board
-    - frdm_k64f
-    - nucleo_wb55rg
-    - nucleo_l496zg
-    - mimxrt1010_evk
-    - nucleo_l452re
-    - nrf5340dk/nrf5340/cpuapp
-    - stm32f4_disco
+    #- frdm_k64f
+    #- nucleo_wb55rg
+    #- nucleo_l496zg
+    #- mimxrt1010_evk
+    #- nucleo_l452re
+    #- nrf5340dk/nrf5340/cpuapp
+    #- stm32f4_disco
     # The following platforms are not supported in twister currently
     #- nrf52833dk_nrf52833
     #- atsamr21_xpro

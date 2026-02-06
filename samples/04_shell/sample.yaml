@@ -2,7 +2,7 @@ sample:
   name: console build test
 common:
   integration_platforms:
-    - native_posix
+    - native_sim
 tests:
   sample.basic.console:
     build_only: true
