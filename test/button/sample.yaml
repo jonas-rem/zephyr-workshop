@@ -19,3 +19,8 @@ common:
 tests:
   sample.basic.button:
     tags: introduction
+    harness: console
+    harness_config:
+      type: one_line
+      regex:
+        - "Button test start"

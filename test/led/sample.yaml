@@ -19,3 +19,8 @@ common:
 tests:
   sample.basic.led:
     tags: introduction
+    harness: console
+    harness_config:
+      type: one_line
+      regex:
+        - "LED module started"
