@@ -260,7 +260,7 @@ cirrus-logic  infineon    openisa     telink
 [..]
 
 zephyrproject/zephyr:~$ ls boards/
-96boards               firefly       qemu
+96boards               firefly       native_sim
 actinius               gd            rak
 ...
 ```
