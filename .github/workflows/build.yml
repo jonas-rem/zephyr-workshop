@@ -38,4 +38,5 @@ jobs:
 
       - name: Build and Test
         run: |
-          west twister -T app/ -T test/ --integration
+          west twister -T test/ --integration
+          west twister -T app/ --integration
