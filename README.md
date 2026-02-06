@@ -151,3 +151,30 @@ west flash
 # native_sim execution
 west build -t run
 ```
+
+### Building and Running the Application on native_sim
+
+The application can be built and run on `native_sim` for testing without hw:
+
+```shell
+# Build the application
+west build -b native_sim app -p
+
+# Run with shell on separate UART (creates predictable symlink)
+./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
+```
+
+This creates two separate consoles:
+- **Logs** - Appear in the terminal output (uart0)
+- **Shell** - Accessible via `/tmp/zephyr_shell` symlink (uart1)
+
+Interact with the shell:
+
+```shell
+# Send commands to the application
+echo "my_app button button_press" > /tmp/zephyr_shell
+echo "help" > /tmp/zephyr_shell
+
+# Or use screen for interactive session
+tio /tmp/zephyr_shell
+```
