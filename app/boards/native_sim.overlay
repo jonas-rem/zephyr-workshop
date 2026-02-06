@@ -1,9 +1,9 @@
 /**
  * Native Sim Overlay for Application
  *
- * This overlay adds a button (sw0) alias for the native_sim board
- * to enable the button module to compile and run.
- * Also enables uart1 for shell on separate console.
+ * This overlay adds a button (sw0) aliases for the native_sim board to enable
+ * the button module to compile and run. Also enables uart1 for shell on
+ * separate console.
  */
 
 / {

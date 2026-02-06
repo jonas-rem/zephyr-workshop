@@ -1,0 +1,20 @@
+/**
+ * Native Sim Overlay for Button Test
+ *
+ * This overlay adds a button (sw0) alias for the native_sim board
+ * to enable the button module to compile and run.
+ */
+
+/ {
+	aliases {
+		sw0 = &button0;
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+		button0: button_0 {
+			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+			label = "User button";
+		};
+	};
+};
