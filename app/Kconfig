@@ -2,6 +2,7 @@ menu "Application"
 
 rsource "src/modules/led/Kconfig.led"
 rsource "src/modules/button/Kconfig.button"
+rsource "src/modules/button_mock/Kconfig.button_mock"
 
 endmenu
 
