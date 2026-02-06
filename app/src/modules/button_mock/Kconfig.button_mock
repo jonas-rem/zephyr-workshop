@@ -1,0 +1,14 @@
+# Copyright (c) 2026 Jonas Remmert
+# SPDX-License-Identifier: Apache-2.0
+
+config BUTTON_MOCK
+	bool "Button mock module for native_sim"
+	depends on BOARD_NATIVE_SIM
+	default y
+	help
+	  Enable button mock module that simulates physical button presses
+	  using the GPIO emulator for native_sim builds.
+
+module = BUTTON_MOCK
+module-str = button_mock
+source "subsys/logging/Kconfig.template.log_config"
