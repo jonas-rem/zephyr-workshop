@@ -1,35 +1,44 @@
 {
-  "image": "ubuntu:24.04",
+  "name": "Zephyr Workshop",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
   "workspaceMount": "source=${localWorkspaceFolder},target=/zephyrproject/zephyr-workshop,type=bind",
   "workspaceFolder": "/zephyrproject",
-  "onCreateCommand": "apt-get update
-		      echo 'tzdata tzdata/Areas select Europe' | debconf-set-selections
-		      echo 'tzdata tzdata/Zones/Europe select Berlin' | debconf-set-selections
-		      DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends git cmake ninja-build gperf ccache dfu-util device-tree-compiler wget python3-dev python3-pip python3-setuptools python3-tk python3-wheel xz-utils file make gcc gcc-multilib g++-multilib libsdl2-dev libmagic1 vim htop
-		      pip3 install west --break-system-packages
-		      west init -l zephyr-workshop
-		      west update
-		      west zephyr-export
-		      pip install -r zephyr/scripts/requirements.txt --break-system-packages
-		      west sdk install --toolchains arm-zephyr-eabi x86_64-zephyr-elf
-		      mkdir renode_portable
-		      wget https://builds.renode.io/renode-latest.linux-portable.tar.gz
-		      tar xf  renode-latest.linux-portable.tar.gz -C renode_portable --strip-components=1
-		      echo \"export PATH='/zephyrproject/renode_portable:$PATH'\" >> ~/.bashrc
-		      rm renode-latest.linux-portable.tar.gz
-		      cd zephyr-workshop
-		      ",
-  "remoteEnv": { "LC_ALL": "C" },
+  "postCreateCommand": "bash /zephyrproject/zephyr-workshop/.devcontainer/post-create.sh",
+  "postAttachCommand": "code /zephyrproject/zephyr-workshop/samples/01_hello_world/src/main.c",
+  "remoteEnv": {
+    "LC_ALL": "C"
+  },
   "customizations": {
     "vscode": {
       "settings": {
+        "workbench.colorTheme": "Default Dark Modern",
+        "workbench.preferredDarkColorTheme": "Default Dark Modern",
+        "workbench.startupEditor": "none",
+        "workbench.tips.enabled": false,
+        "workbench.welcomePage.walkthroughs.openOnInstall": false,
+        "workbench.tree.indent": 20,
+        "update.showReleaseNotes": false,
+        "editor.minimap.enabled": false,
+        "breadcrumbs.enabled": false,
+        "extensions.ignoreRecommendations": true,
+        "extensions.closeExtensionDetailsOnViewChange": true,
+        "security.workspace.trust.startupPrompt": "never",
+        "security.workspace.trust.banner": "never",
+        "telemetry.telemetryLevel": "off",
+        "C_Cpp.showInitialConfiguration": false,
+        "C_Cpp.showOnlineInstallationValidationNotifications": false,
+        "C_Cpp.intelliSenseCachePath": "",
         "cmake.configureOnOpen": false,
         "cmake.showOptionsMovedNotification": false,
         "git.autofetch": false
       },
       "extensions": [
         "ms-vscode.cpptools-extension-pack",
-        "plorefice.devicetree"
+        "trond-snekvik.kconfig-lang",
+        "nordic-semiconductor.nrf-devicetree",
+        "editorconfig.editorconfig"
       ]
     }
   }
