@@ -3,6 +3,7 @@ sample:
 common:
   integration_platforms:
     - native_sim
+    - reel_board
 tests:
   sample.basic.console:
     build_only: true

@@ -2,7 +2,6 @@ sample:
   name: sensor test
 common:
   integration_platforms:
-    - native_sim
     - reel_board
 tests:
   sample.basic.sensor:
