@@ -89,11 +89,28 @@ Zephyr's Zbus. The application is located at ´app´, related tests are in the
 The application should run on most supported boards as it only uses a button
 and an led.
 
-To run and explore integration tests with twister, you can build the tests and
-application for mulitple boards:
+To run and explore integration tests with twister, you can build the tests,
+application and samples for multiple boards:
 ```shell
-west twister -T app/ -T test/ --integration
+west twister -T app/ -T test/ -T samples/ --integration
 ```
+
+For a partial run (e.g., after changing a single file), you can filter for specific
+tests or platforms while still running as integration test:
+```shell
+# Run only a specific test scenario (still as integration test)
+west twister -T samples/ -s sample.basic.helloworld --integration
+
+# Run tests only for a specific platform (still as integration test)
+west twister -T samples/ -p native_sim --integration
+
+# Run a specific sample directory only (still as integration test)
+west twister -T samples/01_hello_world/ --integration
+```
+
+Twister will automatically reuse existing build directories unless they are
+incompatible with the changes. Use `--pristine` or `-p always` to force a clean
+rebuild when needed.
 
 ## Github Codespaces Environment
 Just click on the button `<> Code` above to create a Github Codespaces

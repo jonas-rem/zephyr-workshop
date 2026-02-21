@@ -1,0 +1,8 @@
+sample:
+  description: System Controller unit tests
+  name: sys_ctrl_test
+tests:
+  sample.sys_ctrl:
+    integration_platforms:
+      - native_sim
+    tags: test
