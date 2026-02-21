@@ -346,7 +346,7 @@ arduino_i2c: &i2c0 {
 Build the `blinky` sample:
 
 ```shell
-west build -b reel_board \
+west build -b reel_board@2 \
   ../zephyr/samples/basic/blinky -p
 ```
 
