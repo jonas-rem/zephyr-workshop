@@ -72,7 +72,7 @@ Build and flash the application with `west`
 
 ```shell
 cd ~/zephyrproject/zephyr
-west build -b reel_board samples/basic/blinky -p
+west build -b reel_board@2 samples/basic/blinky -p
 west flash
 ```
 
