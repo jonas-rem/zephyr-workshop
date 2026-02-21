@@ -6,21 +6,41 @@ work with the Zephyr Project and develop applications based on it. The slide
 deck and code examples are ideal to conduct trainings.
 
 .. toctree::
+   :caption: Slides
+   :maxdepth: 1
+
+   src/slides
+
+
+.. toctree::
    :caption: Content
    :maxdepth: 1
 
    src/introduction
    src/setup
-   src/application
+   src/tracing
    src/architecture
    src/llm_future
 
 
 .. toctree::
-   :caption: Slides
+   :caption: Application
    :maxdepth: 1
 
-   src/slides
+   app/README
+
+.. toctree::
+   :caption: Samples
+   :maxdepth: 1
+
+   samples/01_hello_world/README
+   samples/02_logging/README
+   samples/03_workqueues/README
+   samples/04_shell/README
+   samples/05_sensor/README
+   samples/06_ble/README
+   samples/07_display_cfb/README
+   samples/08_sys_init/README
 
 
 .. note::
