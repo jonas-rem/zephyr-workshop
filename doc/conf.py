@@ -3,6 +3,29 @@ project = "Zephyr Workshop"
 copyright = "2026 Jonas Remmert, Licensed under CC BY-SA 4.0"
 author = "Jonas Remmert"
 
+import os
+import sys
+from docutils.parsers.rst import Directive
+
+sys.path.insert(0, os.path.abspath('.'))
+
+# Mock directive for zephyr-app-commands used in sample READMEs
+class ZephyrAppCommands(Directive):
+    has_content = True
+    option_spec = {
+        'zephyr-app': str,
+        'host-os': str,
+        'board': str,
+        'goals': str,
+        'compact': lambda x: x,
+    }
+    
+    def run(self):
+        return []
+
+def setup(app):
+    app.add_directive('zephyr-app-commands', ZephyrAppCommands)
+
 # -- General configuration ----------------------------------------------------
 extensions = []
 
