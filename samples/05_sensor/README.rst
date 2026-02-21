@@ -1,81 +1,65 @@
-.. _ti_hdc_sample:
+05 Sensor API
+#############
 
-TI_HDC Sample
-##############
+**Link to Source:** `samples/05_sensor <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/05_sensor>`_
 
-Description
-***********
+Overview
+********
 
-This sample application periodically takes Temperature and Humidity
-using the ti_hdc sensor driver. The result is written to the console.
+This sample demonstrates the use of Zephyr's Sensor API to read temperature
+and humidity from a TI HDC1010 (or compatible) sensor via I2C.
+
+This sample is useful for:
+
+- Understanding the Sensor API
+- Learning how to fetch and read sensor data
+- Working with I2C sensors
 
 Requirements
 ************
 
-This sample needs a compatible sensor like HDC1010 or HDC1080
-connected to the target board's I2C connector.
+This sample requires:
 
-Example Breakout Boards:
+- A board with I2C support (e.g., reel_board@2, nucleo_l496zg)
+- A TI HDC1010 or HDC1080 temperature/humidity sensor
 
-* Pmod HYGRO: Humidity and Temperature Sensor Breakout board
+Supported Boards:
 
+- reel_board@2
+- nucleo_l496zg (with external HDC sensor)
 
-Wiring
-******
+Building
+********
 
-This sample is tested with the STM32L496ZG nucleo and the Pmod HYGRO
-Temp/RH breakout board.
+For reel_board@2 (has onboard sensor):
 
-The sensor operates at 3.3V and uses I2C to communicate with the board.
+.. code-block:: console
 
-External Wires:
+   host:~$ west build -b reel_board@2 samples/05_sensor -p
+   host:~$ west flash
 
-* Breakout **GND** pin <--> Nucleo **GND** pin
-* Breakout **VCC** pin <--> Nucleo **3V3** pin
-* Breakout **SDA** pin <--> Nucleo **CN7-D14** pin
-* Breakout **SCL** pin <--> Nucleo **CN7-D15** pin
+For other boards with external sensor:
 
-Building and Running
-********************
+.. code-block:: console
 
-This sample builds one application for the HDC1080 sensor.
-Build/Flash Steps:
-
-.. zephyr-app-commands::
-   :zephyr-app: samples/sensor/ti_hdc/
-   :board: nucleo_l496zg
-   :goals: build flash
-   :compact:
+   host:~$ west build -b nucleo_l496zg samples/05_sensor -p
+   host:~$ west flash
 
 Sample Output
 *************
+
 .. code-block:: console
 
-    Running on arm!
-    Dev 0x20001160 name HDC1080 is ready!
-    Fetching...
-    Raw Temp = 25144, Temp = 23.305053 C, Raw RH = 32292, RH = 49.273681 %
-    Fetching...
-    Raw Temp = 25148, Temp = 23.315124 C, Raw RH = 32424, RH = 49.475097 %
-    ...
+   *** Booting Zephyr OS build v4.3.0 ***
+   Running on arm!
+   Dev 0x801c name ti_hdc@43 is ready!
+   Fetching...
+   Temp = 22.852966 C, RH = 38.793945 %
+   Fetching...
+   Temp = 22.842895 C, RH = 38.897705 %
+   Fetching...
 
-Build Testing
-**************
+Resources
+*********
 
-.. code-block:: bash
-
-    $ZEPHYR_BASE/scripts/twister -T $ZEPHYR_BASE/samples/sensor/ti_hdc/ -p nucleo_l496zg --device-testing --device-serial /dev/ttyACM0 -t build
-
-Target Testing
-**************
-
-.. code-block:: bash
-
-    $ZEPHYR_BASE/scripts/twister -T $ZEPHYR_BASE/samples/sensor/ti_hdc/ -p nucleo_l496zg --device-testing --device-serial /dev/ttyACM0 -t target
-
-
-References
-**********
-
-.. _Nucleo STM32L496ZG board: https://www.st.com/en/evaluation-tools/nucleo-l496zg.html
-.. _HDC1080 Breakout board: https://store.digilentinc.com/pmod-hygro-digital-humidity-and-temperature-sensor/
+- `Zephyr Sensor API Documentation <https://docs.zephyrproject.org/latest/hardware/peripherals/sensor.html>`_

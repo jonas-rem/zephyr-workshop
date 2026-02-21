@@ -40,3 +40,4 @@ jobs:
         run: |
           west twister -T test/ --integration
           west twister -T app/ --integration
+          west twister -T samples/ --integration
