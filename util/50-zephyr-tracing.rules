@@ -1,0 +1,9 @@
+# Zephyr USB Tracing - Allow non-root access to USB devices
+# Install: sudo cp 50-zephyr-tracing.rules /etc/udev/rules.d/
+# Then: sudo udevadm control --reload-rules && sudo udevadm trigger
+
+# Nordic Semiconductor (nrf52840dk, nrf5340dk, etc.)
+SUBSYSTEM=="usb", ATTR{idVendor}=="2fe3", ATTR{idProduct}=="0001", MODE="0666", GROUP="plugdev"
+
+# You can add more devices here as needed
+# Format: SUBSYSTEM=="usb", ATTR{idVendor}=="XXXX", ATTR{idProduct}=="YYYY", MODE="0666", GROUP="plugdev"

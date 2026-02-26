@@ -237,9 +237,308 @@ Run a single test by its scenario name:
    host:~$ west twister -s sample.basic.button
    host:~$ west twister -s sample.basic.led
 
+Tracing with CTF
+****************
+
+This application supports tracing using CTF (Common Trace Format). CTF is a
+binary trace format that allows you to visualize thread scheduling, interrupts,
+synchronization primitives, and more using tools like Trace Compass.
+
+Two configuration files are provided for different backends:
+
+- ``prj_native_ctf.conf``: For native_sim (outputs to file)
+- ``prj_usb_ctf.conf``: For hardware boards via USB
+
+Prerequisites
+=============
+
+Install Trace Compass for viewing traces:
+
+.. code-block:: console
+
+   host:~$ sudo snap install trace-compass   # Ubuntu
+   # OR download from https://eclipse.dev/tracecompass/
+
+For USB capture, install pyusb:
+
+.. code-block:: console
+
+   host:~$ sudo apt install python3-usb
+
+Option 1: native_sim (POSIX Backend)
+====================================
+
+Step 1: Build the application with CTF tracing
+------------------------------------------------
+
+.. code-block:: console
+
+   host:~$ west build -b native_sim app -p -- \
+               -DEXTRA_CONF_FILE=prj_native_ctf.conf
+
+Step 2: Create trace output directory
+--------------------------------------
+
+.. code-block:: console
+
+   host:~$ mkdir -p traces
+
+Step 3: Run the application and capture trace data
+---------------------------------------------------
+
+.. code-block:: console
+
+   host:~$ ./build/zephyr/zephyr.exe -trace-file=traces/channel0_0
+
+Let the application run for 10-30 seconds, then press :kbd:`CTRL+C` to stop.
+
+Step 4: Verify trace files
+---------------------------
+
+Your traces directory should now contain:
+
+.. code-block:: none
+
+   traces/
+   ├── channel0_0    # Binary trace data (generated during run)
+   └── metadata      # CTF format description (from zephyr/subsys/tracing/ctf/tsdl/)
+
+Option 2: Hardware Board via USB (e.g., nrf52840dk)
+===================================================
+
+Step 1: Build the application with USB CTF tracing
+---------------------------------------------------
+
+.. code-block:: console
+
+   host:~$ west build -b nrf52840dk/nrf52840 app -p -- \
+               -DEXTRA_CONF_FILE=prj_usb_ctf.conf
+
+Step 2: Flash the firmware to the board
+-----------------------------------------
+
+.. code-block:: console
+
+   host:~$ west flash
+
+Step 3: Connect USB cable
+--------------------------
+
+Connect a USB cable from the nrf52840dk's **USB port** (not the J-Link USB)
+to your host computer.
+
+Step 4: Verify USB device is detected
+--------------------------------------
+
+The board should enumerate as a USB device:
+
+.. code-block:: console
+
+   host:~$ lsusb | grep Nordic
+   Bus 003 Device 082: ID 2fe3:0001 NordicSemiconductor USBD sample
+
+**Understanding VID and PID:**
+
+The output shows ``ID 2fe3:0001`` where:
+
+- **VID** (Vendor ID) = ``0x2FE3`` - Identifies the manufacturer (Nordic Semiconductor)
+- **PID** (Product ID) = ``0x0001`` - Identifies the specific device (Zephyr USB device)
+
+To see all USB devices without filtering:
+
+.. code-block:: console
+
+   host:~$ lsusb
+
+Look for your board in the output. The format is always ``ID VID:PID Description``.
+
+**Common VIDs:**
+
+- ``0x2FE3``: Nordic Semiconductor (nrf52840dk, nrf5340dk, etc.)
+- ``0x1366``: SEGGER (J-Link debuggers)
+- ``0x0483``: STMicroelectronics (ST-Link, STM32 boards)
+
+Step 5: Create trace directory
+-------------------------------
+
+.. code-block:: console
+
+   host:~$ mkdir -p traces
+
+Step 6: Capture trace data
+---------------------------
+
+Run the capture script for 10-20 seconds, then press :kbd:`CTRL+C`:
+
+.. code-block:: console
+
+   host:~$ python3 zephyr/scripts/tracing/trace_capture_usb.py \
+               -v 0x2FE3 -p 0x0001 -o traces/channel0_0
+
+The capture script parameters are:
+
+- ``-v 0x2FE3``: Vendor ID (from Step 4)
+- ``-p 0x0001``: Product ID (from Step 4)
+- ``-o traces/channel0_0``: Output file path
+
+Replace the VID and PID values with those you found in Step 4.
+
+Step 7: Verify trace files
+---------------------------
+
+.. code-block:: console
+
+   host:~$ ls -lh traces/
+   total 8.1M
+   -rw-r--r-- 1 root root 8.1M Feb 26 18:05 channel0_0
+   -rw-rw-r-- 1 user user  29K Feb 26 18:06 metadata
+
+Viewing Traces in Trace Compass
+================================
+
+Step 1: Launch Trace Compass
+-----------------------------
+
+.. code-block:: console
+
+   host:~$ trace-compass &
+
+Step 2: Import the Zephyr parser (first time only)
+---------------------------------------------------
+
+1. Clone the parser repository:
+
+   .. code-block:: console
+
+      host:~$ git clone https://github.com/ostrodivski/zephyr-tracecompass-parser.git
+
+2. In Trace Compass: Window → Preferences → Tracing → Custom Parsers
+
+3. Click "Import" and select the XML files from the cloned repository
+
+Step 3: Open the trace
+-----------------------
+
+1. File → Open Trace
+2. Browse to your ``traces/`` directory
+3. Select the folder (not individual files)
+4. Click "Open"
+
+Step 4: Explore the trace
+--------------------------
+
+Trace Compass will display:
+
+- **Kernel Overview**: Thread states and CPU usage
+- **Thread Scheduling**: Timeline showing when each thread runs
+- **Interrupts**: ISR entry and exit events
+- **Synchronization**: Semaphore and mutex operations
+- **Custom Events**: Any application-specific trace points
+
+Configuration Files Explained
+==============================
+
+prj_native_ctf.conf
+--------------------
+
+.. code-block:: cfg
+
+   # Enable tracing subsystem
+   CONFIG_TRACING=y
+   CONFIG_TRACING_CTF=y
+   CONFIG_TRACING_SYNC=y
+   CONFIG_TRACING_BACKEND_POSIX=y
+   CONFIG_TRACING_PACKET_MAX_SIZE=64
+
+   # Trace events to capture
+   CONFIG_TRACING_THREAD=y    # Thread create/exit/switch
+   CONFIG_TRACING_ISR=y       # Interrupt entry/exit
+   CONFIG_TRACING_SEMAPHORE=y # Semaphore operations
+   CONFIG_TRACING_MUTEX=y     # Mutex operations
+   CONFIG_TRACING_WORK=y      # Work queue operations
+   CONFIG_TRACING_SYSCALL=y   # System calls
+
+   # Enable thread names in traces
+   CONFIG_THREAD_NAME=y
+   CONFIG_DEBUG_THREAD_INFO=y
+
+prj_usb_ctf.conf
+-----------------
+
+.. code-block:: cfg
+
+   # USB device stack
+   CONFIG_GPIO=y
+   CONFIG_USB_DEVICE_STACK_NEXT=y
+   CONFIG_CDC_ACM_SERIAL_INITIALIZE_AT_BOOT=n
+
+   # Enable tracing subsystem with USB backend
+   CONFIG_TRACING=y
+   CONFIG_TRACING_CTF=y
+   CONFIG_TRACING_ASYNC=y
+   CONFIG_TRACING_BACKEND_USB=y
+   CONFIG_TRACING_HANDLE_HOST_CMD=y
+   CONFIG_TRACING_BUFFER_SIZE=4096
+
+   # Trace events (same as native_sim)
+   CONFIG_TRACING_THREAD=y
+   CONFIG_TRACING_ISR=y
+   CONFIG_TRACING_SEMAPHORE=y
+   CONFIG_TRACING_MUTEX=y
+   CONFIG_TRACING_WORK=y
+   CONFIG_TRACING_SYSCALL=y
+
+   # Thread names
+   CONFIG_THREAD_NAME=y
+   CONFIG_DEBUG_THREAD_INFO=y
+
+Troubleshooting
+===============
+
+USB device not detected
+------------------------
+
+- Check physical USB connection (use the board's USB port, not J-Link)
+- Verify the board is powered
+- Try a different USB cable
+- Check ``lsusb`` output
+
+Permission denied on USB capture
+---------------------------------
+
+The capture script requires root privileges to access USB devices:
+
+.. code-block:: console
+
+   host:~$ python3 zephyr/scripts/tracing/trace_capture_usb.py ...
+
+Trace Compass shows "No events"
+--------------------------------
+
+- Verify both ``channel0_0`` and ``metadata`` files are in the same directory
+- Check that the metadata file is not empty (should be ~29KB)
+- Ensure the Zephyr parser is imported in Trace Compass
+
+Capture script missing dependency
+----------------------------------
+
+If you see ``ModuleNotFoundError: No module named 'usb'``:
+
+.. code-block:: console
+
+   host:~$ sudo apt install python3-usb
+
+Trace file is empty
+--------------------
+
+- Ensure the application is actually running (check console output)
+- For USB: verify the device is enumerated (check ``lsusb``)
+- For native_sim: ensure the trace file path is correct
+
 Resources
 *********
 
 - `Zephyr ZBus Documentation <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_
 - `native_sim Board Documentation <https://docs.zephyrproject.org/latest/boards/native/native_sim/doc/index.html>`_
 - `Zephyr Testing with Twister <https://docs.zephyrproject.org/latest/develop/test/twister.html>`_
+- `Zephyr Tracing Documentation <https://docs.zephyrproject.org/latest/services/tracing/index.html>`_
