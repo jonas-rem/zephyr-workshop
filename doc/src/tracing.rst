@@ -392,6 +392,73 @@ board.
 Let it run for some time, then press :kbd:`CTRL+C` to stop. The ``traces/``
 directory now contains the trace data file and can be opened in Trace Compass.
 
+HW via J-Link RTT + SystemView
+------------------------------
+
+For physical boards like the ``nrf52840dk``, the SEGGER SystemView backend
+provides real-time tracing via J-Link RTT (Real-Time Transfer). SystemView
+visualizes thread scheduling, interrupts, and kernel events with minimal
+overhead.
+
+.. note::
+
+   SEGGER SystemView requires a license for commercial applications. For
+   educational and evaluation purposes, it is free to use.
+
+The workshop ``app`` includes ``prj_sysview_rtt.conf``:
+
+.. code-block:: cfg
+
+   # SEGGER SystemView via RTT
+   CONFIG_TRACING=y
+   CONFIG_SEGGER_SYSTEMVIEW=y
+
+   # Trace events
+   CONFIG_TRACING_THREAD=y
+   CONFIG_TRACING_ISR=y
+   CONFIG_TRACING_SEMAPHORE=y
+   CONFIG_TRACING_MUTEX=y
+   CONFIG_TRACING_WORK=y
+   CONFIG_TRACING_SYSCALL=y
+
+   # Thread names in trace output
+   CONFIG_THREAD_NAME=y
+   CONFIG_DEBUG_THREAD_INFO=y
+
+Build and flash to the board:
+
+.. code-block:: console
+
+   host:~$ west build -b nrf52840dk/nrf52840 app -p -- -DEXTRA_CONF_FILE=prj_sysview_rtt.conf
+   host:~$ west flash
+
+**SystemView Software Installation:**
+
+Download and install SEGGER SystemView from the `SEGGER website
+<https://www.segger.com/downloads/systemview/>`_. Ensure the J-Link software
+is also installed and ``JLinkExe`` is in your system PATH.
+
+**Stream the trace data:**
+
+1. Connect the ``nrf52840dk`` to your host via USB (J-Link debugger)
+2. Open SystemView and select **Target > Recorder Configuration**
+3. Set the interface to **RTT** and device to **nRF52840_xxAA**
+4. Click **Start** to begin recording
+5. SystemView should show a stream of the trace, which you can stop at any time
+
+.. figure:: systemview_timeline.png
+   :align: center
+   :width: 100%
+   :alt: SEGGER SystemView trace visualization
+
+   SystemView with thread scheduling, ISR execution, and kernel events
+
+The screenshot below shows a typical SystemView trace from the example app
+running on the nrf52840dk. The timeline displays thread execution, interrupts,
+and kernel events with precise timing information:
+
+
+
 References
 ----------
 
