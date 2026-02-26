@@ -382,17 +382,17 @@ uart:~$
   stats               version
 uart:~$ kernel thread list
 Threads:
-*0x20000720 shell_uart
+*0x1243a0 shell_uart
 	options: 0x0, priority: 14 timeout: 0
-	state: queued, entry: 0x3ed9
-	Total execution cycles: 22360 (0 %)
-	stack size 2048, unused 932, usage 1116 / 2048 (54 %)
+	state: queued, entry: 0x109399
+	Total execution cycles: 20502688 (0 %)
+	stack size 2048, unused 872, usage 1176 / 2048 (57 %)
 
- 0x20001288 sysworkq
+ 0x12dea0 sysworkq
 	options: 0x1, priority: -1 timeout: 0
-	state: pending, entry: 0x7169
-	Total execution cycles: 163 (0 %)
-	stack size 1024, unused 808, usage 216 / 1024 (21 %)
+	state: pending, entry: 0x11204a
+	Total execution cycles: 624459 (0 %)
+	stack size 1024, unused 648, usage 376 / 1024 (36 %)
 ...
 ```
 
