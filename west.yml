@@ -24,3 +24,4 @@ manifest:
           - hal_ti
           - hal_atmel
           - tinycrypt
+          - segger
