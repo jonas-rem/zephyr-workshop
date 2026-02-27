@@ -51,8 +51,6 @@ static int sys_ctrl_init(void)
 	return 0;
 }
 
-SYS_INIT(sys_ctrl_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
-
 static void sys_ctrl_button_msg_cb(const struct zbus_channel *chan)
 {
 	const enum sys_events *msg_type;
@@ -71,28 +69,59 @@ static void sys_ctrl_button_msg_cb(const struct zbus_channel *chan)
 ZBUS_LISTENER_DEFINE(sys_ctrl_listener, sys_ctrl_button_msg_cb);
 ZBUS_CHAN_ADD_OBS(button_ch, sys_ctrl_listener, DEFAULT_OBS_PRIO);
 
-static int cmd_button(const struct shell *sh, size_t argc, char **argv,
-		    void *data)
+#ifdef CONFIG_SYS_CTRL_MODULE_SHELL
+#include <zephyr/shell/shell.h>
+
+static int cmd_sysctrl_state(const struct shell *sh, size_t argc, char **argv)
+{
+	const char *state_str;
+
+	ARG_UNUSED(argc);
+	ARG_UNUSED(argv);
+
+	switch (sys_state) {
+	case SYS_SLEEP:
+		state_str = "SLEEP";
+		break;
+	case SYS_STANDBY:
+		state_str = "STANDBY";
+		break;
+	default:
+		state_str = "UNKNOWN";
+		break;
+	}
+
+	shell_print(sh, "System state: %s (%d)", state_str, sys_state);
+	return 0;
+}
+
+static int cmd_sysctrl_button(const struct shell *sh, size_t argc, char **argv)
 {
 	int err;
 	enum sys_events msg;
 
+	ARG_UNUSED(argc);
+	ARG_UNUSED(argv);
+
 	msg = SYS_BUTTON_PRESSED;
+	shell_print(sh, "Simulating button press");
 
 	err = zbus_chan_pub(&button_ch, &msg, K_SECONDS(1));
 	if (err) {
-		LOG_ERR("zbus_chan_pub, error: %d", err);
+		shell_error(sh, "Failed to publish button event: %d", err);
+		return err;
 	}
 
 	return 0;
 }
 
-SHELL_SUBCMD_DICT_SET_CREATE(sub_button_cmds, cmd_button,
-	(button_press, 1, "Trigger Button Press")
-);
+SHELL_STATIC_SUBCMD_SET_CREATE(sysctrl_cmds,
+	SHELL_CMD(state, NULL, "Show current system state", cmd_sysctrl_state),
+	SHELL_CMD(button, NULL, "Simulate button press", cmd_sysctrl_button),
+	SHELL_SUBCMD_SET_END);
 
-SHELL_STATIC_SUBCMD_SET_CREATE(my_app_cmds,
-	SHELL_CMD(button, &sub_button_cmds, "Button test commands", NULL),
-	SHELL_SUBCMD_SET_END /* Array terminated. */
-);
-SHELL_CMD_REGISTER(my_app, &my_app_cmds, "my App test", NULL);
+SHELL_CMD_REGISTER(sysctrl, &sysctrl_cmds, "System control module commands", NULL);
+
+#endif /* CONFIG_SYS_CTRL_MODULE_SHELL */
+
+SYS_INIT(sys_ctrl_init, APPLICATION, CONFIG_SYS_CTRL_MODULE_INIT_PRIORITY);

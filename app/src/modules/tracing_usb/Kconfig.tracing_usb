@@ -64,4 +64,11 @@ module = TRACING_USB_MODULE
 module-str = tracing_usb
 source "subsys/logging/Kconfig.template.log_config"
 
+config TRACING_USB_MODULE_INIT_PRIORITY
+	int "USB tracing module init priority"
+	default 95
+	help
+	  System initialization priority for the USB tracing module.
+	  This determines the order in which the USB tracing module is initialized.
+
 endif # TRACING_USB_MODULE

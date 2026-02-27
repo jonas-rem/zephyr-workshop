@@ -57,4 +57,4 @@ static int button_mock_init(void)
 	return 0;
 }
 
-SYS_INIT(button_mock_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+SYS_INIT(button_mock_init, APPLICATION, CONFIG_BUTTON_MOCK_INIT_PRIORITY);

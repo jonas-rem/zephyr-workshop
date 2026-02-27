@@ -1,9 +1,0 @@
-menu "Button Test"
-
-rsource "../../app/src/modules/button/Kconfig.button"
-
-endmenu
-
-menu "Zephyr Kernel"
-source "Kconfig.zephyr"
-endmenu
