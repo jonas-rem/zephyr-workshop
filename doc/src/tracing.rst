@@ -316,13 +316,16 @@ For physical boards like the nrf52840dk, the USB backend provides a clean way
 to capture CTF traces without interfering with the console UART. The board
 enumerates as a USB device and streams trace data to the host.
 
-The workshop ``app`` includes ``prj_usb_ctf.conf``:
+The workshop ``app`` includes ``prj_usb_ctf.conf``. Simply enable the
+``TRACING_USB_MODULE`` to automatically configure USB device initialization:
 
 .. code-block:: cfg
 
    # CTF Tracing via USB
    CONFIG_GPIO=y
-   CONFIG_USB_DEVICE_STACK_NEXT=y
+
+   # Enable USB Tracing Module (automatically configures USB stack)
+   CONFIG_TRACING_USB_MODULE=y
    CONFIG_CDC_ACM_SERIAL_INITIALIZE_AT_BOOT=n
 
    CONFIG_TRACING=y
