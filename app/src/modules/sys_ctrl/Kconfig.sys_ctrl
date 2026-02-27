@@ -1,0 +1,28 @@
+# Copyright (c) 2026 Jonas Remmert
+# SPDX-License-Identifier: Apache-2.0
+
+config SYS_CTRL_MODULE
+	bool "System control module"
+	default y
+	help
+	  Enable the system control module that manages system state
+	  and coordinates between other modules via Zbus.
+
+module = SYS_CTRL_MODULE
+module-str = sys_ctrl
+source "subsys/logging/Kconfig.template.log_config"
+
+config SYS_CTRL_MODULE_INIT_PRIORITY
+	int "System control module init priority"
+	default 85
+	help
+	  System initialization priority for the system control module.
+	  This determines the order in which the system control module is initialized.
+
+config SYS_CTRL_MODULE_SHELL
+	bool "System control module shell commands"
+	depends on SHELL
+	default n
+	help
+	  Enable shell commands for the system control module.
+	  Provides commands to check system state and simulate events for testing.

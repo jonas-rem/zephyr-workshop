@@ -12,3 +12,10 @@ config BUTTON_MOCK
 module = BUTTON_MOCK
 module-str = button_mock
 source "subsys/logging/Kconfig.template.log_config"
+
+config BUTTON_MOCK_INIT_PRIORITY
+	int "Button mock module init priority"
+	default 80
+	help
+	  System initialization priority for the button mock module.
+	  This determines the order in which the button mock module is initialized.

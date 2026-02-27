@@ -4,7 +4,8 @@ sample:
 common:
   tags: introduction
 tests:
-  sample.basic.app:
+  # Main application with all modules
+  basic.app:
     tags: introduction
     integration_platforms:
       - native_sim
@@ -13,10 +14,54 @@ tests:
     harness_config:
       type: one_line
       regex:
+        - "System booted"
+
+  # Module-specific tests using Kconfig options
+  # Tests each module in isolation with console harness
+
+  app.test.button:
+    extra_args: EXTRA_CONF_FILE=test_cfg/button_module.conf
+    integration_platforms:
+      - native_sim
+      - stm32f4_disco
+      - reel_board
+    tags: button
+    harness: console
+    harness_config:
+      type: one_line
+      regex:
+        - "Button module started"
+
+  app.test.led:
+    extra_args: EXTRA_CONF_FILE=test_cfg/led_module.conf
+    integration_platforms:
+      - native_sim
+      - stm32f4_disco
+      - reel_board
+    tags: led
+    harness: console
+    harness_config:
+      type: one_line
+      regex:
         - "LED module started"
 
+  app.test.sys_ctrl:
+    extra_args: EXTRA_CONF_FILE=test_cfg/sys_ctrl_module.conf
+    integration_platforms:
+      - native_sim
+    tags: sys_ctrl
+    harness: console
+    harness_config:
+      type: one_line
+      regex:
+        - "System booted"
+
+  # Note: The old test/sys_ctrl/ contains Ztest unit tests with direct API access.
+  # Those test internal functions (sys_ctrl_get_state(), sys_ctrl_handle_button_press())
+  # which are useful for unit testing but different from integration tests.
+
   # Build tests for tracing configurations
-  sample.app.tracing.native_ctf:
+  app.tracing.native_ctf:
     build_only: true
     extra_args: EXTRA_CONF_FILE=prj_native_ctf.conf
     platform_allow:
@@ -25,7 +70,7 @@ tests:
       - native_sim
     tags: tracing
 
-  sample.app.tracing.usb_ctf:
+  app.tracing.usb_ctf:
     build_only: true
     extra_args: EXTRA_CONF_FILE=prj_usb_ctf.conf
     platform_allow:
@@ -35,7 +80,7 @@ tests:
     depends_on: usb_device
     tags: tracing
 
-  sample.app.tracing.sysview_rtt:
+  app.tracing.sysview_rtt:
     build_only: true
     extra_args: EXTRA_CONF_FILE=prj_sysview_rtt.conf
     platform_allow:

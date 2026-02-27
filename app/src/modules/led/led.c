@@ -55,7 +55,7 @@ static void led_fn(void)
 	/* Boot to State Sleep */
 	sys_state = SYS_SLEEP;
 
-	LOG_INF("LED module started\n");
+	LOG_INF("LED module started");
 	while (1) {
 		switch (sys_state) {
 		case SYS_SLEEP:
@@ -89,6 +89,51 @@ static void led_fn(void)
 		}
 	}
 }
+
+#ifdef CONFIG_LED_MODULE_SHELL
+#include <zephyr/shell/shell.h>
+
+static int cmd_led_set(const struct shell *sh, size_t argc, char **argv,
+		       void *data)
+{
+	int val = (intptr_t)data;
+	int err;
+	enum sys_states msg;
+
+	switch (val) {
+	case 0:
+		msg = SYS_SLEEP;
+		shell_print(sh, "Setting LED to sleep mode (off)");
+		break;
+	case 1:
+		msg = SYS_STANDBY;
+		shell_print(sh, "Setting LED to standby mode (blink)");
+		break;
+	default:
+		shell_print(sh, "Invalid argument");
+		return -EINVAL;
+	}
+
+	err = zbus_chan_pub(&led_ch, &msg, K_SECONDS(1));
+	if (err) {
+		shell_error(sh, "Failed to publish LED state: %d", err);
+		return err;
+	}
+
+	return 0;
+}
+
+SHELL_SUBCMD_DICT_SET_CREATE(sub_led_cmds, cmd_led_set,
+	(sys_sleep, 0, "System is sleeping (LED off)"),
+	(sys_standby, 1, "System is in standby (LED blinking)"));
+
+SHELL_STATIC_SUBCMD_SET_CREATE(led_module_cmds,
+	SHELL_CMD(set, &sub_led_cmds, "Set LED state", NULL),
+	SHELL_SUBCMD_SET_END);
+
+SHELL_CMD_REGISTER(led, &led_module_cmds, "LED module commands", NULL);
+
+#endif /* CONFIG_LED_MODULE_SHELL */
 
 K_THREAD_DEFINE(led_task, CONFIG_LED_MODULE_THREAD_STACK_SIZE, led_fn, NULL,
 		NULL, NULL, CONFIG_LED_MODULE_THREAD_STACK_PRIO, 0, 0);

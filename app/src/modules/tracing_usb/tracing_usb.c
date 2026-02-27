@@ -193,4 +193,4 @@ static int tracing_usb_init(void)
 	return 0;
 }
 
-SYS_INIT(tracing_usb_init, APPLICATION, CONFIG_APPLICATION_INIT_PRIORITY);
+SYS_INIT(tracing_usb_init, APPLICATION, CONFIG_TRACING_USB_MODULE_INIT_PRIORITY);

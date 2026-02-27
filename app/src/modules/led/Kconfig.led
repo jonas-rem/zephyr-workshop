@@ -1,11 +1,32 @@
+# Copyright (c) 2026 Jonas Remmert
+# SPDX-License-Identifier: Apache-2.0
+
+config LED_MODULE
+	bool "LED module"
+	default y
+	help
+	  Enable the LED module for visual feedback via board LEDs.
+
+if LED_MODULE
+
+module = LED_MODULE
+module-str = LED
+source "subsys/logging/Kconfig.template.log_config"
+
 config LED_MODULE_THREAD_STACK_SIZE
 	int "Thread stack size"
 	default 1024
 
 config LED_MODULE_THREAD_STACK_PRIO
 	int "Thread stack priority"
-	default 1
+	default -2
 
-module = LED_MODULE
-module-str = LED
-source "subsys/logging/Kconfig.template.log_config"
+config LED_MODULE_SHELL
+	bool "LED module shell commands"
+	depends on SHELL
+	default n
+	help
+	  Enable shell commands for controlling the LED module.
+	  Provides commands to set LED states manually for testing.
+
+endif # LED_MODULE
