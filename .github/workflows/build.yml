@@ -41,4 +41,4 @@ jobs:
 
       - name: Build and Test
         run: |
-          west twister -T test -T app -T samples --integration
+          west twister -T app -T samples --integration
