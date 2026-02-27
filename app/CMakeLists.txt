@@ -5,11 +5,6 @@ project(application)
 
 target_sources(app PRIVATE src/main.c)
 
-# USB device initialization for tracing support
-if(CONFIG_USB_DEVICE_STACK_NEXT)
-  target_sources(app PRIVATE src/sample_usbd_init.c)
-endif()
-
 add_subdirectory(src/common common)
 add_subdirectory(src/modules/led led)
 add_subdirectory(src/modules/button button)
@@ -18,4 +13,9 @@ add_subdirectory(src/modules/sys_ctrl sys_ctrl)
 # Button mock for native_sim (simulates GPIO button presses)
 if(CONFIG_BOARD_NATIVE_SIM)
   add_subdirectory(src/modules/button_mock button_mock)
+endif()
+
+# USB tracing support for hardware boards
+if(CONFIG_TRACING_USB_MODULE)
+  add_subdirectory(src/modules/tracing_usb tracing_usb)
 endif()

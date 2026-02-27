@@ -1,0 +1,67 @@
+menuconfig TRACING_USB_MODULE
+	bool "USB Tracing Support"
+	depends on TRACING
+	select USB_DEVICE_STACK_NEXT
+	help
+	  Enable USB device initialization for CTF tracing backend.
+	  This module initializes the USB device stack when using
+	  CONFIG_TRACING_BACKEND_USB for hardware-based tracing.
+	  Enable this together with CONFIG_TRACING_BACKEND_USB=y
+
+if TRACING_USB_MODULE
+
+config TRACING_USB_VID
+	hex "USB Vendor ID"
+	default 0x2FE3
+	help
+	  USB Vendor ID for the tracing device.
+	  Default is Nordic Semiconductor (0x2FE3).
+
+config TRACING_USB_PID
+	hex "USB Product ID"
+	default 0x0001
+	help
+	  USB Product ID for the tracing device.
+
+config TRACING_USB_MANUFACTURER
+	string "USB Manufacturer String"
+	default "Zephyr Project"
+	help
+	  Manufacturer string for the USB device descriptor.
+
+config TRACING_USB_PRODUCT
+	string "USB Product String"
+	default "Zephyr Tracing Device"
+	help
+	  Product string for the USB device descriptor.
+
+config TRACING_USB_MAX_POWER
+	int "USB Max Power (mA/2)"
+	default 125
+	help
+	  Maximum power consumption in 2mA units.
+	  Default 125 = 250mA.
+
+config TRACING_USB_SELF_POWERED
+	bool "Self Powered"
+	default y
+	help
+	  Device is self-powered.
+
+config TRACING_USB_REMOTE_WAKEUP
+	bool "Remote Wakeup"
+	default n
+	help
+	  Device supports remote wakeup.
+
+config TRACING_USB_20_EXTENSION_DESC
+	bool "USB 2.0 Extension Descriptor"
+	default n
+	help
+	  Add USB 2.0 Extension Descriptor.
+
+module = TRACING_USB_MODULE
+module-str = tracing_usb
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # TRACING_USB_MODULE
