@@ -3,7 +3,6 @@
 #include <zephyr/logging/log.h>
 
 #include "message_channel.h"
-#include "modules/sys_ctrl/sys_ctrl.h"
 
 LOG_MODULE_REGISTER(sys_ctrl, LOG_LEVEL_DBG);
 
@@ -48,6 +47,9 @@ static int sys_ctrl_init(void)
 {
 	/* Notify the LED module about the initial system state */
 	sys_ctrl_led_msg(sys_state);
+
+	LOG_INF("sys_ctl module started");
+
 	return 0;
 }
 
