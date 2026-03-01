@@ -25,6 +25,10 @@ RUN apt-get update \
     libsdl2-dev \
     libmagic1 \
     ripgrep \
+    tio \
+    minicom \
+    picocom \
+    screen \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
