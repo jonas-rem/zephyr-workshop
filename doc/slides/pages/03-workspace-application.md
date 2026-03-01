@@ -7,7 +7,7 @@ level: 1
 
 ---
 
-## Workspace Application
+## Workspace Application & Topologies
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -21,6 +21,7 @@ Separate application from Zephyr repository
 - Different Licences for app?
 - Maintain references to Zephyr, Modules etc. in app repo
 - Update Zephyr version independently from app
+- West supports T1, T2, and T3 topologies<sup>2</sup>
 
 </div>
 
@@ -49,8 +50,9 @@ zephyrproject
 
 <Footnotes y="col">
   <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/application/index.html">docs.zephyrproject.org/latest/develop/application</a></Footnote>
-  <Footnote :number=2><a href="https://github.com/zephyrproject-rtos/example-application">github.com/zephyrproject-rtos/example-application</a></Footnote>
-  <Footnote :number=3><a href="https://github.com/jonas-rem/zephyr-workshop">github.com/jonas-rem/zephyr-workshop</a></Footnote>
+  <Footnote :number=2><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html">docs.zephyrproject.org/latest/develop/west/workspaces</a></Footnote>
+  <Footnote :number=3><a href="https://github.com/zephyrproject-rtos/example-application">github.com/zephyrproject-rtos/example-application</a></Footnote>
+  <Footnote :number=4><a href="https://github.com/jonas-rem/zephyr-workshop">github.com/jonas-rem/zephyr-workshop</a></Footnote>
 </Footnotes>
 
 ---
@@ -68,12 +70,12 @@ manifest:
   projects:
     - name: zephyr
       remote: zephyrproject-rtos
-      revision: v3.6.0
+      revision: main
       import:
         name-allowlist:
           - cmsis
-          - hal_nordic
-          - hal_nxp
+          - cmsis_6
+          - mbedtls
           - [..]
 ```
 <div class="text-xs text-center mt-2">
@@ -125,7 +127,7 @@ HEAD is now at aad79bf [..]
 
 ---
 
-## Application Structure - Use Case I
+## T1: Star Topology, Zephyr is the Manifest Repository
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -144,29 +146,20 @@ HEAD is now at aad79bf [..]
 </div>
 
 <Footnotes y="col">
-  <Footnote :number=1>Not recommended for production, use an out-of-tree build
-		instead. This makes it easier to upgrade to more recent Zephyr
-		versions.</Footnote>
+  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html#t1-star-topology-zephyr-is-the-manifest-repository">Zephyr Docs: T1 Topology</a></Footnote>
 </Footnotes>
 
 ---
 
-## Application Structure - Use Case II
+## T2: Star Topology, Application is the Manifest Repository
 
 <div class="grid grid-cols-2 gap-4">
 
 <div>
 
-<v-clicks>
-
 - **Who:** One company developing one product
-- **What:** Two variants of the product
-- Different sensors, pin assignments, but similar application
-- **Solution:** Devicetrees for each variant
-  - board_a.dts: `west build -b board_a app`
-  - board_b.dts: `west build -b board_b app`
-
-</v-clicks>
+- **What:** Application-focused development with one or more board variants
+- **Solution:** Application repository acts as the central manifest repository
 
 </div>
 
@@ -176,23 +169,46 @@ HEAD is now at aad79bf [..]
 
 </div>
 
----
+<Footnotes y="col">
+  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html#t2-star-topology-application-is-the-manifest-repository">Zephyr Docs: T2 Topology</a></Footnote>
+</Footnotes>
+
 ---
 
-## Application Structure - Use Case III
+## T2: Star Topology, Applied to multiple Projects
 
 <div class="grid grid-cols-2 gap-4">
 
 <div>
 
-<v-clicks>
+- **Who:** Service provider developing different products for multiple companies
+- **What:** Development states and lifecycles for products differ significantly
+- **Solution:** Same Star topology with dedicated manifest repository
+- **Note:** Switching between projects with west update (via changed config)
 
-- **Who:** One company developing multiple products
-- **What:** Different applications
-- **Solution:** Separate applications
-- Use same Zephyr version for all applications if you can
+</div>
 
-</v-clicks>
+<div class="h-full flex flex-col items-center justify-center">
+  <img src="/images/application_topologies_4.svg" class="h-80 object-contain" />
+</div>
+
+</div>
+
+<Footnotes y="col">
+  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html#t2-star-topology-application-is-the-manifest-repository">Zephyr Docs: T2 Topology</a></Footnote>
+</Footnotes>
+
+---
+
+## T3: Forest Topology
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+
+- **Who:** One company developing multiple independent products, or service providers
+- **What:** Multiple applications at the same level, potentially with different lifecycles
+- **Solution:** Dedicated manifest repository containing no source code
 
 </div>
 
@@ -202,32 +218,9 @@ HEAD is now at aad79bf [..]
 
 </div>
 
----
----
-
-## Application Structure - Use Case IV
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-<v-clicks>
-
-- **Who:** Service provider developing different products for multiple companies
-- **What:** Development states and lifecycle for products differ
-- **Solution:** Individual manifest files for each product
-- Create your own modules, share code inbetween projects
-- Quickly setup and reference projects with west
-
-</v-clicks>
-
-</div>
-
-<div class="h-full flex flex-col items-center justify-center">
-  <img src="/images/application_topologies_4.svg" class="h-80 object-contain" />
-</div>
-
-</div>
+<Footnotes y="col">
+  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html#t3-forest-topology">Zephyr Docs: T3 Topology</a></Footnote>
+</Footnotes>
 
 ---
 
@@ -270,7 +263,6 @@ actinius               gd            rak
 </div>
 
 ---
----
 
 ## Zephyr Hardware Abstraction - devicetree
 
@@ -307,7 +299,7 @@ In Zephyr: C header generation at compile time
 
 ## Zephyr Hardware Abstraction - devicetree
 
-```c {1-8|9-15|16-20|}
+```c
 arduino_i2c: &i2c0 {
         compatible = "nordic,nrf-twim";
         status = "okay";
@@ -322,53 +314,120 @@ arduino_i2c: &i2c0 {
                 int1-gpios = <&gpio0 24 GPIO_ACTIVE_LOW>;
                 int2-gpios = <&gpio0 25 GPIO_ACTIVE_LOW>;
         };
-
-        ti_hdc@43 {
-                compatible = "ti,hdc","ti,hdc1010";
-                reg = <0x43>;
-                drdy-gpios = <&gpio0 22 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-        };
 };
 ```
 
 <div class="text-xs text-center mt-2">devicetree node for the reel board: `boards/phytec/reel_board/dts/reel_board.dtsi`</div>
 
 ---
+
+## Zephyr Hardware Abstraction - Header generation at compile time
+
+```bash
+zephyr$ west build -b reel_board samples/subsys/shell/shell_module -p
+[..]
+-- Board: reel_board, Revision: 1, qualifiers: nrf52840
+-- Found Dtc: /home/j.remmert/zephyr-sdk-0.17.4/sysroots/x86_64-pokysdk-linux/usr/bin/dtc (found
+suitable version "1.7.0", minimum required is "1.4.6")
+-- Found BOARD.dts: /home/j.remmert/git/zephyrproject/zephyr/boards/phytec/reel_board/reel_board.dts
+-- Generated zephyr.dts: /home/j.remmert/git/zephyrproject/zephyr/build/zephyr/zephyr.dts
+-- Generated pickled edt: /home/j.remmert/git/zephyrproject/zephyr/build/zephyr/edt.pickle
+-- Generated devicetree_generated.h:
+[..]/zephyr/build/zephyr/include/generated/zephyr/devicetree_generated.h
+```
+<div class="text-xs text-center mt-2">Build log shows how devicetree headers are generated at
+    `build/zephyr/include/generated/zephyr/devicetree_generated.h`</div>
+
 ---
 
-## Hands-on 2: Let's build Zephyr for the reel board!
+## Zephyr Hardware Abstraction - Generated header
 
-<div class="grid grid-cols-2 gap-4">
+```c
+/* Generated header: devicetree_generated.h (excerpt) */
 
-<div>
+/* Line 15205: Alias used by application */
+#define DT_N_ALIAS_accel0         DT_N_S_soc_S_i2c_40003000_S_mma8652fc_1d
 
+/* Line 15206-15208: Instance macros & nodelabel */
+#define DT_N_INST_0_nxp_fxos8700  DT_N_S_soc_S_i2c_40003000_S_mma8652fc_1d
+#define DT_N_INST_0_nxp_mma8652fc DT_N_S_soc_S_i2c_40003000_S_mma8652fc_1d
+#define DT_N_NODELABEL_mma8642fc  DT_N_S_soc_S_i2c_40003000_S_mma8652fc_1d
 
-Build the `blinky` sample:
-
-```shell
-west build -b reel_board@2 \
-  ../zephyr/samples/basic/blinky -p
+/* Line 15156: Full devicetree path */
+#define DT_N_S_soc_S_i2c_40003000_S_mma8652fc_1d_PATH "/soc/i2c@40003000/mma8652fc@1d"
 ```
 
-**Flash via Drag and Drop:**
-- Download the binary from your Codespace at: `build/zephyr/zephyr.hex`
-- Drag and drop the hex file to the mounted reel board mass storage device
+<div class="text-xs text-center mt-2">Generated identifiers in devicetree_generated.h</div>
 
-**Flash via native setup:**
-```shell
-west flash
+---
+
+## Zephyr Hardware Abstraction - Practical Usage in Code
+
+```c
+const struct device *const dev = DEVICE_DT_GET(DT_ALIAS(accel0));
+
+if (!device_is_ready(dev)) {
+    printf("Device %s is not ready\n", dev->name);
+    return 0;
+}
 ```
 
-**Attach to the serial console:**
+<div class="text-xs text-center mt-1">Application: `samples/sensor/accel_trig/src/main.c`</div>
+<br>
+
+```c
+#define DT_DRV_COMPAT nxp_fxos8700
+
+static const struct fxos8700_config fxos8700_config_##inst = {
+    .bus_cfg.i2c = I2C_DT_SPEC_INST_GET(inst),
+    .range = DT_INST_PROP(inst, range),
+    ...
+};
+
+SENSOR_DEVICE_DT_INST_DEFINE(inst, ...);
+DT_INST_FOREACH_STATUS_OKAY(FXOS8700_INIT)
+```
+
+<div class="text-xs text-center mt-1">Driver: `drivers/sensor/nxp/fxos8700/fxos8700.c`</div>
+
+---
+
+## Hands-on 2: Run Zephyr on native_sim!
+
+<div class="grid grid-cols-5 gap-4">
+
+<div class="col-span-3">
+
+Build the __blinky__ sample for native_sim:
+
 ```shell
-minicom -D /dev/ttyACM0 -b 115200
+west build -b native_sim samples/basic/blinky -p
+```
+
+And run it:
+
+```shell
+west build -t run
+```
+<br>
+
+Watch the LED state toggle in the console. Match the devicetree definition
+(__led0__) with the sample code and generated header:
+
+<div class="text-xxs">
+
+```shell
+boards/native/native_sim/native_sim.dts
+samples/basic/blinky/src/main.c
+build/zephyr/include/generated/zephyr/devicetree_generated.h
 ```
 
 </div>
 
-<div class="flex flex-col items-center justify-center">
-  <img src="/images/reel_board.jpg" class="h-60 object-contain" />
-  <div class="text-xs text-center mt-2">reel board</div>
+</div>
+
+<div class="col-span-2 flex flex-col items-center justify-center">
+  <img src="/images/native_sim_blinky.jpg" class="h-60 object-contain rounded-lg shadow-lg" />
 </div>
 
 </div>

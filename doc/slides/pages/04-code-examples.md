@@ -11,11 +11,11 @@ level: 1
 
 **Samples**
 - Zephyr provides a wide range of samples
-- Samples are located in `zephyr/samples/`
+- Samples are located in __zephyr/samples/__
 - Isolated functionality or feature
 
 **Tests**
-- Tests are located in `zephyr/tests/`
+- Tests are located in __zephyr/tests/__
 - Isolated test cases for a feature or hardware
 - Useful to test e.g. a device driver
 
@@ -156,7 +156,7 @@ Memory region         Used Size  Region Size  %age Used
 - `zephyr.elf|hex|bin`
 - `zephyr.map`
 - `autoconf.h` (Kconfig options)
-- `devicetree_generated.h` (Generated devicetree header)
+- `devicetree_generated.h` (devicetree header)
 - `Kconfig.dts` (devicetree conf)
 
 </div>
