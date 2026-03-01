@@ -21,8 +21,9 @@ This application is useful for:
 
 - Understanding modular architecture in Zephyr
 - Learning about ZBus for inter-module communication
-- Using SYS_INIT for application initialization
-- Testing with native_sim and twister
+- Using `Zephyr System Initialization`_ (SYS_INIT) for application
+  initialization
+- Testing with `native_sim Board`_ and `Twister`_
 
 Architecture
 ************
@@ -34,7 +35,7 @@ modules.
 
 The ``app/common/`` directory contains shared components like message channels
 that enable inter-module communication, while the ``app/modules/`` directory
-houses the individual functional units. Each module is self-contained with its
+contains the individual functional units. Each module is self-contained with its
 own source files, build configuration, and Kconfig options.
 
 .. code-block:: text
@@ -63,25 +64,23 @@ own source files, build configuration, and Kconfig options.
    │       ├── sys_ctrl
    │       │   ├── CMakeLists.txt
    │       │   ├── Kconfig.sys_ctrl
-   │       │   ├── sys_ctrl.c
-   │       │   └── sys_ctrl.h
+   │       │   └── sys_ctrl.c
    └── test_cfg
        ├── button_module.conf
        ├── led_module.conf
        └── sys_ctrl_module.conf
 
-The ``tree`` shows a simplified viw of the structure of the application.
+The ``tree`` shows a simplified view of the structure of the application.
 
 Initialization using SYS_INIT
 =============================
 
-In true Zephyr fashion, the application's modules are initialized independently
-of the ``main()`` function using the ``SYS_INIT`` macro. This allows modules to
-inject their initialization routines into the OS boot sequence automatically.
+The application's modules are initialized independently of the ``main()``
+function using the ``SYS_INIT`` macro. This allows modules to inject their
+initialization routines into the OS boot sequence automatically.
 
 Each module uses ``SYS_INIT()`` with ``APPLICATION`` priority to register itself
-after drivers and ZBus are operational. By convention, ``SYS_INIT()`` is always
-placed at the **bottom of each module file** for consistency and easy discovery.
+after drivers and ZBus are operational.
 
 This initialization pattern ensures:
 
@@ -92,7 +91,7 @@ This initialization pattern ensures:
 
 Each module has its own priority configuration option that defaults to a numeric
 value (e.g., ``CONFIG_SYS_CTRL_MODULE_INIT_PRIORITY=85``) to control
-initialization order.
+initialization order. The entry with the lowest number will be started first.
 
 Example from ``Kconfig.sys_ctrl``:
 
@@ -111,11 +110,9 @@ Example from ``sys_ctrl.c``:
 
 .. code-block:: c
 
-   /* Module code above... */
-
    SYS_INIT(sys_ctrl_init, APPLICATION, CONFIG_SYS_CTRL_MODULE_INIT_PRIORITY);
 
-Initialization sequence (`Zephyr System Initialization <https://docs.zephyrproject.org/latest/doxygen/html/group__sys__init.html>`_)
+Initialization sequence (`Zephyr System Initialization`_)
 
 1. **SYS_INIT modules** (priority order):
 
@@ -127,7 +124,7 @@ Initialization sequence (`Zephyr System Initialization <https://docs.zephyrproje
 
    - LED module thread
 
-3. **main thread  with Prio -1**
+3. **main thread with Prio -1**
 
    - Empty in our case (except one log msg)
 
@@ -136,15 +133,16 @@ Boot log showing this order:
 
 .. code-block:: console
 
-   *** Booting Zephyr OS build v4.3.0-6940-g8c06719191f5 ***
-   [00:00:00.000,000] <inf> button_module: Set up button at gpio_emul pin 1
-   [00:00:00.000,000] <inf> button_module: Button module started
-   [00:00:00.000,000] <inf> button_mock: Button mock module initialized
-   [00:00:00.000,000] <inf> led_module: LED module started
-   [00:00:00.000,000] <dbg> led_module: led_fn: LED off
-   [00:00:00.000,000] <inf> app: System booted. Main thread going to sleep.
-   [00:00:00.020,000] <dbg> led_module: led_fn: LED on
-   [00:00:00.080,000] <dbg> led_module: led_fn: LED off
+   *** Booting Zephyr OS build v4.3.0 ***
+   <inf> button_module: Set up button at gpio_emul pin 1
+   <inf> button_module: Button module started
+   <inf> button_mock: Button mock module initialized
+   <inf> sys_ctrl: Button module started
+   <inf> led_module: LED module started
+   <dbg> led_module: led_fn: LED off
+   <inf> app: System booted. Main thread going to sleep.
+   <dbg> led_module: led_fn: LED on
+   <dbg> led_module: led_fn: LED off
 
 System States
 =============
@@ -170,7 +168,7 @@ example from ``app/prj.conf``:
    CONFIG_SYS_CTRL_MODULE=y
 
 Additionally, each module provides optional shell commands that can be activated
-per module. This shell commands can be used for testing the modules in isolation
+per module. These shell commands can be used for testing the modules in isolation
 or within the application.
 
 .. code-block:: kconfig
@@ -192,7 +190,7 @@ module.
    CONFIG_SYS_CTRL_MODULE_LOG_LEVEL_DBG=y
 
 These options allow building the application with any combination of modules,
-enabling testing in isolation or creating minimal builds. If featues like e.g.
+enabling testing in isolation or creating minimal builds. If features like e.g.
 shell commands are not activated they will not be compiled into the binary.
 
 Module Communication
@@ -218,8 +216,8 @@ The overlay file (``app/boards/native_sim.overlay``) defines:
 - ``uart1`` enabled for shell
 - Shell UART mapped to ``zephyr,shell-uart``
 
-Building
-********
+Build/Run
+*********
 
 The ``native_sim`` board allows Zephyr applications to be compiled as native
 Linux executables, enabling development and testing without physical hardware.
@@ -238,12 +236,13 @@ Run the application with shell on a separate UART/console:
 
 When you run the application, it creates two pseudo-terminals (PTYs):
 
-- **uart** (/dev/pts/X) - Main console (logs and shell if not redirected)
+- **uart_0** (/dev/pts/X) - Main console (logs and shell if not redirected)
 - **uart_1** (/dev/pts/Y) - Shell console when using ``-uart_1_attach_uart_cmd``
 
 With the ``-uart_1_attach_uart_cmd`` option, the shell UART is redirected to a
 separate PTY and linked to ``/tmp/zephyr_shell``. The main UART output (logs)
-remains on the terminal where you started the application.
+remains on the terminal where you started the application, check `native_sim
+PTY UART`_ to get more information.
 
 Connect to the shell using:
 
@@ -258,26 +257,22 @@ Main console (stdout):
 
 .. code-block:: console
 
-   *** Booting Zephyr OS build v4.3.0-6940-g8c06719191f5 ***
-   [00:00:00.000,000] <inf> button_module: Set up button at gpio_emul pin 1
-   [00:00:00.000,000] <inf> button_module: Button module started
-   [00:00:00.000,000] <inf> button_mock: Button mock module initialized
-   [00:00:00.000,000] <inf> led_module: LED module started
-   [00:00:00.000,000] <dbg> led_module: led_fn: LED off
-   [00:00:00.000,000] <inf> app: System booted. Main thread going to sleep.
-   [00:00:00.020,000] <dbg> led_module: led_fn: LED on
-   [00:00:00.080,000] <dbg> led_module: led_fn: LED off
+   *** Booting Zephyr OS build v4.3.0 ***
+   <inf> button_module: Set up button at gpio_emul pin 1
+   <inf> button_module: Button module started
+   <inf> button_mock: Button mock module initialized
+   <inf> sys_ctrl: Button module started
+   <inf> led_module: LED module started
+   <dbg> led_module: led_fn: LED off
+   <inf> app: System booted. Main thread going to sleep.
+   <dbg> led_module: led_fn: LED on
+   <dbg> led_module: led_fn: LED off
 
 Shell via ``/tmp/zephyr_shell``:
 
 .. code-block:: console
 
    host:~$ tio /tmp/zephyr_shell
-   [23:23:29.907] tio v2.7
-   [23:23:29.907] Press ctrl-t q to quit
-   [23:23:29.907] Warning: Could not open tty device (No such file or directory)
-   [23:23:29.907] Waiting for tty device..
-   [23:23:39.005] Connected
 
      button       clear        date         device       devmem       help
      history      kernel       led          mock_button  rem          resize
@@ -313,23 +308,9 @@ The button module provides commands for testing button functionality:
 .. code-block:: console
 
    uart:~$ button press    # Simulate a button press event via ZBus
-   uart:~$ button status   # Show current button pin state
 
 **Button Press** publishes a ``SYS_BUTTON_PRESSED`` event to the button channel,
 which triggers the same logic as a physical button press.
-
-LED Module Commands
-===================
-
-The LED module provides commands to control LED state:
-
-.. code-block:: console
-
-   uart:~$ led set sys_sleep    # Turn LED off
-   uart:~$ led set sys_standby  # Start LED blinking
-
-These commands publish state messages to the LED channel, allowing testing of
-different visual feedback patterns.
 
 System Control Module Commands
 ==============================
@@ -388,7 +369,7 @@ And run with:
 
 .. code-block:: console
 
-   host:~$  ./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
+   host:~$ ./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
    *** Booting Zephyr OS build v4.3.0-6940-g8c06719191f5 ***
    <inf> led_module: LED module started
    <dbg> led_module: led_fn: LED off
@@ -398,7 +379,7 @@ And interact with the shell via:
 
 .. code-block:: console
 
-   host:~$  tio /tmp/zephyr_shell
+   host:~$ tio /tmp/zephyr_shell
 
      clear    date     device   devmem   help     history  kernel   led
      rem      resize   retval   shell
@@ -408,8 +389,8 @@ And interact with the shell via:
    Setting LED to standby mode (blink)
 
 
-Shell Commands for Module Testing
-=================================
+Overview of helpful Shell Commands
+==================================
 
 Each module provides shell commands when built with its ``*_SHELL`` Kconfig
 option enabled:
@@ -434,6 +415,12 @@ option enabled:
 
    uart:~$ sysctrl state         # Show current system state
    uart:~$ sysctrl button        # Simulate button press via ZBus
+
+**Kernel**
+
+.. code-block:: console
+
+   uart:~$ kernel thread list    # Shows all active threads and utilization
 
 Running Tests with Twister
 ==========================
@@ -470,6 +457,8 @@ Resources
 *********
 
 - `Zephyr ZBus Documentation <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_
-- `native_sim Board Documentation <https://docs.zephyrproject.org/latest/boards/native/native_sim/doc/index.html>`_
-- `Zephyr Testing with Twister <https://docs.zephyrproject.org/latest/develop/test/twister.html>`_
+- `native_sim Board <https://docs.zephyrproject.org/latest/boards/native/native_sim/doc/index.html>`_
+- `native_sim PTY UART <https://docs.zephyrproject.org/latest/boards/native/native_sim/doc/index.html#pty-uart>`_
+- Zephyr Testing with `Twister <https://docs.zephyrproject.org/latest/develop/test/twister.html>`_
 - `Zephyr Tracing Documentation <https://docs.zephyrproject.org/latest/services/tracing/index.html>`_
+- `Zephyr System Initialization <https://docs.zephyrproject.org/latest/doxygen/html/group__sys__init.html>`_
