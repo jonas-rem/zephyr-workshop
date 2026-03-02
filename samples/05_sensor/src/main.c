@@ -8,13 +8,12 @@
 #include <zephyr/device.h>
 #include <zephyr/drivers/sensor.h>
 #include <zephyr/sys/printk.h>
-#include <zephyr/sys/__assert.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/drivers/gpio.h>
 
 int main(void)
 {
-	printk("Running on %s!\n", CONFIG_ARCH);
+	printk("Running on %s!\n", CONFIG_BOARD);
 	const struct device *const dev = DEVICE_DT_GET_ONE(ti_hdc);
 
 	if (!device_is_ready(dev)) {
@@ -38,7 +37,7 @@ int main(void)
 		       temp.val1, temp.val2, humidity.val1, humidity.val2);
 
 		/* wait for the next sample */
-		k_sleep(K_SECONDS(10));
+		k_sleep(K_SECONDS(3));
 	}
 	return 0;
 }

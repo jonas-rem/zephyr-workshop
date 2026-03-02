@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: Apache-2.0
+
+config EMUL_TI_HDC
+	bool "TI HDC temperature/humidity sensor emulator"
+	default y
+	depends on EMUL
+	depends on TI_HDC
+	help
+	  Emulator for the TI HDC family (HDC1010/1080) I2C temperature and humidity sensor.
+	  Provides canned readings for use with native_sim.

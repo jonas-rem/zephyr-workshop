@@ -494,9 +494,9 @@ printk("Temp = %d.%06d C, RH = %d.%06d %%\n",
 ## 05_sensor Sample - Console Output
 
 ```shell
-*** Booting Zephyr OS build v4.1.0 ***
-Running on arm!
-Dev 0x801c name ti_hdc@43 is ready!
+*** Booting Zephyr OS build v4.3.0 ***
+Running on native_sim!
+Dev 0x80525e0 name ti_hdc@43 is ready!
 Fetching...
 Temp = 22.852966 C, RH = 38.793945 %
 Fetching...
@@ -632,18 +632,21 @@ Indication complete
 Build and run the samples<sup>1</sup>:
 
 ```shell
-west build -b native_sim samples/02_logging -p
+west build -b native_sim samples/02_shell -p
 west build -t run
 ```
 
-**or**
+The shell is connected to **uart_1**, access via the displayed **/dev/pts/'n'**, e.g.:
 
 ```shell
-west build -b reel_board@2 samples/02_logging -p
-west flash
+tio /dev/pts/12
+uart:~$
 ```
 
-**Task:** Update the displayed name on the passive display
+**Task:** The shell sample can already access devices that are registered in the devicetree. The
+emulated TI HDC1010 is in *zephyr-workshop/emulators/sensor/*.
+
+Change the simulated temperature.
 
 </div>
 
@@ -665,5 +668,5 @@ samples
 </div>
 
 <Footnotes y="col">
-  <Footnote :number=1>Note: The sensor and ble samples require a board to run.</Footnote>
+  <Footnote :number=1>Note: The ble samples requires a board to run.</Footnote>
 </Footnotes>
