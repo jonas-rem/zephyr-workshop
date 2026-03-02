@@ -210,7 +210,7 @@ On native_sim, the application uses:
 - **PTY UART** for shell on separate console
 - **Devicetree Overlay** to define button alias and UART configuration
 
-The overlay file (``app/boards/native_sim.overlay``) defines:
+The overlay file (``boards/native_sim.overlay``) defines:
 
 - ``sw0`` alias for the button
 - ``uart1`` enabled for shell

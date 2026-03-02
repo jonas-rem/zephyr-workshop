@@ -1,0 +1,37 @@
+/**
+ * Workshop board overlay for native_sim.
+ *
+ * - HDC1010 sensor on emulated I2C bus (for sensor samples)
+ * - Button sw0 alias (for app button module)
+ * - Shell on uart1 (separate console for app)
+ */
+
+&i2c0 {
+	ti_hdc: ti_hdc@43 {
+		compatible = "ti,hdc";
+		reg = <0x43>;
+		status = "okay";
+	};
+};
+
+/ {
+	aliases {
+		sw0 = &button0;
+	};
+
+	chosen {
+		zephyr,shell-uart = &uart1;
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+		button0: button_0 {
+			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
+			label = "User button";
+		};
+	};
+};
+
+&uart1 {
+	status = "okay";
+};
