@@ -12,15 +12,15 @@ When the button is pressed, the system toggles between two states:
 - **Sleep**: LED is off, system waits for events (blocking)
 - **Standby**: LED blinks continuously (50ms on, 500ms off)
 
-The application showcases a modular design with inter-module communication via
-`ZBus <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_, allowing the Button module to notify the LED module of state
+The application showcases a modular design with inter-component communication via
+`ZBus <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_, allowing the Button component to notify the LED component of state
 changes without direct coupling. This decoupled architecture enables testing
-individual modules in isolation.
+individual components in isolation.
 
 This application is useful for:
 
 - Understanding modular architecture in Zephyr
-- Learning about ZBus for inter-module communication
+- Learning about ZBus for inter-component communication
 - Using `Zephyr System Initialization`_ (SYS_INIT) for application
   initialization
 - Testing with `native_sim Board`_ and `Twister`_
@@ -31,7 +31,7 @@ Architecture
 The application follows a modular design where functionality is organized into
 reusable components. The source code is located in the ``app/src/`` directory,
 with a clear separation between common infrastructure and feature-specific
-modules.
+components.
 
 The ``app/common/`` directory contains shared components like message channels
 that enable inter-component communication, while the ``app/components/`` directory
@@ -75,21 +75,21 @@ The ``tree`` shows a simplified view of the structure of the application.
 Initialization using SYS_INIT
 =============================
 
-The application's modules are initialized independently of the ``main()``
-function using the ``SYS_INIT`` macro. This allows modules to inject their
+The application's components are initialized independently of the ``main()``
+function using the ``SYS_INIT`` macro. This allows components to inject their
 initialization routines into the OS boot sequence automatically.
 
-Each module uses ``SYS_INIT()`` with ``APPLICATION`` priority to register itself
+Each component uses ``SYS_INIT()`` with ``APPLICATION`` priority to register itself
 after drivers and ZBus are operational.
 
 This initialization pattern ensures:
 
-- Modules start automatically without explicit calls from ``main()``
-- Dependencies (drivers, ZBus) are ready before module initialization
+- Components start automatically without explicit calls from ``main()``
+- Dependencies (drivers, ZBus) are ready before component initialization
 - ``main.c`` remains a lightweight placeholder, decoupled from application logic
-- Each module can be tested in isolation by simply including it via Kconfig
+- Each component can be tested in isolation by simply including it via Kconfig
 
-Each module has its own priority configuration option that defaults to a numeric
+Each component has its own priority configuration option that defaults to a numeric
 value (e.g., ``CONFIG_SYS_CTRL_MODULE_INIT_PRIORITY=85``) to control
 initialization order. The entry with the lowest number will be started first.
 
@@ -98,11 +98,11 @@ Example from ``Kconfig.sys_ctrl``:
 .. code-block:: kconfig
 
    config SYS_CTRL_MODULE_INIT_PRIORITY
-       int "System control module init priority"
+       int "System control component init priority"
        default 85
        help
-         System initialization priority for the system control module.
-         This determines the order in which the module is initialized.
+         System initialization priority for the system control component.
+         This determines the order in which the component is initialized.
 
 The ``APPLICATION`` level ensures proper ordering relative to driver
 initialization while allowing custom priorities within the application phase.
@@ -114,15 +114,15 @@ Example from ``sys_ctrl.c``:
 
 Initialization sequence (`Zephyr System Initialization`_)
 
-1. **SYS_INIT modules** (priority order):
+1. **SYS_INIT components** (priority order):
 
    - Button (priority 80)
    - Button Mock (priority 80)
    - System Control (priority 85)
 
-2. **led module thread with prio -2**:
+2. **led component thread with prio -2**:
 
-   - LED module thread
+   - LED component thread
 
 3. **main thread with Prio -1**
 
@@ -154,21 +154,21 @@ The application implements two system states:
 
 Button presses toggle between these states via ZBus messages.
 
-Module Configuration
-====================
+Component Configuration
+=======================
 
-Each module can be independently enabled or disabled via Kconfig options.
+Each component can be independently enabled or disabled via Kconfig options.
 example from ``app/prj.conf``:
 
 .. code-block:: kconfig
 
-   # Enable modules
+   # Enable components
    CONFIG_LED_MODULE=y
    CONFIG_BUTTON_MODULE=y
    CONFIG_SYS_CTRL_MODULE=y
 
-Additionally, each module provides optional shell commands that can be activated
-per module. These shell commands can be used for testing the modules in isolation
+Additionally, each component provides optional shell commands that can be activated
+per component. These shell commands can be used for testing the components in isolation
 or within the application.
 
 .. code-block:: kconfig
@@ -180,7 +180,7 @@ or within the application.
 
 
 And the same works for Logging. Log levels can be set individually for each
-module.
+component.
 
 .. code-block:: kconfig
 
@@ -189,17 +189,17 @@ module.
    CONFIG_BUTTON_MODULE_LOG_LEVEL_DBG=y
    CONFIG_SYS_CTRL_MODULE_LOG_LEVEL_DBG=y
 
-These options allow building the application with any combination of modules,
+These options allow building the application with any combination of components,
 enabling testing in isolation or creating minimal builds. If features like e.g.
 shell commands are not activated they will not be compiled into the binary.
 
-Module Communication
-====================
+Component Communication
+=======================
 
-Modules communicate via ZBus channels:
+Components communicate via ZBus channels:
 
-- ``button_ch``: Button press events (publisher: Button module, subscriber: Main app)
-- ``led_ch``: LED state changes (publisher: Main app, subscriber: LED module)
+- ``button_ch``: Button press events (publisher: Button component, subscriber: Main app)
+- ``led_ch``: LED state changes (publisher: Main app, subscriber: LED component)
 
 Hardware Abstraction
 ====================
@@ -296,14 +296,14 @@ To build for the reel_board (e.g., ``reel_board@2``), use:
 Shell Commands
 **************
 
-When the application is built with shell support, each module provides commands
+When the application is built with shell support, each component provides commands
 for testing and debugging. These commands are available when the corresponding
 ``CONFIG_*_MODULE_SHELL`` option is enabled.
 
-Button Module Commands
-======================
+Button Component Commands
+=========================
 
-The button module provides commands for testing button functionality:
+The button component provides commands for testing button functionality:
 
 .. code-block:: console
 
@@ -312,8 +312,8 @@ The button module provides commands for testing button functionality:
 **Button Press** publishes a ``SYS_BUTTON_PRESSED`` event to the button channel,
 which triggers the same logic as a physical button press.
 
-System Control Module Commands
-==============================
+System Control Component Commands
+=================================
 
 The system controller provides commands to inspect and manipulate system state:
 
@@ -340,23 +340,23 @@ complete button signal path from hardware to application.
 Testing
 *******
 
-The application uses a modular testing approach where individual modules can be
-tested in isolation using Kconfig options. Each module has its own test
-configuration in ``test_cfg/`` that enables only that module with shell
+The application uses a modular testing approach where individual components can be
+tested in isolation using Kconfig options. Each component has its own test
+configuration in ``test_cfg/`` that enables only that component with shell
 commands for interactive testing.
 
 Test Configurations
 ===================
 
 The ``test_cfg/`` directory contains configuration files for testing each
-module in isolation:
+component in isolation:
 
 .. code-block:: text
 
    app/test_cfg/
-   ├── button_module.conf    # Button module only + shell commands
-   ├── led_module.conf       # LED module only + shell commands
-   └── sys_ctrl_module.conf  # System control module only + shell commands
+   ├── button_module.conf    # Button component only + shell commands
+   ├── led_module.conf       # LED component only + shell commands
+   └── sys_ctrl_module.conf  # System control component only + shell commands
 
 Build with a specific test configuration:
 
@@ -392,24 +392,24 @@ And interact with the shell via:
 Overview of helpful Shell Commands
 ==================================
 
-Each module provides shell commands when built with its ``*_SHELL`` Kconfig
+Each component provides shell commands when built with its ``*_SHELL`` Kconfig
 option enabled:
 
-**LED Module** (``CONFIG_LED_MODULE_SHELL=y``):
+**LED Component** (``CONFIG_LED_MODULE_SHELL=y``):
 
 .. code-block:: console
 
    uart:~$ led set sys_sleep     # Turn LED off
    uart:~$ led set sys_standby   # Start LED blinking
 
-**Button Module** (``CONFIG_BUTTON_MODULE_SHELL=y``):
+**Button Component** (``CONFIG_BUTTON_MODULE_SHELL=y``):
 
 .. code-block:: console
 
    uart:~$ button press          # Simulate button press event
    uart:~$ button status         # Show current button pin state
 
-**System Control Module** (``CONFIG_SYS_CTRL_MODULE_SHELL=y``):
+**System Control Component** (``CONFIG_SYS_CTRL_MODULE_SHELL=y``):
 
 .. code-block:: console
 
@@ -425,7 +425,7 @@ option enabled:
 Running Tests with Twister
 ==========================
 
-Run all module integration tests:
+Run all component integration tests:
 
 .. code-block:: console
 
@@ -438,7 +438,7 @@ Run all module integration tests:
    INFO    - 8 selected test cases not executed: 8 not run (built only).
    INFO    - Run completed
 
-Run tests for a specific module:
+Run tests for a specific component:
 
 .. code-block:: console
 

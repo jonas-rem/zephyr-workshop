@@ -24,7 +24,7 @@ Zephyr.
    +-----------------+-----------------------------------+----------------------------------------------+
    | Adapter         | Device Driver Model               | Abstract HW behind unified driver API        |
    +-----------------+-----------------------------------+----------------------------------------------+
-   | Observer        | ZBus                              | Decouple modules via msg passing (Pub-/Sub)  |
+   | Observer        | ZBus                              | Decouple components via msg passing (Pub-/Sub)  |
    +-----------------+-----------------------------------+----------------------------------------------+
    | State           | SMF (State Machine Framework)     | Handle complex system states and transitions |
    +-----------------+-----------------------------------+----------------------------------------------+

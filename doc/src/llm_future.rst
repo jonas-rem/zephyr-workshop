@@ -30,13 +30,13 @@ new concepts. However, this complexity is there for a reason. If teams
 follow a few paradigms during development, powerful workflows are enabled that
 lead to better, and more maintainable products in a shorter amount of time:
 
-- loosely coupled modules that can run independently: `zbus`.
-- Integration of the `shell` subsystem into each firmware module gives the
+- loosely coupled components that can run independently: `zbus`.
+- Integration of the `shell` subsystem into each firmware component gives the
   possibility to trigger specific events and validate the result.
 - With `native_sim` it is possible to run application code on the developer
   machine at much faster execution speeds. This enables unit-tests that AI tools
   can invoke to validate the code they write.
-- Out of those modules, a subset of the final application can be configured to
+- Out of those components, a subset of the final application can be configured to
   form integration tests that can run with `native_sim`.
 - E2E tests are still required to validate the application generally runs on the
   target hardware in the target conditions. However, since the logic of the
