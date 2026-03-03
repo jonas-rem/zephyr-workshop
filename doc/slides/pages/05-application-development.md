@@ -72,8 +72,8 @@ level: 1
 
 - **General:** Code reuse, maintainability, readability
 - **IPC:** Communication e.g. via Zbus
-- **Context:** Each module can be controlled independently
-- **Testing:** Modules can be tested separately
+- **Context:** Each component can be controlled independently
+- **Testing:** Components can be tested separately
 
 </div>
 
@@ -90,7 +90,7 @@ app/
     │   ├── message_channel.c
     │   └── message_channel.h
     ├── main.c
-    └── modules
+    └── components
         ├── button
         │   ├── button.c
         │   ├── CMakeLists.txt
@@ -107,15 +107,15 @@ app/
 
 ---
 
-## Testing Modules in Isolation - Build
+## Testing Components in Isolation - Build
 
 <div class="grid grid-cols-2 gap-4">
 
 <div>
 
-**Isolated testing of modules**
+**Isolated testing of components**
 - Add subsystems like `shell`, `ztest` for test cases
-- Tests reference modules via CMake
+- Tests reference components via CMake
 - Interfaces abstracted via Zbus
 
 **Test are just a config:**
@@ -135,7 +135,7 @@ app
 
 ```shell
 west twister -T app/ -s app.test.led --integration
-# -> Twister will build and run the app with only the led module
+# -> Twister will build and run the app with only the led component
 west build -b native_sim app -p -- -DCONFIG=led_module.conf
 
 # Self-test the isolated module via shell commands
@@ -154,7 +154,7 @@ west build -b native_sim app -p -- -DCONFIG=led_module.conf
 
 ---
 
-## Testing Modules in Isolation - Integration Test
+## Testing Components in Isolation - Integration Test
 
 <div class="grid grid-cols-2 gap-4 items-start">
 
@@ -199,7 +199,7 @@ junit2html twister-out/twister_report.xml report.html
 
 ---
 
-## Testing Modules in Isolation - Unit Test
+## Testing Components in Isolation - Unit Test
 
 <div class="grid grid-cols-2 gap-4 items-start">
 
@@ -247,7 +247,7 @@ ZTEST(sys_ctrl_suite, test_transition)
 }
 ```
 
-**Trade-off:** Requires testable version of module.
+**Trade-off:** Requires testable version of component.
 
 </div>
 

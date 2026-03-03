@@ -119,7 +119,7 @@ app/src/main.c
 <div>
 
 ```diff
-app/src/modules/led/led.c
+app/src/components/led/led.c
 @@ -75,7 +75,12 @@ static void led_fn(void)
         /* Add your code here */
 +       case SYS_ACTIVE:
