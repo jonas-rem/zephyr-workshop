@@ -4,7 +4,7 @@ sample:
 common:
   tags: introduction
 tests:
-  # Main application with all modules
+  # Main application with all components
   basic.app:
     tags: introduction
     integration_platforms:
@@ -16,8 +16,8 @@ tests:
       regex:
         - "System booted"
 
-  # Module-specific tests using Kconfig options
-  # Tests each module in isolation with console harness
+  # Component-specific tests using Kconfig options
+  # Tests each component in isolation with console harness
 
   app.test.button:
     extra_args: EXTRA_CONF_FILE=test_cfg/button_module.conf
