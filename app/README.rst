@@ -34,8 +34,8 @@ with a clear separation between common infrastructure and feature-specific
 modules.
 
 The ``app/common/`` directory contains shared components like message channels
-that enable inter-module communication, while the ``app/modules/`` directory
-contains the individual functional units. Each module is self-contained with its
+that enable inter-component communication, while the ``app/components/`` directory
+contains the individual functional units. Each component is self-contained with its
 own source files, build configuration, and Kconfig options.
 
 .. code-block:: text
@@ -52,19 +52,19 @@ own source files, build configuration, and Kconfig options.
    │   │   ├── message_channel.c
    │   │   └── message_channel.h
    │   ├── main.c
-   │   └── modules
-   │       ├── button
-   │       │   ├── button.c
-   │       │   ├── CMakeLists.txt
-   │       │   └── Kconfig.button
-   │       ├── led
-   │       │   ├── CMakeLists.txt
-   │       │   ├── Kconfig.led
-   │       │   └── led.c
-   │       ├── sys_ctrl
-   │       │   ├── CMakeLists.txt
-   │       │   ├── Kconfig.sys_ctrl
-   │       │   └── sys_ctrl.c
+   │   └── components
+   │       ├── button
+   │       │   ├── button.c
+   │       │   ├── CMakeLists.txt
+   │       │   └── Kconfig.button
+   │       ├── led
+   │       │   ├── CMakeLists.txt
+   │       │   ├── Kconfig.led
+   │       │   └── led.c
+   │       ├── sys_ctrl
+   │       │   ├── CMakeLists.txt
+   │       │   ├── Kconfig.sys_ctrl
+   │       │   └── sys_ctrl.c
    └── test_cfg
        ├── button_module.conf
        ├── led_module.conf

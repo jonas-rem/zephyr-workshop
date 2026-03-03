@@ -10,26 +10,26 @@ target_sources(app PRIVATE src/main.c)
 
 add_subdirectory(src/common common)
 
-# Conditionally include modules based on Kconfig options
+# Conditionally include components based on Kconfig options
 if(CONFIG_LED_MODULE)
-  add_subdirectory(src/modules/led led)
+  add_subdirectory(src/components/led led)
 endif()
 
 if(CONFIG_BUTTON_MODULE)
-  add_subdirectory(src/modules/button button)
+  add_subdirectory(src/components/button button)
 
   # Button mock for native_sim (simulates GPIO button presses)
   if(CONFIG_BOARD_NATIVE_SIM)
-    add_subdirectory(src/modules/button_mock button_mock)
+    add_subdirectory(src/components/button_mock button_mock)
   endif()
 
 endif()
 
 if(CONFIG_SYS_CTRL_MODULE)
-  add_subdirectory(src/modules/sys_ctrl sys_ctrl)
+  add_subdirectory(src/components/sys_ctrl sys_ctrl)
 endif()
 
 # USB tracing support for hardware boards
 if(CONFIG_TRACING_USB_MODULE)
-  add_subdirectory(src/modules/tracing_usb tracing_usb)
+  add_subdirectory(src/components/tracing_usb tracing_usb)
 endif()

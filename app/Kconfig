@@ -1,10 +1,10 @@
 menu "Application"
 
-rsource "src/modules/led/Kconfig.led"
-rsource "src/modules/button/Kconfig.button"
-rsource "src/modules/sys_ctrl/Kconfig.sys_ctrl"
-rsource "src/modules/button_mock/Kconfig.button_mock"
-rsource "src/modules/tracing_usb/Kconfig.tracing_usb"
+rsource "src/components/led/Kconfig.led"
+rsource "src/components/button/Kconfig.button"
+rsource "src/components/sys_ctrl/Kconfig.sys_ctrl"
+rsource "src/components/button_mock/Kconfig.button_mock"
+rsource "src/components/tracing_usb/Kconfig.tracing_usb"
 
 endmenu
 
