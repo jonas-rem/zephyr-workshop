@@ -621,9 +621,7 @@ Indication complete
 
 ---
 
-## Hands-on 3
-
-### Test the Samples
+## Hands-on 3 - Test the samples
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -632,21 +630,25 @@ Indication complete
 Build and run the samples<sup>1</sup>:
 
 ```shell
-west build -b native_sim samples/02_shell -p
+cd zephyr-workshop
+west build -b native_sim samples/04_shell -p
 west build -t run
+  uart connected to pseudotty: /dev/pts/6
+  uart_1 connected to pseudotty: /dev/pts/8
+  <inf> emul: Registering 1 emulator(s) for i2c@100
 ```
 
 The shell is connected to **uart_1**, access via the displayed **/dev/pts/'n'**, e.g.:
 
 ```shell
-tio /dev/pts/12
+tio /dev/pts/8
 uart:~$
 ```
 
-**Task:** The shell sample can already access devices that are registered in the devicetree. The
-emulated TI HDC1010 is in *zephyr-workshop/emulators/sensor/*.
+**Task:** The shell sample can already access devices that are registered in
+the devicetree. The emulated TI HDC1010 is in *zephyr-workshop/emulators/sensor/*.
 
-Change the simulated temperature.
+Try changing the simulated temperature.
 
 </div>
 
@@ -662,6 +664,24 @@ samples
 ├── 06_ble
 └── 07_display_cfb
 ```
+
+```console
+uart:~$
+  device              devmem
+  i2c                 help
+  section_cmd         sensor
+
+uart:~$ device list
+devices:
+- i2c@100 (READY)
+  DT node labels: i2c0
+- ti_hdc@43 (READY)
+  DT node labels: ti_hdc
+
+uart:~$ sensor get ti_hdc@43
+```
+<div class="text-xs text-center mt-2">Zephyr shell on /dev/pts/8</div>
+
 
 </div>
 

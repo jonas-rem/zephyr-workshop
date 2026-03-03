@@ -107,7 +107,7 @@ app/
 
 ---
 
-## Testing Modules
+## Testing Modules in Isolation - Build
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -118,40 +118,136 @@ app/
 - Tests reference modules via CMake
 - Interfaces abstracted via Zbus
 
-**Example Test Structure:**
+**Test are just a config:**
 ```text
-test/
-├── button
-│   ├── CMakeLists.txt
-│   ├── prj.conf
-│   └── src/main.c
-└── led
-    ├── CMakeLists.txt
-    └── src/main.c
+app
+├── sample.yaml
+│   [..]
+└── test_cfg
+    ├── button_module.conf
+    ├── led_module.conf
+    └── sys_ctrl_module.conf
 ```
 
 </div>
 
 <div>
 
-```cmake
-# test/button/CMakeLists.txt
-target_sources(app PRIVATE src/main.c)
-add_subdirectory(../../app/src/common common)
-add_subdirectory(../../app/src/modules/button button)
+```shell
+west twister -T app/ -s app.test.led --integration
+# -> Twister will build and run the app with only the led module
+west build -b native_sim app -p -- -DCONFIG=led_module.conf
+
+# Self-test the isolated module via shell commands
+  uart:~$ led set sys_sleep
+  Setting LED to sleep mode (off)
+
+# And the LED stops blinking
+  <dbg> led_module: led_fn: LED on
+  <dbg> led_module: led_fn: LED off
+  <dbg> led_module: led_fn: LED off
 ```
 
-```c
-// test/button/src/main.c
-void button_test_msg_cb(const struct zbus_channel *chan) {
-    const enum sys_msg *msg = zbus_chan_const_msg(chan);
-    if (*msg == SYS_BUTTON_PRESSED) {
-        LOG_INF("Button pressed!");
-    }
-}
-ZBUS_LISTENER_DEFINE(button_test, button_test_msg_cb);
-ZBUS_CHAN_ADD_OBS(button_ch, button_test, 1);
+</div>
+
+</div>
+
+---
+
+## Testing Modules in Isolation - Integration Test
+
+<div class="grid grid-cols-2 gap-4 items-start">
+
+<div>
+
+**Running Tests**
+
+```bash
+west twister -T app/ -s app.test.led.pytest -v
 ```
+
+**Results:**
+```text
+app/test_led_module.py::test_led_module_boot PASSED
+app/test_led_module.py::test_led_set_sleep PASSED
+app/test_led_module.py::test_led_set_standby PASSED
+app/test_led_module.py::test_led_state_persistence PASSED
+============== 4 passed in 1.70s =====================
+```
+
+</div>
+
+<div>
+
+**Artifacts:** `twister-out/<platform>/<test>/`
+
+- `handler.log` - Device output & shell
+- `twister_harness.log` - Pytest execution
+- `report.xml` - JUnit results
+
+
+**Test Result HTML Report:**
+```bash
+# Convert JUnit XML to HTML
+pip install junit2html
+junit2html twister-out/twister_report.xml report.html
+```
+
+</div>
+
+</div>
+
+---
+
+## Testing Modules in Isolation - Unit Test
+
+<div class="grid grid-cols-2 gap-4 items-start">
+
+<div>
+
+**When to Unit Test**
+
+- Complex state machines with edge cases
+- Algorithm implementations
+- Pure functions without side effects
+- Logic that benefits from fast execution (< 1ms)
+
+**Structure:**
+```text
+test/sys_ctrl/
+├── CMakeLists.txt
+├── prj.conf
+├── testcase.yaml
+└── src/
+    ├── sys_ctrl.c      # Testable version
+    └── test_sys_ctrl.c # Unit tests
+```
+
+</div>
+
+<div>
+
+**Running Unit Tests**
+
+```bash
+west twister -T test/sys_ctrl --integration
+```
+
+**Test Pattern:**
+```c
+// Include source to access static functions
+#include "sys_ctrl.c"
+
+ZTEST(sys_ctrl_suite, test_transition)
+{
+    sys_ctrl_set_state(SYS_SLEEP);
+    sys_ctrl_handle_button_press();
+    zassert_equal(sys_ctrl_get_state(), 
+                  SYS_STANDBY);
+}
+```
+
+**Trade-off:** Requires testable version of module.
 
 </div>
 
@@ -182,9 +278,8 @@ west twister -T app/ -T test/ --integration
 **Example `sample.yaml`:**
 ```yaml
 integration_platforms:
+  - native_sim
   - reel_board
-  - frdm_k64f
-  - nrf52840dk/nrf52840
 ```
 
 **Output:**

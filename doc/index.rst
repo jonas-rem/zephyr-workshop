@@ -18,8 +18,9 @@ deck and code examples are ideal to conduct trainings.
 
    src/introduction
    src/setup
-   src/tracing
    src/architecture
+   src/testing
+   src/tracing
    src/llm_future
 
 

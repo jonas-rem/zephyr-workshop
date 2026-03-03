@@ -127,7 +127,7 @@ HEAD is now at aad79bf [..]
 
 ---
 
-## T1: Star Topology, Zephyr is the Manifest Repository
+## T1: Zephyr is the Manifest Repository
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -151,7 +151,7 @@ HEAD is now at aad79bf [..]
 
 ---
 
-## T2: Star Topology, Application is the Manifest Repository
+## T2: Application is the Manifest Repository
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -175,7 +175,7 @@ HEAD is now at aad79bf [..]
 
 ---
 
-## T2: Star Topology, Applied to multiple Projects
+## T2: Applied to multiple Projects
 
 <div class="grid grid-cols-2 gap-4">
 

@@ -52,6 +52,9 @@ Repositories
 - Zephyr
 - Modules via west
 
+CI Environments
+- Container Images for CI or local environments provided
+
 </div>
 
 </div>
