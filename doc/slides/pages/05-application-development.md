@@ -71,7 +71,7 @@ level: 1
 <div>
 
 - **General:** Code reuse, maintainability, readability
-- **IPC:** Communication e.g. via Zbus
+- **IPC:** Communication via Zbus
 - **Context:** Each component can be controlled independently
 - **Testing:** Components can be tested separately
 
@@ -94,7 +94,8 @@ app/
         ├── button
         │   ├── button.c
         │   ├── CMakeLists.txt
-        │   └── Kconfig.button
+        │   ├── Kconfig.button
+        │   └── tests/
         └── led
             ├── led.c
             ├── CMakeLists.txt
@@ -107,147 +108,173 @@ app/
 
 ---
 
-## Testing Components in Isolation - Build
+## Starting Components via System Initialization (SYS_INIT)
+
+<div class="grid grid-cols-2 gap-4">
+
+<div>
+
+**Automatic Initialization**
+
+- Runs after drivers/ZBus, before `main()`
+- Configurable priority
+
+**Boot Sequence:**
+```text
+Kernel
+  ↓
+drivers/ZBus
+  ↓
+SYS_INIT functions via priority
+  ↓
+Component threads
+  ↓
+main()
+```
+<v-click>
+
+<br>
+
+**Benefits:**
+
+- Testability via Decoupled modules
+
+</v-click>
+
+</div>
+
+<div>
+
+<v-click>
+
+**button.c:**
+```c
+SYS_INIT(init, APPLICATION,
+         CONFIG_BUTTON_MODULE_INIT_PRIORITY);
+```
+
+**Boot Log:**
+```text
+*** Booting Zephyr OS build v4.3.0 ***
+<inf> button_module: Set up button at gpio_emul pin 1
+<inf> button_module: Button module started
+<inf> sys_ctrl: System control started
+<inf> led_module: LED module started
+<inf> app: Main thread going to sleep.
+```
+
+</v-click>
+
+</div>
+
+</div>
+
+---
+
+## Testing Components in Isolation
 
 <div class="grid grid-cols-2 gap-4">
 
 <div>
 
 **Isolated testing of components**
-- Add subsystems like `shell`, `ztest` for test cases
-- Tests reference components via CMake
+- Zephyr Test framework (`Ztest`)
+- represents an integration test
+- co-located with components
 - Interfaces abstracted via Zbus
+- Hardware emulation via `native_sim`
 
-**Test are just a config:**
+**Test Structure:**
 ```text
-app
-├── sample.yaml
-│   [..]
-└── test_cfg
-    ├── button_module.conf
-    ├── led_module.conf
-    └── sys_ctrl_module.conf
-```
-
-</div>
-
-<div>
-
-```shell
-west twister -T app/ -s app.test.led --integration
-# -> Twister will build and run the app with only the led component
-west build -b native_sim app -p -- -DCONFIG=led_module.conf
-
-# Self-test the isolated module via shell commands
-  uart:~$ led set sys_sleep
-  Setting LED to sleep mode (off)
-
-# And the LED stops blinking
-  <dbg> led_module: led_fn: LED on
-  <dbg> led_module: led_fn: LED off
-  <dbg> led_module: led_fn: LED off
-```
-
-</div>
-
-</div>
-
----
-
-## Testing Components in Isolation - Integration Test
-
-<div class="grid grid-cols-2 gap-4 items-start">
-
-<div>
-
-**Running Tests**
-
-```bash
-west twister -T app/ -s app.test.led.pytest -v
-```
-
-**Results:**
-```text
-app/test_led_module.py::test_led_module_boot PASSED
-app/test_led_module.py::test_led_set_sleep PASSED
-app/test_led_module.py::test_led_set_standby PASSED
-app/test_led_module.py::test_led_state_persistence PASSED
-============== 4 passed in 1.70s =====================
-```
-
-</div>
-
-<div>
-
-**Artifacts:** `twister-out/<platform>/<test>/`
-
-- `handler.log` - Device output & shell
-- `twister_harness.log` - Pytest execution
-- `report.xml` - JUnit results
-
-
-**Test Result HTML Report:**
-```bash
-# Convert JUnit XML to HTML
-pip install junit2html
-junit2html twister-out/twister_report.xml report.html
-```
-
-</div>
-
-</div>
-
----
-
-## Testing Components in Isolation - Unit Test
-
-<div class="grid grid-cols-2 gap-4 items-start">
-
-<div>
-
-**When to Unit Test**
-
-- Complex state machines with edge cases
-- Algorithm implementations
-- Pure functions without side effects
-- Logic that benefits from fast execution (< 1ms)
-
-**Structure:**
-```text
-test/sys_ctrl/
+app/src/components/button/tests/
 ├── CMakeLists.txt
 ├── prj.conf
 ├── testcase.yaml
 └── src/
-    ├── sys_ctrl.c      # Testable version
-    └── test_sys_ctrl.c # Unit tests
+    └── test_button.c
 ```
 
 </div>
 
 <div>
 
-**Running Unit Tests**
+**test_button.c**: direct access to zbus events and emulated hardware (button, sensor, led).
+
+<br>
+
+**Running Component Tests:**
+```bash
+# Single component test
+west twister -T app/src/components/button/tests \
+  -v --integration -p native_sim
+
+# All component tests
+west twister -T app/src/components/ --integration
+
+# Use existing build artifacts for faster testing
+west build -b native_sim app/src/components/button/tests
+west build -t run
+  *** Booting Zephyr OS build v4.3.0 ***
+  START - test_button_press_sleep_to_standby
+  [00:00:00.060,000] <inf> sys_ctrl: System state sleep
+   PASS - test_button_press_sleep_to_standby in 0.000 s
+  [..]
+```
+
+</div>
+
+</div>
+
+---
+
+## Testing Components in Isolation - Results
+
+<div class="grid grid-cols-2 gap-4 items-start">
+
+<div>
+
+**Run Button Test**
 
 ```bash
-west twister -T test/sys_ctrl --integration
+west twister -T app/src/components/button/tests \
+  --integration -p native_sim
 ```
 
-**Test Pattern:**
-```c
-// Include source to access static functions
-#include "sys_ctrl.c"
-
-ZTEST(sys_ctrl_suite, test_transition)
-{
-    sys_ctrl_set_state(SYS_SLEEP);
-    sys_ctrl_handle_button_press();
-    zassert_equal(sys_ctrl_get_state(), 
-                  SYS_STANDBY);
-}
+**Key Artifacts**
+```text
+twister-out/
+├── twister_report.xml          # JUnit XML report
+└── native_sim_native/
+    └── host/zephyr-workshop/
+        └── app/src/components/
+            └── button/tests/
+                └── component.button/
+                    ├── handler.log       # Test output
+                    └── build.log         # Build output
 ```
 
-**Trade-off:** Requires testable version of component.
+</div>
+
+<div>
+
+**Sample Output** (handler.log)
+```text
+Running TESTSUITE button_test_suite
+START - test_button_module_initialized
+ PASS - test_button_module_initialized in 0.000 seconds
+START - test_button_press_creates_event
+ PASS - test_button_press_creates_event in 0.190 seconds
+...
+TESTSUITE button_test_suite succeeded
+SUITE PASS - 100.00% [button_test_suite]:
+  pass = 4, fail = 0, skip = 0, total = 4
+```
+
+**Generate HTML Report**
+```bash
+pip install junit2html
+junit2html twister-out/twister_report.xml report.html
+```
 
 </div>
 
@@ -264,29 +291,32 @@ ZTEST(sys_ctrl_suite, test_transition)
 **Zephyr Test Runner (Twister)**
 - `west twister` - Automates building and running tests
 - Supports multiple platforms (real HW or simulation)
-- Integration tests via `sample.yaml`
-
-**Run Integration Tests:**
-```shell
-west twister -T app/ -T test/ --integration
-```
+- Component tests via `testcase.yaml`
 
 </div>
 
 <div>
 
-**Example `sample.yaml`:**
-```yaml
-integration_platforms:
-  - native_sim
-  - reel_board
+**Run Integration Tests:**
+```shell
+west twister -T app/ --integration
 ```
+
+<br>
+
+Run all tests found in the **app/** dir. This can be build-only, unit-,
+integration- or e2e tests. With or without hardware.
+
+<br>
+
 
 **Output:**
 ```text
-INFO - Total complete: 24/24 100%
-INFO - 24 of 24 configurations passed
-INFO - Run completed
+Total complete:   14/  14  100%
+    built (not run):    8,
+    failed:             0,
+    error:              0
+Run completed
 ```
 
 </div>

@@ -340,13 +340,37 @@ complete button signal path from hardware to application.
 Testing
 *******
 
-The application uses a modular testing approach where individual components can be
-tested in isolation using Kconfig options. Each component has its own test
-configuration in ``test_cfg/`` that enables only that component with shell
-commands for interactive testing.
+The application uses a multi-level testing approach:
+
+1. **Interactive module Test**
+   ``app/test_cfg/`` defines test configs to build modules in isolation. The
+   modules are build with the activated Shell Subsystem. This allows the user to
+   introspect a particular module in isolation via Shell commands. This is not ment
+   as an automatic test (could theoretically be done via pytest) but as a way to
+   understand a module and provide a convinient way to probe it during development.
+
+2. **Component Tests** (in ``app/src/components/*/tests/``):
+   Tests based on ZTest that test modules in isolation on native_sim. These
+   tests publish/subscribe to ZBus channels directly and read emulated devices
+   (e.g. sensor, button, led). Here it is possible to cover many scenarios and edge
+   cases and test them in a reproducible and automatic way in CI (e.g. multiple
+   button presses in rapid succession).
+
+3. **Build Tests** (via ``app/test_cfg/`` and ``app/sample.yaml``):
+   The same configurations that are used to interactively operate a module via
+   its shell commands can be used for build tests. These are mainly build tests and
+   can be build for multiple targets (e.g. native_sim, reel_board). This tests
+   interoperability for several boards.
+
+
+Interactive Testing via Shell
+=============================
+
+For interactive testing and debugging, components can be built with shell commands
+enabled. This allows manual verification of component behavior during development.
 
 Test Configurations
-===================
+^^^^^^^^^^^^^^^^^^^
 
 The ``test_cfg/`` directory contains configuration files for testing each
 component in isolation:
@@ -389,69 +413,136 @@ And interact with the shell via:
    Setting LED to standby mode (blink)
 
 
-Overview of helpful Shell Commands
-==================================
+Component Tests
+===============
 
-Each component provides shell commands when built with its ``*_SHELL`` Kconfig
-option enabled:
+These are **integration tests** for individual components. Each component is
+tested with its real dependencies (ZBus, GPIO emulator) to verify:
 
-**LED Component** (``CONFIG_LED_MODULE_SHELL=y``):
+- Correct ZBus message publication/subscription
+- Proper interaction with emulated hardware
+- State machine behavior
+
+Each component includes its own tests that are co-located with the source code:
+
+.. code-block:: text
+
+   app/src/components/
+   └── button/tests/
+       ├── src/test_button.c
+       ├── prj.conf
+       └── testcase.yaml
+
+These tests use the GPIO emulator to simulate hardware button presses and verify
+that the component correctly publishes ``SYS_BUTTON_PRESSED`` events to the
+``button_ch`` channel.
+
+As an example we have a closer look at the button test:
+
+Button Component Tests (``component.button``):
+
+- ``test_button_module_initialized``: Verifies GPIO is ready
+- ``test_button_press_creates_event``: Simulates GPIO press and verifies ZBus event
+- ``test_event_type_is_correct``: Confirms event is ``SYS_BUTTON_PRESSED``
+- ``test_multiple_presses_generate_multiple_events``: Tests debounce and event generation
+
+Run component tests:
 
 .. code-block:: console
 
-   uart:~$ led set sys_sleep     # Turn LED off
-   uart:~$ led set sys_standby   # Start LED blinking
+   # Run all component tests
+   host:~$ west twister -T app/src/components --integration
 
-**Button Component** (``CONFIG_BUTTON_MODULE_SHELL=y``):
+   # Run specific component tests
+   host:~$ west twister -T app/src/components/button/tests -v --integration
 
-.. code-block:: console
+   # Run during development (faster)
+   host:~$ west build -b native_sim app/src/components/button/tests -p && west build -t run
 
-   uart:~$ button press          # Simulate button press event
-   uart:~$ button status         # Show current button pin state
+Build Tests
+===========
 
-**System Control Component** (``CONFIG_SYS_CTRL_MODULE_SHELL=y``):
+Build Tests use the same configurations like the Interactive Tests. Twister
+automatically discovers all tests in the application, including component tests.
 
-.. code-block:: console
-
-   uart:~$ sysctrl state         # Show current system state
-   uart:~$ sysctrl button        # Simulate button press via ZBus
-
-**Kernel**
-
-.. code-block:: console
-
-   uart:~$ kernel thread list    # Shows all active threads and utilization
-
-Running Tests with Twister
-==========================
-
-Run all component integration tests:
+**Run all tests** (component tests + integration tests):
 
 .. code-block:: console
 
    host:~$ west twister -T app/ --integration
-   INFO    - Zephyr version: v4.3.0-6940-g8c06719191f5
+   INFO    - Zephyr version: v4.3.0
    [ .. ]
-   INFO    - Total complete:   12/  12  100%  built
-   INFO    - 4 of 12 executed test configurations passed (33.33%)
-   INFO    - 4 of 4 executed test cases passed (100.00%)
-   INFO    - 8 selected test cases not executed: 8 not run (built only).
+   INFO    - 6 of 7 executed test configurations passed (85.71%)
+   INFO    - 13 of 13 executed test cases passed (100.00%)
    INFO    - Run completed
 
-Run tests for a specific component:
+This runs:
+
+- Component tests: ``component.button``, ``component.sys_ctrl``
+- build tests: ``basic.app``, ``app.test.button``, ``app.test.led``, ``app.test.sys_ctrl``
+
+**Run specific test suites:**
 
 .. code-block:: console
 
+   # Component tests (fast, use ZTest)
+   host:~$ west twister -T app/src/components/button/tests --integration
+
+   # Build tests (shell-based, use console harness)
    host:~$ west twister -T app/ -s app.test.button --integration
-   host:~$ west twister -T app/ -s app.test.led --integration
-   host:~$ west twister -T app/ -s app.test.sys_ctrl --integration
 
-Run tests on specific platforms:
+    # Build test for the whole app
+    host:~$ west twister -T app/ -s basic.app --integration
+
+Test Reports and Debugging
+==========================
+
+After running tests, Twister creates a ``twister-out/`` directory with test
+results and artifacts.
+
+**Key artifact locations:**
+
+.. code-block:: text
+
+   twister-out/
+   ├── twister_report.xml          # JUnit XML report for CI systems
+   └── native_sim_native/
+       └── host/zephyr-workshop/
+           └── app/src/components/
+               └── button/tests/
+                   └── component.button/
+                       ├── handler.log       # Test execution output
+                       └── build.log         # Build output
+
+**View test results:**
 
 .. code-block:: console
 
-   host:~$ west twister -T app/ -s app.test.button -p native_sim
-   host:~$ west twister -T app/ -s app.test.led -p stm32f4_disco
+   # Check which tests failed
+   host:~$ cat twister-out/twister_report.xml | grep "failures"
+
+   # Read detailed test output
+   host:~$ cat twister-out/native_sim_native/host/zephyr-workshop/\
+     app/src/components/button/tests/component.button/handler.log
+
+   # Check build errors
+   host:~$ cat twister-out/native_sim_native/host/zephyr-workshop/\
+     app/src/components/button/tests/component.button/build.log
+
+**Generate HTML report:**
+
+.. code-block:: console
+
+   host:~$ pip install junit2html
+   host:~$ junit2html twister-out/twister_report.xml report.html
+
+.. figure:: ../doc/src/twister_test_report.png
+   :alt: Twister HTML test report showing passed and failed tests
+   :align: center
+   :width: 80%
+
+   HTML test report, showing test results for component tests. The failing test
+   has a full log in the report so the cause can be identified.
 
 Resources
 *********
