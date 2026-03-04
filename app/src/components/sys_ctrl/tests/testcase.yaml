@@ -1,0 +1,11 @@
+tests:
+  component.sys_ctrl:
+    platform_allow:
+      - native_sim
+    tags:
+      - sys_ctrl
+      - zbus
+      - component
+    integration_platforms:
+      - native_sim
+    timeout: 5

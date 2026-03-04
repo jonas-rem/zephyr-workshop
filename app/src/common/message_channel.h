@@ -37,4 +37,7 @@ enum sys_events {
 ZBUS_CHAN_DECLARE(button_ch);
 ZBUS_CHAN_DECLARE(led_ch);
 
+/* System Control module interface */
+enum sys_states sys_ctrl_get_state(void);
+
 #endif /* _MESSAGE_CHANNEL_H_ */

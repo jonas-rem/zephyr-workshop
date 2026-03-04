@@ -1,0 +1,11 @@
+tests:
+  component.button:
+    platform_allow:
+      - native_sim
+    tags:
+      - button
+      - zbus
+      - component
+    integration_platforms:
+      - native_sim
+    timeout: 5

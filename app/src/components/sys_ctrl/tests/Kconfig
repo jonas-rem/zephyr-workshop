@@ -1,0 +1,16 @@
+menu "Application"
+
+# Source the sys_ctrl component Kconfig
+rsource "../Kconfig.sys_ctrl"
+
+# Other components might be needed for dependencies
+rsource "../../button/Kconfig.button"
+rsource "../../led/Kconfig.led"
+rsource "../../button_mock/Kconfig.button_mock"
+rsource "../../tracing_usb/Kconfig.tracing_usb"
+
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu

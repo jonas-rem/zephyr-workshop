@@ -56,10 +56,6 @@ tests:
       regex:
         - "System booted"
 
-  # Note: The old test/sys_ctrl/ contains Ztest unit tests with direct API access.
-  # Those test internal functions (sys_ctrl_get_state(), sys_ctrl_handle_button_press())
-  # which are useful for unit testing but different from integration tests.
-
   # Build tests for tracing configurations
   app.tracing.native_ctf:
     build_only: true
