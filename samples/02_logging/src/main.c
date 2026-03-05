@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_REGISTER(hello_world, LOG_LEVEL_DBG);
+LOG_MODULE_REGISTER(logging_sample, LOG_LEVEL_DBG);
 
 static const char *hexdump_msg = "HEXDUMP! #@";
 

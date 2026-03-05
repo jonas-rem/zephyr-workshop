@@ -27,8 +27,8 @@ Within each level, priority values determine the order (lower numbers run first)
 
 This sample includes two modules:
 
-- **Module 1**: Priority APPLICATION, level 0 (runs first)
-- **Module 2**: Priority APPLICATION, level 999 (runs second)
+- **Module 1**: Level APPLICATION, priority 0 (runs first)
+- **Module 2**: Level APPLICATION, priority 999 (runs second)
 
 Building
 ********
@@ -52,7 +52,7 @@ The ``main()`` function is called after all the init hooks from APPLICATION have
 been executed. Therefore the execution order of the example should be:
 
 1. module_1_init()
-1. module_2_init()
+2. module_2_init()
 3. main()
 
 .. code-block:: console
@@ -81,8 +81,8 @@ Sample Output
    host:~$ west build -t run
 
    *** Booting Zephyr OS build v4.3.0 ***
-   Module 1 initialized (priority: APPLICATION, level: 0)
-   Module 2 initialized (priority: APPLICATION, level: 999)
+   Module 1 initialized (level: APPLICATION, priority: 0)
+   Module 2 initialized (level: APPLICATION, priority: 999)
    Hello World! native_sim/native
 
 Exit native_sim by pressing :kbd:`CTRL+C`.

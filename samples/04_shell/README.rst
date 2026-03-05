@@ -27,6 +27,9 @@ Key Features:
 Building
 ********
 
+This sample uses ``qemu_x86`` because the shell subsystem requires a UART
+backend for interactive use, which QEMU provides.
+
 This application can be built and executed on QEMU x86 as follows:
 
 .. code-block:: console

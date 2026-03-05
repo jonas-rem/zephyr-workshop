@@ -4,7 +4,7 @@
 
 int module_1_init(void)
 {
-	printk("Module 1 initialized (priority: APPLICATION, level: %d)\n",
+	printk("Module 1 initialized (level: APPLICATION, priority: %d)\n",
 		MODULE_1_INIT_PRIORITY);
 
 	return 0;

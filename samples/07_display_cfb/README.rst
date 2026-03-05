@@ -56,8 +56,8 @@ Display Output
 
 The display will show:
 
-- "Zephyr Class"
-- "EW 2025"
+- "Zephyr Workshop"
+- "CFB Demo"
 - "<name>" (placeholder for your name)
 
 Customization

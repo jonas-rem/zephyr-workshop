@@ -69,8 +69,8 @@ int main(void)
 
 	for (int i = 0; i < MIN(x_res, y_res); i++) {
 		cfb_framebuffer_clear(dev, false);
-		cfb_print(dev, "Zephyr Class", 17, 5);
-		cfb_print(dev, "EW 2025", 60, 40);
+		cfb_print(dev, "Zephyr Workshop", 5, 5);
+		cfb_print(dev, "CFB Demo", 40, 40);
 		cfb_print(dev, "<name>", 5, 90);
 		cfb_framebuffer_finalize(dev);
 	}
