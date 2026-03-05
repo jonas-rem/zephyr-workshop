@@ -47,6 +47,12 @@ indent_style = space
 indent_size = 3
 max_line_length = 80
 
+# Markdown
+[*.md]
+indent_style = space
+indent_size = 2
+max_line_length = 80
+
 # YAML
 [*.{yml,yaml}]
 indent_style = space
