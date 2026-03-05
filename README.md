@@ -20,7 +20,6 @@ Resources to get started with Zephyr:
 - [Workshop Slides]
 - [Documentation](https://jonas-rem.github.io/zephyr-workshop/index.html)
 - [Application]
-- [Samples](https://jonas-rem.github.io/zephyr-workshop/samples/)
 - [GitHub Codespaces Setup](https://jonas-rem.github.io/zephyr-workshop/src/setup.html)
 
 ### Modular Application
