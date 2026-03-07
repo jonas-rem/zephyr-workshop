@@ -1,0 +1,11 @@
+tests:
+  component.sensor_log:
+    platform_allow:
+      - native_sim
+    tags:
+      - sensor_log
+      - zbus
+      - component
+    integration_platforms:
+      - native_sim
+    timeout: 5

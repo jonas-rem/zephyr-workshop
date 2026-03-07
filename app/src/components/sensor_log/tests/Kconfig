@@ -1,0 +1,18 @@
+menu "Application"
+
+# Source the sensor_log component Kconfig
+rsource "../Kconfig.sensor_log"
+
+# Other components might be needed for dependencies
+rsource "../../sys_ctrl/Kconfig.sys_ctrl"
+rsource "../../button/Kconfig.button"
+rsource "../../led/Kconfig.led"
+rsource "../../button_mock/Kconfig.button_mock"
+rsource "../../tracing_usb/Kconfig.tracing_usb"
+rsource "../../temp_alert/Kconfig.temp_alert"
+
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu

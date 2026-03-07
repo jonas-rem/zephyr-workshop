@@ -1,0 +1,39 @@
+# Copyright (c) 2026 Jonas Remmert
+# SPDX-License-Identifier: Apache-2.0
+
+config SENSOR_LOG_COMPONENT
+	bool "Sensor log module"
+	default y
+	help
+	  Enable the sensor log module that records sensor readings,
+	  alerts, and state changes with timestamps. Provides shell
+	  commands for log inspection.
+
+if SENSOR_LOG_COMPONENT
+
+module = SENSOR_LOG
+module-str = SENSOR_LOG
+source "subsys/logging/Kconfig.template.log_config"
+
+config SENSOR_LOG_BUFFER_SIZE
+	int "Sensor log buffer size (number of entries)"
+	default 100
+	help
+	  Number of log entries to store in the ring buffer.
+	  When the buffer is full, oldest entries are overwritten.
+
+config SENSOR_LOG_INIT_PRIORITY
+	int "Sensor log module init priority"
+	default 80
+	help
+	  System initialization priority for the sensor log module.
+	  Set to 80 to initialize before components that publish on boot.
+
+config SENSOR_LOG_SHELL
+	bool "Sensor commands for sensor_log"
+	default n
+	help
+	  Enable shell commands for the sensor log module.
+	  Provides "sensor_log last" and "sensor_log history" commands.
+
+endif # SENSOR_LOG_COMPONENT
