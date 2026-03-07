@@ -1,0 +1,12 @@
+tests:
+  component.tempsense:
+    platform_allow:
+      - native_sim
+    tags:
+      - tempsense
+      - zbus
+      - sensor
+      - component
+    integration_platforms:
+      - native_sim
+    timeout: 5
