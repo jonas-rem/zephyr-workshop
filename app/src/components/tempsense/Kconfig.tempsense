@@ -1,0 +1,41 @@
+# Copyright (c) 2026 Jonas Remmert
+# SPDX-License-Identifier: Apache-2.0
+
+config TEMPSENSE_COMPONENT
+	bool "Temperature sensor module"
+	default y
+	depends on SENSOR
+	help
+	  Enable the temperature sensor module that reads temperature
+	  from a TI HDC sensor and publishes readings to event_ch.
+
+if TEMPSENSE_COMPONENT
+
+module = TEMPSENSE
+module-str = TEMPSENSE
+source "subsys/logging/Kconfig.template.log_config"
+
+config TEMPSENSE_SAMPLE_INTERVAL_MS
+	int "Sample interval in milliseconds"
+	default 1000
+	help
+	  Time between temperature readings in milliseconds.
+	  Default is 1000 ms (1 reading per second).
+
+config TEMPSENSE_INIT_PRIORITY
+	int "Temperature sensor module init priority"
+	default 80
+	help
+	  System initialization priority for the temperature sensor module.
+	  Must be lower than SYS_CTRL_COMPONENT_INIT_PRIORITY (default 85)
+	  to ensure the sensor is ready before system state changes.
+
+config TEMPSENSE_SHELL
+	bool "Temperature sensor shell commands"
+	depends on SHELL
+	default n
+	help
+	  Enable shell commands for manual temperature sensor interaction.
+	  Provides commands to read temperature and check status.
+
+endif # TEMPSENSE_COMPONENT
