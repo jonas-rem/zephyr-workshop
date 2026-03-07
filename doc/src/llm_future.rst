@@ -45,22 +45,3 @@ lead to better, and more maintainable products in a shorter amount of time:
 
 This creates a very fast feedback loop for iteration. the Shell subsystem acts
 an introspection tool into the code.
-
-TODO / Ideas to expand
-----------------------
-
-- Specification-driven development: Human writes executable specs (Gherkin, contracts),
-  agent implements to satisfy them. Specs are harder than coding but compound value.
-  Can be iterative: sketch → implement → validate → refine.
-
-- Architecture matters MORE with agents, not less. Good architecture enables:
-  * Observable state for human validation (via shell/zbus)
-  * Fast simulation cycles for agent iteration
-  * Explicit behavior that serves as living specification
-  * Linear progress instead of compounding technical debt
-
-- Human becomes product validator and specification author, not code reviewer.
-  Shift from "debugging opaque code" to "clarifying intent."
-
-- Hybrid workflow: humans explore via shell/REPL, capture insights as specs,
-  agents implement. Specs are the durable artifact, not the code.
