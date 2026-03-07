@@ -1,0 +1,37 @@
+# Copyright (c) 2026 Jonas Remmert
+# SPDX-License-Identifier: Apache-2.0
+
+config TEMP_ALERT_COMPONENT
+	bool "Temperature alert module"
+	default y
+	help
+	  Enable the temperature alert module that monitors sensor readings
+	  and publishes alerts when the temperature exceeds a threshold.
+
+if TEMP_ALERT_COMPONENT
+
+module = TEMP_ALERT
+module-str = TEMP_ALERT
+source "subsys/logging/Kconfig.template.log_config"
+
+config TEMP_ALERT_THRESHOLD
+	int "Temperature alert threshold (in 0.01°C)"
+	default 500
+	help
+	  Temperature threshold in 0.01°C units. Default is 500 (5°C).
+	  When temperature exceeds this value for 2 consecutive readings,
+	  a SYS_TEMP_ALERT event is published.
+
+config TEMP_ALERT_INIT_PRIORITY
+	int "Temperature alert module init priority"
+	default 90
+	help
+	  System initialization priority for the temperature alert module.
+
+config TEMP_ALERT_SHELL
+	bool "Shell commands for temp_alert"
+	default n
+	help
+	  Enable shell commands for the temperature alert module.
+
+endif # TEMP_ALERT_COMPONENT
