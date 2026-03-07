@@ -5,7 +5,7 @@
 #include <zephyr/usb/bos.h>
 #include <stdint.h>
 
-LOG_MODULE_REGISTER(tracing_usb_module, CONFIG_TRACING_USB_MODULE_LOG_LEVEL);
+LOG_MODULE_REGISTER(tracing_usb_component, CONFIG_TRACING_USB_COMPONENT_LOG_LEVEL);
 
 /* Default USB device configuration values */
 #ifndef CONFIG_TRACING_USB_VID
@@ -193,4 +193,4 @@ static int tracing_usb_init(void)
 	return 0;
 }
 
-SYS_INIT(tracing_usb_init, APPLICATION, CONFIG_TRACING_USB_MODULE_INIT_PRIORITY);
+SYS_INIT(tracing_usb_init, APPLICATION, CONFIG_TRACING_USB_COMPONENT_INIT_PRIORITY);

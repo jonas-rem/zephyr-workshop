@@ -12,6 +12,6 @@ target_sources(app PRIVATE src/test_sys_ctrl.c)
 add_subdirectory(../../../common common)
 
 # Include sys_ctrl component
-if(CONFIG_SYS_CTRL_MODULE)
+if(CONFIG_SYS_CTRL_COMPONENT)
   add_subdirectory(.. sys_ctrl)
 endif()

@@ -20,7 +20,7 @@ tests:
   # Tests each component in isolation with console harness
 
   app.test.button:
-    extra_args: EXTRA_CONF_FILE=test_cfg/button_module.conf
+    extra_args: EXTRA_CONF_FILE=test_cfg/button_component.conf
     integration_platforms:
       - native_sim
       - stm32f4_disco
@@ -30,10 +30,10 @@ tests:
     harness_config:
       type: one_line
       regex:
-        - "Button module started"
+        - "Button component started"
 
   app.test.led:
-    extra_args: EXTRA_CONF_FILE=test_cfg/led_module.conf
+    extra_args: EXTRA_CONF_FILE=test_cfg/led_component.conf
     integration_platforms:
       - native_sim
       - stm32f4_disco
@@ -43,10 +43,10 @@ tests:
     harness_config:
       type: one_line
       regex:
-        - "LED module initialized"
+        - "LED component initialized"
 
   app.test.sys_ctrl:
-    extra_args: EXTRA_CONF_FILE=test_cfg/sys_ctrl_module.conf
+    extra_args: EXTRA_CONF_FILE=test_cfg/sys_ctrl_component.conf
     integration_platforms:
       - native_sim
     tags: sys_ctrl

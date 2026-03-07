@@ -1,39 +1,39 @@
 # Copyright (c) 2026 Jonas Remmert
 # SPDX-License-Identifier: Apache-2.0
 
-config LED_MODULE
-	bool "LED module"
+config LED_COMPONENT
+	bool "LED component"
 	default y
 	help
-	  Enable the LED module for visual feedback via board LEDs.
+	  Enable the LED component for visual feedback via board LEDs.
 
-if LED_MODULE
+if LED_COMPONENT
 
-module = LED_MODULE
+module = LED_COMPONENT
 module-str = LED
 source "subsys/logging/Kconfig.template.log_config"
 
-config LED_MODULE_THREAD_STACK_SIZE
+config LED_COMPONENT_THREAD_STACK_SIZE
 	int "Thread stack size"
 	default 1024
 
-config LED_MODULE_THREAD_STACK_PRIO
+config LED_COMPONENT_THREAD_STACK_PRIO
 	int "Thread stack priority"
 	default -2
 
-config LED_MODULE_SHELL
-	bool "LED module shell commands"
+config LED_COMPONENT_SHELL
+	bool "LED component shell commands"
 	depends on SHELL
 	default n
 	help
-	  Enable shell commands for controlling the LED module.
+	  Enable shell commands for controlling the LED component.
 	  Provides commands to set LED states manually for testing.
 
-config LED_MODULE_INIT_PRIORITY
-	int "LED module init priority"
+config LED_COMPONENT_INIT_PRIORITY
+	int "LED component init priority"
 	default 90
 	help
-	  System initialization priority for the LED module.
-	  This determines the order in which the LED module is initialized.
+	  System initialization priority for the LED component.
+	  This determines the order in which the LED component is initialized.
 
-endif # LED_MODULE
+endif # LED_COMPONENT

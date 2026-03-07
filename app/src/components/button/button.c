@@ -7,7 +7,7 @@
 
 #include "message_channel.h"
 
-LOG_MODULE_REGISTER(button_module, CONFIG_BUTTON_MODULE_LOG_LEVEL);
+LOG_MODULE_REGISTER(button_component, CONFIG_BUTTON_COMPONENT_LOG_LEVEL);
 
 #define DEBOUNCE_DELAY_MS	10
 #define SW0_NODE		DT_ALIAS(sw0)
@@ -81,12 +81,12 @@ static int init(void)
 
 	k_work_init_delayable(&send_event_work, send_event_work_handler);
 
-	LOG_INF("Button module started");
+	LOG_INF("Button component started");
 
 	return 0;
 }
 
-#ifdef CONFIG_BUTTON_MODULE_SHELL
+#ifdef CONFIG_BUTTON_COMPONENT_SHELL
 #include <zephyr/shell/shell.h>
 
 static int cmd_button_press(const struct shell *sh, size_t argc, char **argv)
@@ -109,12 +109,12 @@ static int cmd_button_press(const struct shell *sh, size_t argc, char **argv)
 	return 0;
 }
 
-SHELL_STATIC_SUBCMD_SET_CREATE(button_module_cmds,
+SHELL_STATIC_SUBCMD_SET_CREATE(button_component_cmds,
 	SHELL_CMD(press, NULL, "Simulate button press event", cmd_button_press),
 	SHELL_SUBCMD_SET_END);
 
-SHELL_CMD_REGISTER(button, &button_module_cmds, "Button module commands", NULL);
+SHELL_CMD_REGISTER(button, &button_component_cmds, "Button component commands", NULL);
 
-#endif /* CONFIG_BUTTON_MODULE_SHELL */
+#endif /* CONFIG_BUTTON_COMPONENT_SHELL */
 
-SYS_INIT(init, APPLICATION, CONFIG_BUTTON_MODULE_INIT_PRIORITY);
+SYS_INIT(init, APPLICATION, CONFIG_BUTTON_COMPONENT_INIT_PRIORITY);

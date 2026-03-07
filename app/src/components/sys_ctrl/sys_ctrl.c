@@ -66,7 +66,7 @@ static void sys_ctrl_button_msg_cb(const struct zbus_channel *chan)
 ZBUS_LISTENER_DEFINE(sys_ctrl_listener, sys_ctrl_button_msg_cb);
 ZBUS_CHAN_ADD_OBS(event_ch, sys_ctrl_listener, 1);
 
-#ifdef CONFIG_SYS_CTRL_MODULE_SHELL
+#ifdef CONFIG_SYS_CTRL_COMPONENT_SHELL
 #include <zephyr/shell/shell.h>
 
 static int cmd_sysctrl_state(const struct shell *sh, size_t argc, char **argv)
@@ -117,8 +117,8 @@ SHELL_STATIC_SUBCMD_SET_CREATE(sysctrl_cmds,
 	SHELL_CMD(button, NULL, "Simulate button press", cmd_sysctrl_button),
 	SHELL_SUBCMD_SET_END);
 
-SHELL_CMD_REGISTER(sys_ctrl, &sysctrl_cmds, "System control module commands", NULL);
+SHELL_CMD_REGISTER(sys_ctrl, &sysctrl_cmds, "System control component commands", NULL);
 
-#endif /* CONFIG_SYS_CTRL_MODULE_SHELL */
+#endif /* CONFIG_SYS_CTRL_COMPONENT_SHELL */
 
-SYS_INIT(sys_ctrl_init, APPLICATION, CONFIG_SYS_CTRL_MODULE_INIT_PRIORITY);
+SYS_INIT(sys_ctrl_init, APPLICATION, CONFIG_SYS_CTRL_COMPONENT_INIT_PRIORITY);

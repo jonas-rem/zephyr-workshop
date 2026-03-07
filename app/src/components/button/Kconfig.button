@@ -1,28 +1,28 @@
 # Copyright (c) 2026 Jonas Remmert
 # SPDX-License-Identifier: Apache-2.0
 
-config BUTTON_MODULE
-	bool "Button module"
+config BUTTON_COMPONENT
+	bool "Button component"
 	default y
 	help
-	  Enable the button module for handling physical button inputs
+	  Enable the button component for handling physical button inputs
 	  and publishing button events via Zbus.
 
-module = BUTTON_MODULE
+module = BUTTON_COMPONENT
 module-str = BUTTON
 source "subsys/logging/Kconfig.template.log_config"
 
-config BUTTON_MODULE_INIT_PRIORITY
-	int "Button module init priority"
+config BUTTON_COMPONENT_INIT_PRIORITY
+	int "Button component init priority"
 	default 80
 	help
-	  System initialization priority for the button module.
-	  This determines the order in which the button module is initialized.
+	  System initialization priority for the button component.
+	  This determines the order in which the button component is initialized.
 
-config BUTTON_MODULE_SHELL
-	bool "Button module shell commands"
+config BUTTON_COMPONENT_SHELL
+	bool "Button component shell commands"
 	depends on SHELL
 	default n
 	help
-	  Enable shell commands for the button module.
+	  Enable shell commands for the button component.
 	  Provides commands to simulate button presses for testing.

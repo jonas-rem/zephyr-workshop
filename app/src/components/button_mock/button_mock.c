@@ -49,7 +49,7 @@ SHELL_CMD_REGISTER(mock_button, NULL, "Simulate button press via GPIO", cmd_mock
 
 static int button_mock_init(void)
 {
-	LOG_INF("Button mock module initialized");
+	LOG_INF("Button mock component initialized");
 	
 	k_work_init_delayable(&button_press_work, button_press_work_handler);
 	k_work_init_delayable(&button_release_work, button_release_work_handler);
@@ -57,4 +57,4 @@ static int button_mock_init(void)
 	return 0;
 }
 
-SYS_INIT(button_mock_init, APPLICATION, CONFIG_BUTTON_MOCK_INIT_PRIORITY);
+SYS_INIT(button_mock_init, APPLICATION, CONFIG_BUTTON_MOCK_COMPONENT_INIT_PRIORITY);

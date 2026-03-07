@@ -67,9 +67,9 @@ own source files, build configuration, and Kconfig options.
    │       │   ├── Kconfig.sys_ctrl
    │       │   └── sys_ctrl.c
    └── test_cfg
-       ├── button_module.conf
-       ├── led_module.conf
-       └── sys_ctrl_module.conf
+   ├── button_component.conf
+   ├── led_component.conf
+   └── sys_ctrl_component.conf
 
 The ``tree`` shows a simplified view of the structure of the application.
 
@@ -91,14 +91,14 @@ This initialization pattern ensures:
 - Each component can be tested in isolation by simply including it via Kconfig
 
 Each component has its own priority configuration option that defaults to a numeric
-value (e.g., ``CONFIG_SYS_CTRL_MODULE_INIT_PRIORITY=85``) to control
+value (e.g., ``CONFIG_SYS_CTRL_COMPONENT_INIT_PRIORITY=85``) to control
 initialization order. The entry with the lowest number will be started first.
 
 Example from ``Kconfig.sys_ctrl``:
 
 .. code-block:: kconfig
 
-   config SYS_CTRL_MODULE_INIT_PRIORITY
+   config SYS_CTRL_COMPONENT_INIT_PRIORITY
        int "System control component init priority"
        default 85
        help
@@ -111,7 +111,7 @@ Example from ``sys_ctrl.c``:
 
 .. code-block:: c
 
-   SYS_INIT(sys_ctrl_init, APPLICATION, CONFIG_SYS_CTRL_MODULE_INIT_PRIORITY);
+   SYS_INIT(sys_ctrl_init, APPLICATION, CONFIG_SYS_CTRL_COMPONENT_INIT_PRIORITY);
 
 Initialization sequence (`Zephyr System Initialization`_)
 
@@ -132,11 +132,11 @@ Boot log showing this order:
 .. code-block:: console
 
    *** Booting Zephyr OS build v4.3.0 ***
-   <inf> button_module: Set up button at gpio_emul pin 1
-   <inf> button_module: Button module started
-   <inf> button_mock: Button mock module initialized
-   <inf> sys_ctrl: sys_ctl module started
-   <inf> led_module: LED module initialized
+   <inf> button_component: Set up button at gpio_emul pin 1
+   <inf> button_component: Button component started
+   <inf> button_mock: Button mock component initialized
+   <inf> sys_ctrl: sys_ctl component started
+   <inf> led_component: LED component initialized
    <inf> app: System booted. Main thread going to sleep.
 
 System States
@@ -158,9 +158,9 @@ example from ``app/prj.conf``:
 .. code-block:: kconfig
 
    # Enable components
-   CONFIG_LED_MODULE=y
-   CONFIG_BUTTON_MODULE=y
-   CONFIG_SYS_CTRL_MODULE=y
+   CONFIG_LED_COMPONENT=y
+   CONFIG_BUTTON_COMPONENT=y
+   CONFIG_SYS_CTRL_COMPONENT=y
 
 Additionally, each component provides optional shell commands that can be activated
 per component. These shell commands can be used for testing the components in isolation
@@ -168,10 +168,10 @@ or within the application.
 
 .. code-block:: kconfig
 
-   # Control individual module shell configurations
-   CONFIG_BUTTON_MODULE_SHELL=y
-   CONFIG_LED_MODULE_SHELL=y
-   CONFIG_SYS_CTRL_MODULE_SHELL=y
+   # Control individual component shell configurations
+   CONFIG_BUTTON_COMPONENT_SHELL=y
+   CONFIG_LED_COMPONENT_SHELL=y
+   CONFIG_SYS_CTRL_COMPONENT_SHELL=y
 
 
 And the same works for Logging. Log levels can be set individually for each
@@ -179,10 +179,10 @@ component.
 
 .. code-block:: kconfig
 
-   # Enable debug logging for each module
-   CONFIG_LED_MODULE_LOG_LEVEL_DBG=y
-   CONFIG_BUTTON_MODULE_LOG_LEVEL_DBG=y
-   CONFIG_SYS_CTRL_MODULE_LOG_LEVEL_DBG=y
+   # Enable debug logging for each component
+   CONFIG_LED_COMPONENT_LOG_LEVEL_DBG=y
+   CONFIG_BUTTON_COMPONENT_LOG_LEVEL_DBG=y
+   CONFIG_SYS_CTRL_COMPONENT_LOG_LEVEL_DBG=y
 
 These options allow building the application with any combination of components,
 enabling testing in isolation or creating minimal builds. If features like e.g.
@@ -253,11 +253,11 @@ Main console (stdout):
 .. code-block:: console
 
    *** Booting Zephyr OS build v4.3.0 ***
-   <inf> button_module: Set up button at gpio_emul pin 1
-   <inf> button_module: Button module started
-   <inf> button_mock: Button mock module initialized
-   <inf> sys_ctrl: sys_ctl module started
-   <inf> led_module: LED module initialized
+   <inf> button_component: Set up button at gpio_emul pin 1
+   <inf> button_component: Button component started
+   <inf> button_mock: Button mock component initialized
+   <inf> sys_ctrl: sys_ctl component started
+   <inf> led_component: LED component initialized
    <inf> app: System booted. Main thread going to sleep.
 
 Shell via ``/tmp/zephyr_shell``:
@@ -290,7 +290,7 @@ Shell Commands
 
 When the application is built with shell support, each component provides commands
 for testing and debugging. These commands are available when the corresponding
-``CONFIG_*_MODULE_SHELL`` option is enabled.
+``CONFIG_*_COMPONENT_SHELL`` option is enabled.
 
 Button Component Commands
 =========================
@@ -334,22 +334,22 @@ Testing
 
 The application uses a multi-level testing approach:
 
-1. **Interactive module Test**
+1. **Interactive component Test**
    ``app/test_cfg/`` defines test configs to build modules in isolation. The
-   modules are build with the activated Shell Subsystem. This allows the user to
-   introspect a particular module in isolation via Shell commands. This is not ment
+   components are built with the activated Shell Subsystem. This allows the user to
+   introspect a particular component in isolation via Shell commands. This is not ment
    as an automatic test (could theoretically be done via pytest) but as a way to
-   understand a module and provide a convinient way to probe it during development.
+   understand a component and provide a convinient way to probe it during development.
 
 2. **Component Tests** (in ``app/src/components/*/tests/``):
-   Tests based on ZTest that test modules in isolation on native_sim. These
+   Tests based on ZTest that test components in isolation on native_sim. These
    tests publish/subscribe to ZBus channels directly and read emulated devices
    (e.g. sensor, button, led). Here it is possible to cover many scenarios and edge
    cases and test them in a reproducible and automatic way in CI (e.g. multiple
    button presses in rapid succession).
 
 3. **Build Tests** (via ``app/test_cfg/`` and ``app/sample.yaml``):
-   The same configurations that are used to interactively operate a module via
+   The same configurations that are used to interactively operate a component via
    its shell commands can be used for build tests. These are mainly build tests and
    can be build for multiple targets (e.g. native_sim, reel_board). This tests
    interoperability for several boards.
@@ -370,16 +370,16 @@ component in isolation:
 .. code-block:: text
 
    app/test_cfg/
-   ├── button_module.conf    # Button component only + shell commands
-   ├── led_module.conf       # LED component only + shell commands
-   └── sys_ctrl_module.conf  # System control component only + shell commands
+   ├── button_component.conf    # Button component only + shell commands
+   ├── led_component.conf       # LED component only + shell commands
+   └── sys_ctrl_component.conf  # System control component only + shell commands
 
 Build with a specific test configuration:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim app -p -- -DEXTRA_CONF_FILE=test_cfg/button_module.conf
-   host:~$ west build -b native_sim app -p -- -DEXTRA_CONF_FILE=test_cfg/led_module.conf
+   host:~$ west build -b native_sim app -p -- -DEXTRA_CONF_FILE=test_cfg/button_component.conf
+   host:~$ west build -b native_sim app -p -- -DEXTRA_CONF_FILE=test_cfg/led_component.conf
 
 And run with:
 
@@ -387,7 +387,7 @@ And run with:
 
    host:~$ ./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
    *** Booting Zephyr OS build v4.3.0-6940-g8c06719191f5 ***
-   <inf> led_module: LED module initialized
+   <inf> led_component: LED component initialized
    <inf> app: System booted. Main thread going to sleep.
 
 
@@ -419,7 +419,7 @@ As an example we have a closer look at the button test:
 
 Button Component Tests (``component.button``):
 
-- ``test_button_module_initialized``: Verifies GPIO is ready
+- ``test_button_component_initialized``: Verifies GPIO is ready
 - ``test_button_press_creates_event``: Simulates GPIO press and verifies ZBus event
 - ``test_event_type_is_correct``: Confirms event is ``SYS_BUTTON_PRESSED``
 - ``test_multiple_presses_generate_multiple_events``: Tests debounce and event generation

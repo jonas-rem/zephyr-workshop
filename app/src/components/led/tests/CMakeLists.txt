@@ -12,6 +12,6 @@ target_sources(app PRIVATE src/test_led.c)
 add_subdirectory(../../../common common)
 
 # Include LED component
-if(CONFIG_LED_MODULE)
+if(CONFIG_LED_COMPONENT)
   add_subdirectory(.. led)
 endif()

@@ -12,6 +12,6 @@ target_sources(app PRIVATE src/test_button.c)
 add_subdirectory(../../../common common)
 
 # Include button component
-if(CONFIG_BUTTON_MODULE)
+if(CONFIG_BUTTON_COMPONENT)
   add_subdirectory(.. button)
 endif()

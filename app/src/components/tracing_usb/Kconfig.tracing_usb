@@ -1,14 +1,14 @@
-menuconfig TRACING_USB_MODULE
+menuconfig TRACING_USB_COMPONENT
 	bool "USB Tracing Support"
 	depends on TRACING
 	select USB_DEVICE_STACK_NEXT
 	help
 	  Enable USB device initialization for CTF tracing backend.
-	  This module initializes the USB device stack when using
+	  This component initializes the USB device stack when using
 	  CONFIG_TRACING_BACKEND_USB for hardware-based tracing.
 	  Enable this together with CONFIG_TRACING_BACKEND_USB=y
 
-if TRACING_USB_MODULE
+if TRACING_USB_COMPONENT
 
 config TRACING_USB_VID
 	hex "USB Vendor ID"
@@ -60,15 +60,15 @@ config TRACING_USB_20_EXTENSION_DESC
 	help
 	  Add USB 2.0 Extension Descriptor.
 
-module = TRACING_USB_MODULE
+module = TRACING_USB_COMPONENT
 module-str = tracing_usb
 source "subsys/logging/Kconfig.template.log_config"
 
-config TRACING_USB_MODULE_INIT_PRIORITY
-	int "USB tracing module init priority"
+config TRACING_USB_COMPONENT_INIT_PRIORITY
+	int "USB tracing component init priority"
 	default 95
 	help
-	  System initialization priority for the USB tracing module.
-	  This determines the order in which the USB tracing module is initialized.
+	  System initialization priority for the USB tracing component.
+	  This determines the order in which the USB tracing component is initialized.
 
-endif # TRACING_USB_MODULE
+endif # TRACING_USB_COMPONENT

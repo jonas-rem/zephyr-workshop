@@ -1,21 +1,21 @@
 # Copyright (c) 2026 Jonas Remmert
 # SPDX-License-Identifier: Apache-2.0
 
-config BUTTON_MOCK
-	bool "Button mock module for native_sim"
+config BUTTON_MOCK_COMPONENT
+	bool "Button mock component for native_sim"
 	depends on BOARD_NATIVE_SIM
 	default y
 	help
-	  Enable button mock module that simulates physical button presses
+	  Enable button mock component that simulates physical button presses
 	  using the GPIO emulator for native_sim builds.
 
-module = BUTTON_MOCK
+module = BUTTON_MOCK_COMPONENT
 module-str = button_mock
 source "subsys/logging/Kconfig.template.log_config"
 
-config BUTTON_MOCK_INIT_PRIORITY
-	int "Button mock module init priority"
+config BUTTON_MOCK_COMPONENT_INIT_PRIORITY
+	int "Button mock component init priority"
 	default 80
 	help
-	  System initialization priority for the button mock module.
-	  This determines the order in which the button mock module is initialized.
+	  System initialization priority for the button mock component.
+	  This determines the order in which the button mock component is initialized.

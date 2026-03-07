@@ -6,7 +6,7 @@
 
 #include "message_channel.h"
 
-LOG_MODULE_REGISTER(led_module, CONFIG_LED_MODULE_LOG_LEVEL);
+LOG_MODULE_REGISTER(led_component, CONFIG_LED_COMPONENT_LOG_LEVEL);
 
 #define LED0_NODE DT_ALIAS(led0)
 #define LED1_NODE DT_ALIAS(led1)
@@ -194,7 +194,7 @@ ZBUS_LISTENER_DEFINE(led_event_listener, led_event_cb);
 ZBUS_CHAN_ADD_OBS(sys_ctl_ch, led_sys_ctl_listener, 1);
 ZBUS_CHAN_ADD_OBS(event_ch, led_event_listener, 1);
 
-#ifdef CONFIG_LED_MODULE_SHELL
+#ifdef CONFIG_LED_COMPONENT_SHELL
 #include <zephyr/shell/shell.h>
 
 static const char *led_mode_to_str(led_mode_t mode)
@@ -265,9 +265,9 @@ SHELL_STATIC_SUBCMD_SET_CREATE(led_cmds,
 	SHELL_CMD(set, NULL, "Set LED mode: led set <0|1> <off|power|pulse|alarm>", cmd_led_set),
 	SHELL_SUBCMD_SET_END);
 
-SHELL_CMD_REGISTER(led, &led_cmds, "LED module commands", NULL);
+SHELL_CMD_REGISTER(led, &led_cmds, "LED component commands", NULL);
 
-#endif /* CONFIG_LED_MODULE_SHELL */
+#endif /* CONFIG_LED_COMPONENT_SHELL */
 
 static int led_init(void)
 {
@@ -288,8 +288,8 @@ static int led_init(void)
 
 	k_timer_init(&led_timer, led_timer_handler, NULL);
 
-	LOG_INF("LED module initialized");
+	LOG_INF("LED component initialized");
 	return 0;
 }
 
-SYS_INIT(led_init, APPLICATION, CONFIG_LED_MODULE_INIT_PRIORITY);
+SYS_INIT(led_init, APPLICATION, CONFIG_LED_COMPONENT_INIT_PRIORITY);
