@@ -10,19 +10,19 @@
 
 #include "message_channel.h"
 
-/* Test observer for button_ch messages */
-static enum sys_events last_button_event;
+/* Test observer for event_ch messages */
+static struct event_msg last_button_msg;
 static volatile int button_msg_count;
 
-static void button_ch_observer_cb(const struct zbus_channel *chan)
+static void event_ch_observer_cb(const struct zbus_channel *chan)
 {
-	const enum sys_events *msg = zbus_chan_const_msg(chan);
-	last_button_event = *msg;
+	const struct event_msg *msg = zbus_chan_const_msg(chan);
+	last_button_msg = *msg;
 	button_msg_count++;
 }
 
-ZBUS_LISTENER_DEFINE(test_button_listener, button_ch_observer_cb);
-ZBUS_CHAN_ADD_OBS(button_ch, test_button_listener, DEFAULT_OBS_PRIO);
+ZBUS_LISTENER_DEFINE(test_button_listener, event_ch_observer_cb);
+ZBUS_CHAN_ADD_OBS(event_ch, test_button_listener, 1);
 
 /* GPIO emulator setup */
 static const struct device *button_dev;
@@ -105,7 +105,7 @@ ZTEST(button_test_suite, test_event_type_is_correct)
 
 	/* If we got an event, verify its type */
 	if (button_msg_count > count_before) {
-		zassert_equal(last_button_event, SYS_BUTTON_PRESSED,
+		zassert_equal(last_button_msg.event, SYS_BUTTON_PRESSED,
 			      "Event type should be SYS_BUTTON_PRESSED");
 	}
 

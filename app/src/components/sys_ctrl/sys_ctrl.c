@@ -6,14 +6,14 @@
 
 LOG_MODULE_REGISTER(sys_ctrl, LOG_LEVEL_DBG);
 
-/* Boot to State Standby */
-static enum sys_states sys_state = SYS_STANDBY;
+/* Boot to State Active */
+static enum sys_states sys_state = SYS_ACTIVE;
 
 static void sys_ctrl_led_msg(enum sys_states msg)
 {
 	int err;
 
-	err = zbus_chan_pub(&led_ch, &msg, K_SECONDS(1));
+	err = zbus_chan_pub(&sys_ctl_ch, &msg, K_SECONDS(1));
 	if (err) {
 		LOG_ERR("zbus_chan_pub, error: %d", err);
 	}
@@ -24,10 +24,10 @@ void sys_ctrl_handle_button_press(void)
 	/* Assign new system state */
 	switch (sys_state) {
 	case SYS_SLEEP:
-		sys_state = SYS_STANDBY;
-		LOG_INF("System state standby");
+		sys_state = SYS_ACTIVE;
+		LOG_INF("System state active");
 		break;
-	case SYS_STANDBY:
+	case SYS_ACTIVE:
 		sys_state = SYS_SLEEP;
 		LOG_INF("System state sleep");
 		break;
@@ -36,11 +36,6 @@ void sys_ctrl_handle_button_press(void)
 	}
 
 	sys_ctrl_led_msg(sys_state);
-}
-
-enum sys_states sys_ctrl_get_state(void)
-{
-	return sys_state;
 }
 
 static int sys_ctrl_init(void)
@@ -55,12 +50,12 @@ static int sys_ctrl_init(void)
 
 static void sys_ctrl_button_msg_cb(const struct zbus_channel *chan)
 {
-	const enum sys_events *msg_type;
+	const struct event_msg *msg;
 
 	/* Get message from channel. */
-	msg_type = zbus_chan_const_msg(chan);
+	msg = zbus_chan_const_msg(chan);
 
-	if (*msg_type != SYS_BUTTON_PRESSED) {
+	if (msg->event != SYS_BUTTON_PRESSED) {
 		/* Ignore other messages */
 		return;
 	}
@@ -69,7 +64,7 @@ static void sys_ctrl_button_msg_cb(const struct zbus_channel *chan)
 }
 
 ZBUS_LISTENER_DEFINE(sys_ctrl_listener, sys_ctrl_button_msg_cb);
-ZBUS_CHAN_ADD_OBS(button_ch, sys_ctrl_listener, DEFAULT_OBS_PRIO);
+ZBUS_CHAN_ADD_OBS(event_ch, sys_ctrl_listener, 1);
 
 #ifdef CONFIG_SYS_CTRL_MODULE_SHELL
 #include <zephyr/shell/shell.h>
@@ -85,8 +80,8 @@ static int cmd_sysctrl_state(const struct shell *sh, size_t argc, char **argv)
 	case SYS_SLEEP:
 		state_str = "SLEEP";
 		break;
-	case SYS_STANDBY:
-		state_str = "STANDBY";
+	case SYS_ACTIVE:
+		state_str = "ACTIVE";
 		break;
 	default:
 		state_str = "UNKNOWN";
@@ -100,15 +95,15 @@ static int cmd_sysctrl_state(const struct shell *sh, size_t argc, char **argv)
 static int cmd_sysctrl_button(const struct shell *sh, size_t argc, char **argv)
 {
 	int err;
-	enum sys_events msg;
+	struct event_msg msg;
 
 	ARG_UNUSED(argc);
 	ARG_UNUSED(argv);
 
-	msg = SYS_BUTTON_PRESSED;
+	msg.event = SYS_BUTTON_PRESSED;
 	shell_print(sh, "Simulating button press");
 
-	err = zbus_chan_pub(&button_ch, &msg, K_SECONDS(1));
+	err = zbus_chan_pub(&event_ch, &msg, K_SECONDS(1));
 	if (err) {
 		shell_error(sh, "Failed to publish button event: %d", err);
 		return err;
@@ -122,7 +117,7 @@ SHELL_STATIC_SUBCMD_SET_CREATE(sysctrl_cmds,
 	SHELL_CMD(button, NULL, "Simulate button press", cmd_sysctrl_button),
 	SHELL_SUBCMD_SET_END);
 
-SHELL_CMD_REGISTER(sysctrl, &sysctrl_cmds, "System control module commands", NULL);
+SHELL_CMD_REGISTER(sys_ctrl, &sysctrl_cmds, "System control module commands", NULL);
 
 #endif /* CONFIG_SYS_CTRL_MODULE_SHELL */
 

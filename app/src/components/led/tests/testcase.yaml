@@ -1,0 +1,11 @@
+tests:
+  component.led:
+    platform_allow:
+      - native_sim
+    tags:
+      - led
+      - zbus
+      - component
+    integration_platforms:
+      - native_sim
+    timeout: 10

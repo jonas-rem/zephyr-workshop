@@ -3,25 +3,19 @@
 
 #include <zephyr/zbus/zbus.h>
 
-#define DEFAULT_OBS_PRIO 1
-
 /**
  * @brief System State.
  */
 enum sys_states {
 	/**
-	 * @brief System was active and is transitioning to sleep now.
+	 * @brief System is idle (low-power, no measurements).
 	 */
 	SYS_SLEEP,
 
 	/**
-	 * @brief System is in standby.
+	 * @brief System is active (measuring, trip in progress).
 	 */
-	SYS_STANDBY,
-
-	/* Add your code here */
-
-	/* */
+	SYS_ACTIVE,
 };
 
 /**
@@ -32,12 +26,36 @@ enum sys_events {
 	 * @brief Button Pressed event
 	 */
 	SYS_BUTTON_PRESSED,
+
+	/**
+	 * @brief Sensor reading available
+	 */
+	SYS_SENSOR_READING,
+
+	/**
+	 * @brief Temperature threshold exceeded
+	 */
+	SYS_TEMP_ALERT,
 };
 
-ZBUS_CHAN_DECLARE(button_ch);
-ZBUS_CHAN_DECLARE(led_ch);
+/**
+ * @brief Sensor data payload.
+ */
+struct sensor_data {
+	int32_t temp; /* Temperature in 0.01 °C */
+};
 
-/* System Control module interface */
-enum sys_states sys_ctrl_get_state(void);
+/**
+ * @brief Generic event message carried on event_ch.
+ */
+struct event_msg {
+	enum sys_events event;
+	union {
+		struct sensor_data sensor;
+	};
+};
+
+ZBUS_CHAN_DECLARE(event_ch);
+ZBUS_CHAN_DECLARE(sys_ctl_ch);
 
 #endif /* _MESSAGE_CHANNEL_H_ */

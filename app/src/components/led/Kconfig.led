@@ -29,4 +29,11 @@ config LED_MODULE_SHELL
 	  Enable shell commands for controlling the LED module.
 	  Provides commands to set LED states manually for testing.
 
+config LED_MODULE_INIT_PRIORITY
+	int "LED module init priority"
+	default 90
+	help
+	  System initialization priority for the LED module.
+	  This determines the order in which the LED module is initialized.
+
 endif # LED_MODULE

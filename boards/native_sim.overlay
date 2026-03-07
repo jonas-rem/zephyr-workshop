@@ -17,6 +17,8 @@
 / {
 	aliases {
 		sw0 = &button0;
+		led0 = &led0;
+		led1 = &led1;
 	};
 
 	chosen {
@@ -28,6 +30,18 @@
 		button0: button_0 {
 			gpios = <&gpio0 1 GPIO_ACTIVE_LOW>;
 			label = "User button";
+		};
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		led0: led_0 {
+			gpios = <&gpio0 2 GPIO_ACTIVE_LOW>;
+			label = "LED 0 (status)";
+		};
+		led1: led_1 {
+			gpios = <&gpio0 3 GPIO_ACTIVE_LOW>;
+			label = "LED 1 (events)";
 		};
 	};
 };

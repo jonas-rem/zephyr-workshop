@@ -60,7 +60,7 @@ layout: default
 ```diff
 test/led/src/main.c
 @@ -29,7 +29,9 @@ static int cmd_led(...)
-                led_msg(SYS_STANDBY);
+                led_msg(SYS_ACTIVE);
                 break;
         /* Add your code here */
 +       case 2:
@@ -70,14 +70,14 @@ test/led/src/main.c
         default:
                 shell_print(sh, "Invalid argument");
 @@ -41,9 +43,9 @@ static int cmd_led(...)
- SHELL_SUBCMD_DICT_SET_CREATE(sub_led_cmds, cmd_led,
-        (sys_sleep, 0, "System is sleeping"),
--       (sys_standby, 1, "System is in standby")
-+       (sys_standby, 1, "System is in standby"),
-        /* Add your code here */
-+       (sys_active, 2, "System is active")
-        /* */
- );
+SHELL_SUBCMD_DICT_SET_CREATE(sub_led_cmds, cmd_led,
+	(sys_sleep, 0, "System is sleeping"),
+-	(sys_active, 1, "System is active")
++	(sys_active, 1, "System is active"),
+	/* Add your code here */
++	(sys_standby, 2, "System is in standby")
+	/* */
+);
 ```
 
 ---
@@ -102,7 +102,7 @@ app/src/common/message_channel.h
 ```diff
 app/src/main.c
 @@ -39,11 +39,14 @@ static void button_msg_cb(...)
-        case SYS_STANDBY:
+        case SYS_ACTIVE:
 +               sys_state = SYS_ACTIVE;
 +               LOG_INF("System state active");
                break;

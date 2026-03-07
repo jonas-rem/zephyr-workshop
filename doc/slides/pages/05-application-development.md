@@ -325,58 +325,67 @@ Run completed
 
 ---
 
-## Hands-on 4: Extend the Application
+## Hands-on 4: Extend the Application - Cold-Chain Monitoring
 
 <div class="grid grid-cols-2 gap-4">
 
 <div>
 
-Currently: **standby**, **sleep**.
-**Task:** Add a third state: **active**.
-Cycle via button: `standby` -> `sleep` -> `active`
+1. **tempsense**
+- Read temp, publish to `event_ch`
 
-- **Sleep:** LED off
-- **Standby:** LED blinking
-- **Active:** LED on
+2. **temp_alert**
+- Watch readings, emit alert if ≥5°C
+
+3. **sensor_log**
+- Record all events from ``event_ch``
+- expose records via shell
+
+Hints:
+- Start with one of the components
+- channels and existing components are already prepared
+- Tests exist, use them to develop
 
 </div>
-
-<div class="flex flex-col items-center justify-center">
-  <img src="/images/zbus_application.png" class="h-60" />
-</div>
-
-</div>
-
----
----
-
-## Hands-on 5: BLE Sensor Improvements
-
-<div class="grid grid-cols-2 gap-4">
 
 <div>
 
-`06_ble` measures the temp with the sensor in the nRF52840 die. A higher
-precision is possible by using the TI HDC1010 sensor.
+```text {class="text-xs"}
+event_ch                                     sys_ctl_ch
+   │               ┌────────────┐                  │
+   │◀─── PRESSED ──│  Button    │                  │
+   │               └────────────┘                  │
+   │               ┌────────────┐                  │
+   │──── PRESSED ─▶│  sys_ctrl  │── ACTIVE/SLEEP ─▶│
+   │               └────────────┘                  │
+   │               ┌────────────┐                  │
+   │─ TEMP/ALERT ─▶│    LED     │◀─ ACTIVE/SLEEP ──│
+   │               └────────────┘                  │
 
-**Change the sample accordingly:**
+   │   ----------- New Components ------------     │
+   │               ┌────────────┐                  │
+   │◀──── TEMP ────│ tempsense  │◀─ ACTIVE/SLEEP ──│
+   │               └────────────┘                  │
+   │               ┌────────────┐                  │
+   │◀─── ALERT ────│ temp_alert │                  │
+   │──── TEMP ────▶│            │                  │
+   │               └────────────┘                  │
+   │               ┌────────────┐                  │
+   │─ TEMP/ALERT ─▶│ sensor_log │◀─ ACTIVE/SLEEP ──│
+                   └────────────┘
+```
+<div class="text-xs text-center mt-2">Cold-Chain Monitoring Architecture</div>
 
-- Confirm that the sensor is working (Sensor Shell)
-- Enable the Sensor API
-- Change the sensor device and get HDC1010 from DTS
-- `SENSOR_CHAN_DIE_TEMP` → `SENSOR_CHAN_AMBIENT_TEMP`
 
-**Can you confirm a faster reaction time?**
-
-</div>
-
-<div class="flex flex-col items-center justify-center">
-  <img src="/images/reel_board_hdc1010.jpg" class="h-60 object-contain" />
-  <div class="text-xs text-center mt-2">TI HDC1010 Temperature and Humidity Sensor</div>
 </div>
 
 </div>
 
 <Footnotes y="col">
-  <Footnote :number="1">Hint: Check the sensor sample `05_sensor` for reference. Only a few lines need to be changed.</Footnote>
+  <Footnote :number="1">
+    Full details at:
+    <a href="https://jonas-rem.github.io/zephyr-workshop/task_app_extension.html">
+      jonas-rem.github.io/zephyr-workshop/task_app_extension.html
+    </a>
+  </Footnote>
 </Footnotes>

@@ -14,8 +14,7 @@ LOG_MODULE_REGISTER(button_module, CONFIG_BUTTON_MODULE_LOG_LEVEL);
 #if !DT_NODE_HAS_STATUS(SW0_NODE, okay)
 #error "Unsupported board: sw0 devicetree alias is not defined"
 #endif
-static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW0_NODE, gpios,
-							      {0});
+static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW0_NODE, gpios, {0});
 static struct gpio_callback button_cb_data;
 
 static struct k_work_delayable send_event_work;
@@ -24,16 +23,15 @@ static struct k_work_delayable send_event_work;
 static void send_event_work_handler(struct k_work *work)
 {
 	int err;
-	enum sys_events msg;
+	struct event_msg msg = { .event = SYS_BUTTON_PRESSED };
 
 	/* Due to button bouncing, check if button was pressed or released */
 	if (gpio_pin_get(button.port, button.pin) == 0) {
 		return;
 	}
 
-	msg = SYS_BUTTON_PRESSED;
 	LOG_INF("Button pressed, sent zbus event");
-	err = zbus_chan_pub(&button_ch, &msg, K_SECONDS(1));
+	err = zbus_chan_pub(&event_ch, &msg, K_SECONDS(1));
 	if (err) {
 		LOG_ERR("zbus_chan_pub, error: %d", err);
 	}
@@ -94,15 +92,14 @@ static int init(void)
 static int cmd_button_press(const struct shell *sh, size_t argc, char **argv)
 {
 	int err;
-	enum sys_events msg;
+	struct event_msg msg = { .event = SYS_BUTTON_PRESSED };
 
 	ARG_UNUSED(argc);
 	ARG_UNUSED(argv);
 
-	msg = SYS_BUTTON_PRESSED;
 	shell_print(sh, "Simulating button press");
 
-	err = zbus_chan_pub(&button_ch, &msg, K_SECONDS(1));
+	err = zbus_chan_pub(&event_ch, &msg, K_SECONDS(1));
 	if (err) {
 		shell_error(sh, "Failed to publish button event: %d", err);
 		return err;
@@ -112,28 +109,8 @@ static int cmd_button_press(const struct shell *sh, size_t argc, char **argv)
 	return 0;
 }
 
-static int cmd_button_status(const struct shell *sh, size_t argc, char **argv)
-{
-	int pin_state;
-
-	ARG_UNUSED(argc);
-	ARG_UNUSED(argv);
-
-	if (!gpio_is_ready_dt(&button)) {
-		shell_error(sh, "Button device not ready");
-		return -ENODEV;
-	}
-
-	pin_state = gpio_pin_get_dt(&button);
-	shell_print(sh, "Button pin state: %s (%d)",
-		    pin_state ? "pressed" : "released", pin_state);
-
-	return 0;
-}
-
 SHELL_STATIC_SUBCMD_SET_CREATE(button_module_cmds,
 	SHELL_CMD(press, NULL, "Simulate button press event", cmd_button_press),
-	SHELL_CMD(status, NULL, "Show button status", cmd_button_status),
 	SHELL_SUBCMD_SET_END);
 
 SHELL_CMD_REGISTER(button, &button_module_cmds, "Button module commands", NULL);

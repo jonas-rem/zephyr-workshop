@@ -43,7 +43,7 @@ tests:
     harness_config:
       type: one_line
       regex:
-        - "LED module started"
+        - "LED module initialized"
 
   app.test.sys_ctrl:
     extra_args: EXTRA_CONF_FILE=test_cfg/sys_ctrl_module.conf

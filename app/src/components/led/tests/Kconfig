@@ -1,0 +1,13 @@
+menu "Application"
+
+# Source the LED component Kconfig
+rsource "../Kconfig.led"
+
+# Other components might be needed for dependencies
+rsource "../../sys_ctrl/Kconfig.sys_ctrl"
+
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu
