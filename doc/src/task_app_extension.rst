@@ -5,15 +5,15 @@ This exercise extends the existing application with sensor functionality. Three
 new components are added, each developed and tested independently by a separate
 group.
 
-:ref:`temp_alert <group2_temp_alert>` (Beginner)
+:ref:`temp_alert <group2_temp_alert>`
    Listen to sensor readings, publish alert on threshold. Pure logic, no
    hardware, no threads.
 
-:ref:`tempsense <group1_tempsense>` (Intermediate)
+:ref:`tempsense <group1_tempsense>`
    Read sensor via Zephyr Sensor API, publish periodically, react to system
    state. Uses ``k_work_delayable`` and sensor driver.
 
-:ref:`sensor_log <group3_sensor_log>` (Advanced)
+:ref:`sensor_log <group3_sensor_log>`
    Subscribe to two channels, store entries in ring buffer, expose via shell
    commands. Ring buffer and shell registration are provided in the stub.
 
@@ -129,16 +129,17 @@ Group 1: tempsense — The Sensor Driver
 =======================================
 
 Reads the temperature from the sensor and publishes readings to ``event_ch``
-every 500 ms while the system is in ACTIVE.
+every 1 s while the system is in ACTIVE.
 
-During a trip (ACTIVE), the device measures continuously. When idle (SLEEP),
+During operation (ACTIVE), the device measures continuously. When idle (SLEEP),
 it pauses sampling to save battery — these devices run on battery for days or
 weeks.
 
 **What to implement:**
 
-- Use the Zephyr Sensor API (``sensor_sample_fetch``, ``sensor_channel_get``)
-  to read the emulated TI HDC sensor
+- Use the Zephyr Sensor API (see :doc:`/../../samples/05_sensor/README`)
+  (``sensor_sample_fetch``, ``sensor_channel_get``) to read the emulated TI HDC
+  sensor
 - Use ``k_work_delayable`` for periodic 500 ms measurement
 - Subscribe to ``sys_ctl_ch``: start measuring in ACTIVE, stop in SLEEP
 - Publish a ``SYS_SENSOR_READING`` event with the temperature to ``event_ch``
@@ -154,8 +155,9 @@ two consecutive readings, it publishes a ``SYS_TEMP_ALERT`` event. After that,
 one alert is published for every further reading that still exceeds the
 threshold.
 
-In a real device, this would activate a buzzer or send a notification to a
-fleet management system. In our application, the alert is recorded by
+This automatically triggers an alarm in the led component (blink led for 3 s)
+for demonstration. In a real device, this would activate a buzzer or send a
+notification to a fleet management system. In addition the alert is recorded by
 sensor_log.
 
 **What to implement:**
@@ -198,15 +200,21 @@ temperature log to verify the cold chain was maintained throughout.
 .. code-block:: console
 
    uart:~$ sensor_log history
-   #[00:00:01.000] STATE    ACTIVE
-   [00:00:01.500] SENSOR   temp=3.20 °C
-   [00:00:02.000] SENSOR   temp=3.25 °C
-   [00:00:02.500] SENSOR   temp=5.80 °C
-   [00:00:03.000] SENSOR   temp=6.10 °C
-   [00:00:03.000] ALERT    temp=6.10 °C (threshold exceeded)
-   [00:00:03.500] SENSOR   temp=6.30 °C
-   [00:00:03.500] ALERT    temp=6.30 °C (threshold exceeded)
+   [00:00:01.000] STATE    ACTIVE
+   [00:00:02.000] SENSOR   temp=3.20 °C
+   [00:00:03.000] SENSOR   temp=3.25 °C
+   [00:00:04.000] SENSOR   temp=5.80 °C
+   [00:00:05.000] SENSOR   temp=6.10 °C
+   [00:00:05.000] ALERT    temp=6.10 °C
+   [00:00:06.000] SENSOR   temp=6.30 °C
+   [00:00:06.000] ALERT    temp=6.30 °C
    [00:00:10.000] STATE    SLEEP
+
+**Note:**
+
+In a real device, events would be saved in a flash storage not in memory. Zephyr
+offers the right tools for this (filesystems, flash partition, settings subsys
+etc.). However, in this example keeping the log in memory is ok.
 
 How a Trip Works
 ****************
@@ -284,14 +292,15 @@ Integration
 
 Once all groups have their tests passing, the results are merged together:
 
-1. Each group opens a pull request against the ``ew25_app_extension`` branch
+1. Each group opens a pull request to the zephyr-workshop repository
 2. CI runs all component tests automatically
 3. If tests are green, the PR is merged
+4. Once 3 modules are merged, the cold chain monitor should be ready and working
 
 Since each group only touches their own component directory and one line in
-``prj.conf``, merge conflicts should be minimal. After all three PRs are
-merged, build and run the full application to see all components working
-together.
+``prj.conf``, merge conflicts should be minimal. After all three PRs are merged,
+build and run the full application for native_sim and for the reel_board to see
+all components working together.
 
 Running Tests
 =============
@@ -302,6 +311,10 @@ Running Tests
    host:~$ west build -b native_sim app/src/components/tempsense/tests -p
    host:~$ west build -t run
    # If only .c/.h files changed, just re-run (incremental build):
+   host:~$ west build -t run
+
+   # Build a component in isolation for interacting via shell (without the ZTest setup)
+   host:~$ west build -b native_sim app -p -- -DCONF_FILE=test_cfg/tempsense.conf
    host:~$ west build -t run
 
    # Single component test via Twister
