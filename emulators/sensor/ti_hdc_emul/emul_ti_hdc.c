@@ -27,11 +27,19 @@ LOG_MODULE_REGISTER(ti_hdc_emul, CONFIG_SENSOR_LOG_LEVEL);
  * Raw register ranges for random readings.
  * HDC formula: temp_C = raw * 165 / 65536 - 40
  *              hum_%  = raw * 100 / 65536
+ *
+ * Inverse formula: raw = (temp_C + 40) * 65536 / 165
  */
 #define TEMP_RAW_MIN  23418  /* 19 °C: (19+40) * 65536 / 165 */
 #define TEMP_RAW_MAX  24211  /* 21 °C: (21+40) * 65536 / 165 */
 #define HUM_RAW_MIN   26214  /* 40 %:  40 * 65536 / 100 */
 #define HUM_RAW_MAX   39321  /* 60 %:  60 * 65536 / 100 */
+
+/* Temperature ranges for the exercise (first 10 readings: 3-5°C, after: 4-7°C) */
+#define TEMP_RAW_3C   17079  /* 3 °C:  (3+40) * 65536 / 165 */
+#define TEMP_RAW_4C   17476  /* 4 °C:  (4+40) * 65536 / 165 */
+#define TEMP_RAW_5C   17873  /* 5 °C:  (5+40) * 65536 / 165 */
+#define TEMP_RAW_7C   18668  /* 7 °C:  (7+40) * 65536 / 165 */
 
 struct ti_hdc_emul_data {
 	uint8_t cur_reg;         /* last register address written */
@@ -39,6 +47,7 @@ struct ti_hdc_emul_data {
 	uint16_t reg_humidity;   /* reg 0x01 — raw humidity */
 	uint16_t reg_manufid;    /* reg 0xFE */
 	uint16_t reg_deviceid;   /* reg 0xFF */
+	uint32_t sample_count;   /* number of temperature readings generated */
 };
 
 struct ti_hdc_emul_cfg {
@@ -53,7 +62,13 @@ static uint16_t rand_in_range(uint16_t min, uint16_t max)
 
 static void ti_hdc_emul_generate_sample(struct ti_hdc_emul_data *data)
 {
-	data->reg_temp = rand_in_range(TEMP_RAW_MIN, TEMP_RAW_MAX);
+	/* First 10 readings: 3-5°C, following readings: 4-7°C */
+	if (data->sample_count < 10) {
+		data->reg_temp = rand_in_range(TEMP_RAW_3C, TEMP_RAW_5C);
+	} else {
+		data->reg_temp = rand_in_range(TEMP_RAW_4C, TEMP_RAW_7C);
+	}
+	data->sample_count++;
 	data->reg_humidity = rand_in_range(HUM_RAW_MIN, HUM_RAW_MAX);
 }
 

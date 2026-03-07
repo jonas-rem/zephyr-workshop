@@ -498,9 +498,11 @@ printk("Temp = %d.%06d C, RH = %d.%06d %%\n",
 Running on native_sim!
 Dev 0x80525e0 name ti_hdc@43 is ready!
 Fetching...
-Temp = 22.852966 C, RH = 38.793945 %
+Temp = 4.059753 C, RH = 40.344238 %
 Fetching...
-Temp = 22.842895 C, RH = 38.897705 %
+Temp = 3.677062 C, RH = 45.675659 %
+Fetching...
+Temp = 4.165496 C, RH = 58.164978 %
 Fetching...
 ```
 

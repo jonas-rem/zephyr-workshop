@@ -37,7 +37,7 @@ int main(void)
 		       temp.val1, temp.val2, humidity.val1, humidity.val2);
 
 		/* wait for the next sample */
-		k_sleep(K_SECONDS(3));
+		k_sleep(K_SECONDS(1));
 	}
 	return 0;
 }
