@@ -29,6 +29,7 @@ deck and code examples are ideal to conduct trainings.
    :maxdepth: 1
 
    app/README
+   src/task_app_extension
 
 .. toctree::
    :caption: Samples

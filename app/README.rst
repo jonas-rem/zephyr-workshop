@@ -1,4 +1,4 @@
-Example APP
+Example App
 ###########
 
 **Link to Source:** `app <https://github.com/jonas-rem/zephyr-workshop/tree/main/app>`_
@@ -10,12 +10,13 @@ This application demonstrates a simple state machine controlled by a button.
 When the button is pressed, the system toggles between two states:
 
 - **Sleep**: LED is off, system waits for events (blocking)
-- **Standby**: LED blinks continuously (50ms on, 500ms off)
+- **Active**: LED blinks continuously (50ms on, 500ms off)
 
-The application showcases a modular design with inter-component communication via
-`ZBus <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_, allowing the Button component to notify the LED component of state
-changes without direct coupling. This decoupled architecture enables testing
-individual components in isolation.
+The application showcases a modular design with inter-component communication
+via `ZBus <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_,
+allowing the Button component to notify the LED component of state changes
+without direct coupling. This decoupled architecture enables testing individual
+components in isolation.
 
 This application is useful for:
 
@@ -119,12 +120,9 @@ Initialization sequence (`Zephyr System Initialization`_)
    - Button (priority 80)
    - Button Mock (priority 80)
    - System Control (priority 85)
+   - LED (priority 90)
 
-2. **led component thread with prio -2**:
-
-   - LED component thread
-
-3. **main thread with Prio -1**
+2. **main thread with Prio -1**
 
    - Empty in our case (except one log msg)
 
@@ -137,12 +135,9 @@ Boot log showing this order:
    <inf> button_module: Set up button at gpio_emul pin 1
    <inf> button_module: Button module started
    <inf> button_mock: Button mock module initialized
-   <inf> sys_ctrl: Button module started
-   <inf> led_module: LED module started
-   <dbg> led_module: led_fn: LED off
+   <inf> sys_ctrl: sys_ctl module started
+   <inf> led_module: LED module initialized
    <inf> app: System booted. Main thread going to sleep.
-   <dbg> led_module: led_fn: LED on
-   <dbg> led_module: led_fn: LED off
 
 System States
 =============
@@ -150,7 +145,7 @@ System States
 The application implements two system states:
 
 - **Sleep** (``SYS_SLEEP``): LED is off, system waits for events
-- **Standby** (``SYS_STANDBY``): LED blinks, system is active
+- **Active** (``SYS_ACTIVE``): LED blinks, system is active
 
 Button presses toggle between these states via ZBus messages.
 
@@ -198,8 +193,8 @@ Component Communication
 
 Components communicate via ZBus channels:
 
-- ``button_ch``: Button press events (publisher: Button component, subscriber: Main app)
-- ``led_ch``: LED state changes (publisher: Main app, subscriber: LED component)
+- ``event_ch``: Different events events (publisher: Button component, subscriber: sys_ctrl)
+- ``sys_ctl_ch``: System state changes (publisher: sys_ctrl, subscriber: LED component)
 
 Hardware Abstraction
 ====================
@@ -261,12 +256,9 @@ Main console (stdout):
    <inf> button_module: Set up button at gpio_emul pin 1
    <inf> button_module: Button module started
    <inf> button_mock: Button mock module initialized
-   <inf> sys_ctrl: Button module started
-   <inf> led_module: LED module started
-   <dbg> led_module: led_fn: LED off
+   <inf> sys_ctrl: sys_ctl module started
+   <inf> led_module: LED module initialized
    <inf> app: System booted. Main thread going to sleep.
-   <dbg> led_module: led_fn: LED on
-   <dbg> led_module: led_fn: LED off
 
 Shell via ``/tmp/zephyr_shell``:
 
@@ -322,7 +314,7 @@ The system controller provides commands to inspect and manipulate system state:
    uart:~$ sysctrl state   # Display current system state
    uart:~$ sysctrl button  # Simulate button press via ZBus
 
-**State Display** shows whether the system is in ``SLEEP`` or ``STANDBY`` state.
+**State Display** shows whether the system is in ``SLEEP`` or ``ACTIVE`` state.
 
 Hardware Simulation Commands
 ============================
@@ -395,22 +387,8 @@ And run with:
 
    host:~$ ./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
    *** Booting Zephyr OS build v4.3.0-6940-g8c06719191f5 ***
-   <inf> led_module: LED module started
-   <dbg> led_module: led_fn: LED off
+   <inf> led_module: LED module initialized
    <inf> app: System booted. Main thread going to sleep.
-
-And interact with the shell via:
-
-.. code-block:: console
-
-   host:~$ tio /tmp/zephyr_shell
-
-     clear    date     device   devmem   help     history  kernel   led
-     rem      resize   retval   shell
-   uart:~$ led set
-     sys_sleep    sys_standby
-   uart:~$ led set sys_standby
-   Setting LED to standby mode (blink)
 
 
 Component Tests
@@ -435,7 +413,7 @@ Each component includes its own tests that are co-located with the source code:
 
 These tests use the GPIO emulator to simulate hardware button presses and verify
 that the component correctly publishes ``SYS_BUTTON_PRESSED`` events to the
-``button_ch`` channel.
+``event_ch`` channel.
 
 As an example we have a closer look at the button test:
 
