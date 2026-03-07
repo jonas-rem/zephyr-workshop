@@ -7,6 +7,7 @@ tests:
       - zbus
       - sensor
       - component
+      - workshop
     integration_platforms:
       - native_sim
     timeout: 5
