@@ -261,7 +261,9 @@ showing thread states, interrupts, and kernel events:
    Zephyr Comprehensive Timeline view opened
 
 The trace visualization shows thread scheduling, ISR execution, and GPIO
-operations in both table and Gantt chart views:
+operations in both table and Gantt chart views. The trace is from a
+``nrf52840dk`` evaluation board where the traces have been collected via usb
+(see example below):
 
 .. figure:: trace_compass_visualization.png
    :align: center
@@ -276,27 +278,6 @@ native_sim
 ^^^^^^^^^^
 
 The workshop ``app`` includes ``prj_native_ctf.conf``:
-
-.. code-block:: cfg
-
-   # CTF Tracing on native_sim (POSIX backend)
-   CONFIG_TRACING=y
-   CONFIG_TRACING_CTF=y
-   CONFIG_TRACING_SYNC=y
-   CONFIG_TRACING_BACKEND_POSIX=y
-   CONFIG_TRACING_PACKET_MAX_SIZE=64
-
-   # Trace events
-   CONFIG_TRACING_THREAD=y
-   CONFIG_TRACING_ISR=y
-   CONFIG_TRACING_SEMAPHORE=y
-   CONFIG_TRACING_MUTEX=y
-   CONFIG_TRACING_WORK=y
-   CONFIG_TRACING_SYSCALL=y
-
-   # Thread names in trace output
-   CONFIG_THREAD_NAME=y
-   CONFIG_DEBUG_THREAD_INFO=y
 
 Build and run:
 
@@ -318,34 +299,6 @@ enumerates as a USB device and streams trace data to the host.
 
 The workshop ``app`` includes ``prj_usb_ctf.conf``. Simply enable the
 ``TRACING_USB_MODULE`` to automatically configure USB device initialization:
-
-.. code-block:: cfg
-
-   # CTF Tracing via USB
-   CONFIG_GPIO=y
-
-   # Enable USB Tracing Module (automatically configures USB stack)
-   CONFIG_TRACING_USB_MODULE=y
-   CONFIG_CDC_ACM_SERIAL_INITIALIZE_AT_BOOT=n
-
-   CONFIG_TRACING=y
-   CONFIG_TRACING_CTF=y
-   CONFIG_TRACING_ASYNC=y
-   CONFIG_TRACING_BACKEND_USB=y
-   CONFIG_TRACING_HANDLE_HOST_CMD=y
-   CONFIG_TRACING_BUFFER_SIZE=4096
-
-   # Trace events
-   CONFIG_TRACING_THREAD=y
-   CONFIG_TRACING_ISR=y
-   CONFIG_TRACING_SEMAPHORE=y
-   CONFIG_TRACING_MUTEX=y
-   CONFIG_TRACING_WORK=y
-   CONFIG_TRACING_SYSCALL=y
-
-   # Thread names in trace output
-   CONFIG_THREAD_NAME=y
-   CONFIG_DEBUG_THREAD_INFO=y
 
 Build and flash to the board:
 
@@ -409,24 +362,6 @@ overhead.
    educational and evaluation purposes, it is free to use.
 
 The workshop ``app`` includes ``prj_sysview_rtt.conf``:
-
-.. code-block:: cfg
-
-   # SEGGER SystemView via RTT
-   CONFIG_TRACING=y
-   CONFIG_SEGGER_SYSTEMVIEW=y
-
-   # Trace events
-   CONFIG_TRACING_THREAD=y
-   CONFIG_TRACING_ISR=y
-   CONFIG_TRACING_SEMAPHORE=y
-   CONFIG_TRACING_MUTEX=y
-   CONFIG_TRACING_WORK=y
-   CONFIG_TRACING_SYSCALL=y
-
-   # Thread names in trace output
-   CONFIG_THREAD_NAME=y
-   CONFIG_DEBUG_THREAD_INFO=y
 
 Build and flash to the board:
 

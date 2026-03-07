@@ -40,8 +40,8 @@ lead to better, and more maintainable products in a shorter amount of time:
   form integration tests that can run with `native_sim`.
 - E2E tests are still required to validate the application generally runs on the
   target hardware in the target conditions. However, since the logic of the
-  firmware has already been validated in simulation End 2 End tests can be light.
-  E2E tests require the most amount of time and are the most complex to maintain.
+  firmware has already been validated in simulation, End 2 End tests can be light.
+  E2E tests require the most amount of time and are complex to maintain.
 
 This creates a very fast feedback loop for iteration. the Shell subsystem acts
 an introspection tool into the code.

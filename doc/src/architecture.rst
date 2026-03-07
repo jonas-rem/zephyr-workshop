@@ -1,6 +1,9 @@
 Architecture
 ============
 
+.. note::
+   This documentation page is a **work in progress** and may be incomplete or subject to change.
+
 Patterns
 --------
 
