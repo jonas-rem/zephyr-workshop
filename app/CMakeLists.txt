@@ -29,6 +29,10 @@ if(CONFIG_SYS_CTRL_COMPONENT)
   add_subdirectory(src/components/sys_ctrl sys_ctrl)
 endif()
 
+if(CONFIG_TEMP_ALERT_COMPONENT)
+  add_subdirectory(src/components/temp_alert temp_alert)
+endif()
+
 # USB tracing support for hardware boards
 if(CONFIG_TRACING_USB_COMPONENT)
   add_subdirectory(src/components/tracing_usb tracing_usb)
