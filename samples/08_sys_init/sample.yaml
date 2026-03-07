@@ -12,8 +12,8 @@ common:
     type: multi_line
     ordered: true
     regex:
-      - "Module 1 initialized.*APPLICATION.*level: 0"
-      - "Module 2 initialized.*APPLICATION.*level: 999"
+      - "Module 1 initialized.*APPLICATION.*priority: 0"
+      - "Module 2 initialized.*APPLICATION.*priority: 999"
       - "Hello World!.*"
 tests:
   sample.basic.sys_init:
