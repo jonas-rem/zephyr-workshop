@@ -211,10 +211,9 @@ temperature log to verify the cold chain was maintained throughout.
    [00:00:10.000] STATE    SLEEP
 
 **Note:**
-
-In a real device, events would be saved in a flash storage not in memory. Zephyr
-offers the right tools for this (filesystems, flash partition, settings subsys
-etc.). However, in this example keeping the log in memory is ok.
+  In a real device, events would be saved in a flash storage not in memory. Zephyr
+  offers the right tools for this (filesystems, flash partition, settings subsys
+  etc.). However, in this example keeping the log in memory is ok.
 
 How a Trip Works
 ****************
@@ -239,28 +238,39 @@ When all components are active, a typical trip looks like this:
    timestamps.
 
 What Is Already Provided
-*************************
+************************
 
 The following is prepared and does not need to be changed:
 
-- ``message_channel.h``: Channel declarations (``event_ch``, ``sys_ctl_ch``),
-  ``struct event_msg``, ``struct sensor_data``, event and state enums
-- ``message_channel.c``: ``ZBUS_CHAN_DEFINE`` for both channels
-- ``native_sim.overlay``: Emulated TI HDC sensor on I2C, two LEDs
-  (``led0``, ``led1``), button (``sw0``)
-- ``native_sim.conf``: Emulation support enabled
-- The existing components (button, sys_ctrl) use the renamed channels but
-  their logic is unchanged
-- The LED component is extended to also subscribe to ``event_ch`` and drive
-  ``led1`` (sensor activity flash). The existing ``led0`` behavior is
-  unchanged.
+- All 3 components (``app/src/components/``), but incomplete
+- shell interfaces inside each component (manual testing and introspection)
+- Tests for all (e.g. ``app/src/components/tempsense/test``). Check below on how
+  to build and run the tests.
+- message_channel declarations (``app/src/common/message_channel.h``)
+- Emulated TI HDC sensor on I2C, two LEDs, button (``native_sim.overlay``)
+- By default the new components in ``app/prj.conf`` are deactivated
 
-For each new component, a **stub** and a **failing test** are provided:
+Overview of relevant parts:
 
-- The stub has the file structure (``CMakeLists.txt``, ``Kconfig``, source
-  file) but the implementation is incomplete
-- The test (in ``tests/``) is complete and will **fail** when run against the
-  stub
+.. code-block:: console
+
+   app
+   ├── prj.conf
+   ├── src
+   │   ├── common
+   │   │   └── message_channel.h
+   │   ├── components
+   │   │   ├── sensor_log
+   │   │   │   └── tests
+   │   │   ├── temp_alert
+   │   │   │   └── tests
+   │   │   ├── tempsense
+   │   │   │   └── tests
+   │   └── main.c
+   └── test_cfg
+       ├── sensor_log.conf
+       ├── temp_alert.conf
+       └── tempsense.conf
 
 Development Workflow
 ********************
@@ -272,27 +282,53 @@ Each group works independently on their component:
 
    .. code-block:: console
 
-      host:~$ west twister -T app/src/components/tempsense/tests --integration -p native_sim
+      host:~$ west build -b native_sim app/src/components/tempsense/tests -p
+      or
+      host:~$ west build -b native_sim app/src/components/temp_alert/tests -p
+      or
+      host:~$ west build -b native_sim app/src/components/sensor_log/tests -p
+
+      Execute the build on native_sim:
+      host:~$ west build -t run
 
 3. **Implement** the component to make the tests pass
 4. **Run the test again** — it should pass now
+
+Tip:
+   it is sufficient to run ``west build -t run`` after an initial build, if
+   only .c/.h files have been changed.
+
 5. **Enable the component** in ``prj.conf`` and build the full application
-6. **Verify** together with the other groups that everything works end-to-end
+6. **Verify** that everything works end-to-end. You can do that by building and
+   probing the isolated modules with shell commands:
+
+   .. code-block:: console
+
+      host:~$ west build -b native_sim app -p -- -DCONF_FILE=test_cfg/tempsense.conf
+      or
+      host:~$ west build -b native_sim app -p -- -DCONF_FILE=test_cfg/temp_alert.conf
+      or
+      host:~$ west build -b native_sim app -p -- -DCONF_FILE=test_cfg/sensor_log.conf
+
+      Execute the build on native_sim:
+      host:~$ west build -t run
+
+      Open the console in another terminal (number in the boot-log):
+      host:~$ tio dev/pts/<n>
+
+      Example:
+      uart:~$ tempsense read
+      Temperature: 4.059753 C
 
 This follows a test-driven development (TDD) approach: the tests define the
-expected behavior, the implementation makes it real.
-
-**Rule:** Each group may only edit files inside their assigned component
-directory (e.g. ``app/src/components/tempsense/``) and add one line to
-``app/prj.conf`` to enable their module (``CONFIG_TEMPSENSE_MODULE=y``).
-No other files should be modified.
+expected behavior.
 
 Integration
 ===========
 
 Once all groups have their tests passing, the results are merged together:
 
-1. Each group opens a pull request to the zephyr-workshop repository
+1. Each group can open a pull request to the zephyr-workshop repository
 2. CI runs all component tests automatically
 3. If tests are green, the PR is merged
 4. Once 3 modules are merged, the cold chain monitor should be ready and working

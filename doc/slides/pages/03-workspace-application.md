@@ -401,7 +401,7 @@ DT_INST_FOREACH_STATUS_OKAY(FXOS8700_INIT)
 Build the __blinky__ sample for native_sim:
 
 ```shell
-west build -b native_sim samples/basic/blinky -p
+west build -b native_sim zephyr/samples/basic/blinky -p
 ```
 
 And run it:
@@ -417,8 +417,8 @@ Watch the LED state toggle in the console. Match the devicetree definition
 <div class="text-xxs">
 
 ```shell
-boards/native/native_sim/native_sim.dts
-samples/basic/blinky/src/main.c
+zephyr/boards/native/native_sim/native_sim.dts
+zephyr/samples/basic/blinky/src/main.c
 build/zephyr/include/generated/zephyr/devicetree_generated.h
 ```
 

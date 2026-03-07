@@ -384,7 +384,7 @@ event_ch                                     sys_ctl_ch
 <Footnotes y="col">
   <Footnote :number="1">
     Full details at:
-    <a href="https://jonas-rem.github.io/zephyr-workshop/task_app_extension.html">
+    <a href="https://jonas-rem.github.io/zephyr-workshop/src/task_app_extension.html">
       jonas-rem.github.io/zephyr-workshop/task_app_extension.html
     </a>
   </Footnote>
