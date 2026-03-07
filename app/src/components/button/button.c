@@ -17,7 +17,11 @@ LOG_MODULE_REGISTER(button_component, CONFIG_BUTTON_COMPONENT_LOG_LEVEL);
 static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(SW0_NODE, gpios, {0});
 static struct gpio_callback button_cb_data;
 
-static struct k_work_delayable send_event_work;
+/* System workqueue context - forward declaration */
+static void send_event_work_handler(struct k_work *work);
+
+/* Delayable work for button event - initialized at compile time */
+K_WORK_DELAYABLE_DEFINE(send_event_work, send_event_work_handler);
 
 /* System workqueue context */
 static void send_event_work_handler(struct k_work *work)
@@ -46,7 +50,7 @@ static void button_pressed(const struct device *dev, struct gpio_callback *cb,
 
 	if (now - last_press_time > DEBOUNCE_DELAY_MS) {
 		last_press_time = now;
-		k_work_schedule(&send_event_work, K_MSEC(DEBOUNCE_DELAY_MS/2));
+		k_work_reschedule(&send_event_work, K_MSEC(DEBOUNCE_DELAY_MS/2));
 	}
 }
 
@@ -78,8 +82,6 @@ static int init(void)
 	gpio_init_callback(&button_cb_data, button_pressed, BIT(button.pin));
 	gpio_add_callback(button.port, &button_cb_data);
 	LOG_INF("Set up button at %s pin %d", button.port->name, button.pin);
-
-	k_work_init_delayable(&send_event_work, send_event_work_handler);
 
 	LOG_INF("Button component started");
 

@@ -37,3 +37,11 @@ endif()
 if(CONFIG_TRACING_USB_COMPONENT)
   add_subdirectory(src/components/tracing_usb tracing_usb)
 endif()
+
+if(CONFIG_TEMPSENSE_COMPONENT)
+  add_subdirectory(src/components/tempsense tempsense)
+endif()
+
+if(CONFIG_SENSOR_LOG_COMPONENT)
+  add_subdirectory(src/components/sensor_log sensor_log)
+endif()

@@ -15,8 +15,11 @@ LOG_MODULE_REGISTER(button_mock, LOG_LEVEL_DBG);
 #define BUTTON_NODE DT_ALIAS(sw0)
 static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET(BUTTON_NODE, gpios);
 
-static struct k_work_delayable button_press_work;
-static struct k_work_delayable button_release_work;
+/* Delayable work items - initialized at compile time */
+static void button_press_work_handler(struct k_work *work);
+static void button_release_work_handler(struct k_work *work);
+K_WORK_DELAYABLE_DEFINE(button_press_work, button_press_work_handler);
+K_WORK_DELAYABLE_DEFINE(button_release_work, button_release_work_handler);
 
 static void button_release_work_handler(struct k_work *work)
 {
@@ -30,7 +33,7 @@ static void button_press_work_handler(struct k_work *work)
 	LOG_INF("Button pressed (mock)");
 	
 	/* Schedule button release after 100ms */
-	k_work_schedule(&button_release_work, K_MSEC(100));
+	k_work_reschedule(&button_release_work, K_MSEC(100));
 }
 
 /* Shell command to trigger button press */
@@ -40,7 +43,7 @@ static int cmd_mock_button(const struct shell *sh, size_t argc, char **argv)
 	ARG_UNUSED(argv);
 	
 	LOG_INF("Triggering mock button press");
-	k_work_schedule(&button_press_work, K_NO_WAIT);
+	k_work_reschedule(&button_press_work, K_NO_WAIT);
 	
 	return 0;
 }
@@ -50,9 +53,6 @@ SHELL_CMD_REGISTER(mock_button, NULL, "Simulate button press via GPIO", cmd_mock
 static int button_mock_init(void)
 {
 	LOG_INF("Button mock component initialized");
-	
-	k_work_init_delayable(&button_press_work, button_press_work_handler);
-	k_work_init_delayable(&button_release_work, button_release_work_handler);
 	
 	return 0;
 }

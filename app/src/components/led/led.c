@@ -74,7 +74,7 @@ static void update_timer_state(void)
 static void set_led_state(int led_idx, led_instance_t *led, bool state)
 {
 	if (led->state != state) {
-		LOG_INF("LED%d: %s", led_idx, state ? "ON" : "OFF");
+		LOG_DBG("LED%d: %s", led_idx, state ? "ON" : "OFF");
 	}
 	led->state = state;
 	gpio_pin_set_dt(led->spec, state);
@@ -287,6 +287,9 @@ static int led_init(void)
 	set_led_state(1, &leds[1], false);
 
 	k_timer_init(&led_timer, led_timer_handler, NULL);
+
+	/* Set initial state for LED0 based on default system state (SLEEP) */
+	set_led_mode(0, LED_MODE_OFF);
 
 	LOG_INF("LED component initialized");
 	return 0;

@@ -140,7 +140,7 @@ weeks.
 - Use the Zephyr Sensor API (see :doc:`/../../samples/05_sensor/README`)
   (``sensor_sample_fetch``, ``sensor_channel_get``) to read the emulated TI HDC
   sensor
-- Use ``k_work_delayable`` for periodic 500 ms measurement
+- Use ``k_work_delayable`` for periodic 1 s measurement
 - Subscribe to ``sys_ctl_ch``: start measuring in ACTIVE, stop in SLEEP
 - Publish a ``SYS_SENSOR_READING`` event with the temperature to ``event_ch``
   after each measurement
@@ -225,7 +225,7 @@ When all components are active, a typical trip looks like this:
 2. The driver presses the button to start the trip. sys_ctrl transitions to
    ACTIVE and broadcasts the new state on ``sys_ctl_ch``.
 3. The **LED** component receives ACTIVE: ``led0`` starts blinking.
-4. **tempsense** receives ACTIVE, starts measuring every 500 ms, publishes
+4. **tempsense** receives ACTIVE, starts measuring every 1 s, publishes
    ``SYS_SENSOR_READING`` events to ``event_ch``. The **LED** component
    flashes ``led1`` for 50 ms on each reading as a visual heartbeat.
 5. **sensor_log** records every reading with a timestamp.

@@ -7,7 +7,7 @@
 LOG_MODULE_REGISTER(sys_ctrl, LOG_LEVEL_DBG);
 
 /* Boot to State Active */
-static enum sys_states sys_state = SYS_ACTIVE;
+static enum sys_states sys_state = SYS_SLEEP;
 
 static void sys_ctrl_led_msg(enum sys_states msg)
 {
@@ -40,9 +40,6 @@ void sys_ctrl_handle_button_press(void)
 
 static int sys_ctrl_init(void)
 {
-	/* Notify the LED module about the initial system state */
-	sys_ctrl_led_msg(sys_state);
-
 	LOG_INF("sys_ctl module started");
 
 	return 0;

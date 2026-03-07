@@ -3,9 +3,13 @@ menu "Application"
 rsource "src/components/led/Kconfig.led"
 rsource "src/components/button/Kconfig.button"
 rsource "src/components/sys_ctrl/Kconfig.sys_ctrl"
-rsource "src/components/temp_alert/Kconfig.temp_alert"
 rsource "src/components/button_mock/Kconfig.button_mock"
 rsource "src/components/tracing_usb/Kconfig.tracing_usb"
+
+# extended cold chain monitoring components
+rsource "src/components/temp_alert/Kconfig.temp_alert"
+rsource "src/components/tempsense/Kconfig.tempsense"
+rsource "src/components/sensor_log/Kconfig.sensor_log"
 
 endmenu
 
