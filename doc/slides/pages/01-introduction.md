@@ -85,14 +85,28 @@ level: 1
 - Vendor-neutrality: fairness and interoperability
 - Technical Steering Committee (TSC) and Working Groups (WG)
 - Security and tooling (e.g. SBOM) as integral part
-- **Alternative to vendor SDKs**
+
+<br>
+
+Zephyr Project: **Hall 4, Stand 4-170**<br>
+- 10 Year Anniversary
+- Scavenger Hunt!
+- Freedom Boards giveway
 
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/lf-stacked-color.svg" class="h-40 object-contain" />
-  <div class="text-xs text-center mt-2">The Linux Foundation logo</div>
+<br>
+<br>
+  <img src="/images/lf-stacked-color.svg" class="h-30 object-contain" />
+<br>
+<br>
+<br>
+<br>
+  <img src="/images/zephyr-research-qr.png" class="h-30" />
+  <div class="text-xs text-center mt-2">linuxfoundation.org/research/zephyr-turns-10</div>
 </div>
+
 
 </div>
 
