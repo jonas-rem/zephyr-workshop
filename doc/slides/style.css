@@ -240,3 +240,14 @@ figcaption.mt-3.text-center.text-xs,
   font-weight: 500;
 }
 
+/* Global footer - uses a more specific selector to avoid conflicts */
+.slidev-layout:not(.cover):not(.section)::before {
+  content: 'Zephyr Workshop, March 2026';
+  position: absolute;
+  bottom: 12px;
+  right: 30px;
+  font-size: 0.65rem;
+  color: var(--color-header-bg);
+  z-index: 100;
+  pointer-events: none;
+}
