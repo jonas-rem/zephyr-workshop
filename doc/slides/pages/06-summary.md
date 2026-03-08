@@ -15,27 +15,31 @@ level: 1
 <v-clicks>
 
 **Ecosystem:**
-- Many components besides the RTOS itself, e.g. drivers, networking.
+- Many components besides the RTOS itself, e.g. drivers, networking
 - Modular and hardware independent by default!
-- Many concepts from Linux makes it easier to get started.
+- Many concepts from Linux makes it easier to get started
 
-**Structure:**
-- Ready-to-use structure for your application.
-- Systems get more complex, avoid developing from scratch.
-
+**Testability:**
+- Build testable modular applications
+- Many things can run with native_sim
+- Testability on multiple levels via ZTest
 </v-clicks>
 </div>
 
 <div>
 <v-clicks>
 
-**Open Source:**
-- Supply chain security.
-- No vendor lock-in.
-- Supported by large companies.
+**Structure:**
+- Ready-to-use structure for your application
+- Systems get more complex, avoid developing from scratch
 
-**Community:**
-- Active, questions and contributions welcomed.
+<br>
+<br>
+
+**Open Source:**
+- Supply chain security, no vendor lock-in
+- Supported by large companies
+- Active Community, questions and contributions welcomed
 
 </v-clicks>
 </div>
@@ -55,7 +59,7 @@ class: text-center
 
 <div class="text-sm text-gray-500 mt-12">
 
-CC BY-SA - This presentation is licensed under Creative Commons
-Attribution-ShareAlike.
+Slides and workshop material remain available at<br>
+<a href="https://github.com/jonas-rem/zephyr-workshop">github.com/jonas-rem/zephyr-workshop</a>
 
 </div>

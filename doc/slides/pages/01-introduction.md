@@ -22,13 +22,16 @@ level: 1
 
 <div>
 
-- Combine theory with hands-on practice
+**Theory:**
 - Introduction to Zephyr RTOS
-- Setting up the SDK
-  - On a Local Machine
-  - GitHub Codespaces
-- Exploring key features
-- Hands-on development
+- Understanding the development ecosystem
+- Exploring key features and subsystems
+
+**Hands-on Sessions:**
+1. Development environment setup
+2. Build and run samples on native_sim
+3. Explore progressive examples
+4. Extend an application (Cold-Chain Monitoring)
 
 </div>
 
@@ -42,9 +45,9 @@ level: 1
 
 ## Audience Check
 
-- What are your goals for the Workshop?
 - Have you used an RTOS before?
 - Your experience with Zephyr?
+- What are your goals for the Workshop?
 
 ---
 ---
@@ -83,7 +86,6 @@ level: 1
 - Technical Steering Committee (TSC) and Working Groups (WG)
 - Security and tooling (e.g. SBOM) as integral part
 - **Alternative to vendor SDKs**
-- **Safety certification ongoing**
 
 </div>
 
