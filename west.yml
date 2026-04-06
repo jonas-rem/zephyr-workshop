@@ -15,6 +15,7 @@ manifest:
           - cmsis      # required by the ARM port
           - cmsis_6
           - mbedtls
+          - tf-psa-crypto
           - hal_nordic
           - hal_stm32
           - hal_nxp
