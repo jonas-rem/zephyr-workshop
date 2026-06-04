@@ -36,7 +36,7 @@ level: 1
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/zephyr_logo.png" class="h-40" />
+  <img src="../public/images/zephyr_logo.png" class="h-40" />
 </div>
 
 </div>
@@ -66,7 +66,7 @@ level: 1
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/jrov2201.jpg" class="h-60 object-contain" />
+  <img src="../public/images/jrov2201.jpg" class="h-60 object-contain" />
   <div class="text-xs text-center mt-2">Pump Monitor for BeST Berliner Sensortechnik GmbH</div>
 </div>
 
@@ -90,7 +90,7 @@ level: 1
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/lf-stacked-color.svg" class="h-40 object-contain" />
+  <img src="../public/images/lf-stacked-color.svg" class="h-40 object-contain" />
   <div class="text-xs text-center mt-2">The Linux Foundation logo</div>
 </div>
 

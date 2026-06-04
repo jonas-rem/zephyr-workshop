@@ -140,7 +140,7 @@ HEAD is now at aad79bf [..]
 </div>
 
 <div class="h-full flex flex-col items-center justify-center">
-  <img src="/images/application_topologies_1.svg" class="h-80 object-contain" />
+  <img src="../public/images/application_topologies_1.svg" class="h-80 object-contain" />
 </div>
 
 </div>
@@ -164,7 +164,7 @@ HEAD is now at aad79bf [..]
 </div>
 
 <div class="h-full flex flex-col items-center justify-center">
-  <img src="/images/application_topologies_2.svg" class="h-80 object-contain" />
+  <img src="../public/images/application_topologies_2.svg" class="h-80 object-contain" />
 </div>
 
 </div>
@@ -189,7 +189,7 @@ HEAD is now at aad79bf [..]
 </div>
 
 <div class="h-full flex flex-col items-center justify-center">
-  <img src="/images/application_topologies_4.svg" class="h-80 object-contain" />
+  <img src="../public/images/application_topologies_4.svg" class="h-80 object-contain" />
 </div>
 
 </div>
@@ -213,7 +213,7 @@ HEAD is now at aad79bf [..]
 </div>
 
 <div class="h-full flex flex-col items-center justify-center">
-  <img src="/images/application_topologies_3.svg" class="h-80 object-contain" />
+  <img src="../public/images/application_topologies_3.svg" class="h-80 object-contain" />
 </div>
 
 </div>
@@ -285,7 +285,7 @@ In Zephyr: C header generation at compile time
 </div>
 
 <div class="h-full flex flex-col items-center justify-center">
-  <img src="/images/devicetree-logo.svg" class="h-35" />
+  <img src="../public/images/devicetree-logo.svg" class="h-35" />
   <div class="text-xs text-center mt-2">devicetree Logo</div>
 </div>
 
@@ -427,7 +427,7 @@ build/zephyr/include/generated/zephyr/devicetree_generated.h
 </div>
 
 <div class="col-span-2 flex flex-col items-center justify-center">
-  <img src="/images/native_sim_blinky.jpg" class="h-60 object-contain rounded-lg shadow-lg" />
+  <img src="../public/images/native_sim_blinky.jpg" class="h-60 object-contain rounded-lg shadow-lg" />
 </div>
 
 </div>

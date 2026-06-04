@@ -583,12 +583,12 @@ Indication complete
 <div class="grid grid-cols-2 gap-8">
 
 <div class="flex flex-col items-center">
-  <img src="/images/nrf_connect_scan.png" class="h-72" />
+  <img src="../public/images/nrf_connect_scan.png" class="h-72" />
   <div class="text-xs text-center mt-2">Scanning for BLE devices</div>
 </div>
 
 <div class="flex flex-col items-center">
-  <img src="/images/nrf_connect_ble_connected.png" class="h-72" />
+  <img src="../public/images/nrf_connect_ble_connected.png" class="h-72" />
   <div class="text-xs text-center mt-2">Connected with nRF Connect App</div>
 </div>
 
@@ -611,7 +611,7 @@ Indication complete
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/reel_board_passive_display.jpg" class="h-60 object-contain" />
+  <img src="../public/images/reel_board_passive_display.jpg" class="h-60 object-contain" />
   <div class="text-xs text-center mt-2">Updated display on the reel board</div>
 </div>
 

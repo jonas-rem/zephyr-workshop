@@ -27,7 +27,7 @@ level: 1
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/zbus_zephyr.svg" class="h-60 object-contain" />
+  <img src="../public/images/zbus_zephyr.svg" class="h-60 object-contain" />
   <div class="text-xs text-center mt-2">Zbus overview</div>
 </div>
 
@@ -56,7 +56,7 @@ level: 1
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/zbus_application.png" class="h-60 object-contain" />
+  <img src="../public/images/zbus_application.png" class="h-60 object-contain" />
   <div class="text-xs text-center mt-2">Minimal modular application with zbus</div>
 </div>
 
@@ -350,7 +350,9 @@ Hints:
 
 <div>
 
-```text {class="text-xs"}
+<div class="text-xs">
+
+```text
 event_ch                                     sys_ctl_ch
    │               ┌────────────┐                  │
    │◀─── PRESSED ──│  Button    │                  │
@@ -372,8 +374,11 @@ event_ch                                     sys_ctl_ch
    │               └────────────┘                  │
    │               ┌────────────┐                  │
    │─ TEMP/ALERT ─▶│ sensor_log │◀─ ACTIVE/SLEEP ──│
-                   └────────────┘
+   │               └────────────┘                  │
 ```
+
+</div>
+
 <div class="text-xs text-center mt-2">Cold-Chain Monitoring Architecture</div>
 
 

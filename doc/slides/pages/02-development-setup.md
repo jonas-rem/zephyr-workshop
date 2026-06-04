@@ -8,7 +8,7 @@ level: 1
 ---
 layout: figure
 figureCaption: Zephyr Getting Started Guide
-figureUrl: /images/Zephyr_getting_started.png
+figureUrl: ./images/Zephyr_getting_started.png
 figureFootnoteNumber: 1
 ---
 
@@ -91,7 +91,7 @@ Hello World! native_sim/native
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/zephyr_blinky.png" class="h-60 object-contain" />
+  <img src="../public/images/zephyr_blinky.png" class="h-60 object-contain" />
   <div class="text-xs text-center mt-2">reel board with blinking LED</div>
 </div>
 
@@ -115,7 +115,7 @@ GitHub Codespaces<sup>1</sup>
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/codespaces_how_to_start.png" class="h-40 object-contain" />
+  <img src="../public/images/codespaces_how_to_start.png" class="h-40 object-contain" />
   <div class="text-xs text-center mt-2">Create a new Codespace</div>
 </div>
 
@@ -135,7 +135,7 @@ GitHub Codespaces<sup>1</sup>
 
 <div class="flex flex-col gap-4">
   <div>
-    <img src="/images/codespaces_setting_up.png" class="h-50" />
+    <img src="../public/images/codespaces_setting_up.png" class="h-50" />
     <div class="text-xs">Codespaces starting..</div>
   </div>
 </div>
@@ -143,7 +143,7 @@ GitHub Codespaces<sup>1</sup>
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/codespaces_open.png" class="h-100 object-contain" />
+  <img src="../public/images/codespaces_open.png" class="h-100 object-contain" />
   <div class="text-xs text-center mt-2">Codespaces in a Browser Window</div>
 </div>
 
@@ -184,7 +184,7 @@ west build -t run
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="/images/codespaces_setting_up_class.png" class="h-60 object-contain" />
+  <img src="../public/images/codespaces_setting_up_class.png" class="h-60 object-contain" />
   <div class="text-xs text-center mt-2">Setup new Instance</div>
 </div>
 

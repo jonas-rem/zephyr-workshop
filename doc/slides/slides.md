@@ -15,7 +15,9 @@ info: |
 keywords: zephyr,rtos,embedded,iot
 exportFilename: zephyr-workshop-slides
 download: false
+contextMenu: false
 lineNumbers: false
+preloadImages: false
 drawings:
   persist: false
 transition: none
