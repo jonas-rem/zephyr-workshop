@@ -29,7 +29,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version: '22'
 
       - name: Install PDF build dependencies
         run: |
@@ -53,7 +53,7 @@ jobs:
         working-directory: doc
 
       - name: Install Playwright browsers
-        timeout-minutes: 10
+        timeout-minutes: 20
         run: npm --prefix slides exec playwright install -- --with-deps chromium
         working-directory: doc
 
