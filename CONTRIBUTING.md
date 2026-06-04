@@ -6,42 +6,41 @@ Repository.
 
 ## Development
 
+### Workshop Releases
+
+Workshop-specific releases use branches named `<city-MM.YY>` and tags named
+`vX.Y.Z-<city-MM.YY>`, for example `vienna-06.26` and
+`v0.9.0-vienna-06.26`.
+
+Pushing a release tag, for example `git push origin v0.9.0-vienna-06.26`,
+triggers CI to create a GitHub Release with docs/slides PDF and HTML artifacts.
+
 ### Building the Documentation
 
-The documentation is located in the `doc` folder. To build the full
-documentation including the integrated slides, use `tox`:
+The documentation is located in the `doc` folder. Install
+[uv](https://docs.astral.sh/uv/) and Node.js, then build from the repository
+root with `make`:
 
 ```shell
-cd doc
-# Build integrated HTML documentation (Sphinx + Slides)
-tox -e html
+# Build integrated documentation and slides
+make docs
 # Or for live preview with autobuild
-tox -e docs
+make html
 ```
 
 ### Building Slides Standalone
 
 The presentation slides are located in `doc/slides` and are written with
 [Slidev](https://sli.dev/). They are automatically built and included when
-building the documentation, but they can also be built standalone:
+building the documentation. For live slide editing, use the Slidev development
+server:
 
 ```shell
-cd doc
-tox -e slides
+make slides
 ```
 
 The standalone build output is located in
 `doc/slides_dist/zephyr-workshop_slides`.
-
-#### Live Preview
-For the best experience when editing slides, use the Slidev development server
-which provides instant hot-reloading:
-
-```shell
-cd doc/slides
-npm install
-npm run dev
-```
 
 ## Licensing
 

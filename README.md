@@ -56,6 +56,18 @@ The workshop includes both a web-based documentation (Sphinx) and a slide
 presentation (Slidev). The slides are integrated into the documentation. View
 the [Workshop Slides].
 
+Build the complete documentation and slides output:
+
+```shell
+make docs
+```
+
+Start the live HTML documentation autobuilder:
+
+```shell
+make html
+```
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for instructions on building the
 documentation and slides locally.
 

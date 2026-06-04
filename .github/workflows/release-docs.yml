@@ -1,0 +1,86 @@
+name: Release Documentation
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release-docs:
+    runs-on: ubuntu-latest
+    env:
+      npm_config_cache: ${{ github.workspace }}/.npm-cache
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Install PDF build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            fonts-dejavu \
+            latexmk \
+            texlive-fonts-recommended \
+            texlive-latex-extra \
+            texlive-latex-recommended \
+            texlive-xetex \
+            xindy
+
+      - name: Install dependencies
+        run: npm --prefix slides install --package-lock=false
+        working-directory: doc
+
+      - name: Install Playwright browsers
+        run: npm --prefix slides exec playwright install -- --with-deps chromium
+        working-directory: doc
+
+      - name: Build documentation and slides
+        run: make docs
+
+      - name: Prepare release assets
+        run: |
+          tag_name="${GITHUB_REF_NAME//\//-}"
+          mkdir -p release-assets
+          tar -czf "release-assets/zephyr-workshop-docs-${tag_name}.tar.gz" -C doc/_build html
+          tar -czf "release-assets/zephyr-workshop-slides-html-${tag_name}.tar.gz" -C doc/slides_dist zephyr-workshop_slides
+          cp doc/_build/latex/zephyr-workshop-docs.pdf \
+            "release-assets/zephyr-workshop-docs-${tag_name}.pdf"
+          cp doc/slides_dist/zephyr-workshop_slides/zephyr-workshop_slides.pdf \
+            "release-assets/zephyr-workshop-slides-${tag_name}.pdf"
+
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v6
+        with:
+          name: release-docs-${{ github.ref_name }}
+          path: release-assets/*
+          if-no-files-found: error
+
+      - name: Create or update GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" release-assets/* --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" release-assets/* \
+              --verify-tag \
+              --title "${GITHUB_REF_NAME}" \
+              --notes "Documentation and slides artifacts for ${GITHUB_REF_NAME}."
+          fi

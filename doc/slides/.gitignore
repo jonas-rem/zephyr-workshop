@@ -2,9 +2,9 @@
 node_modules/
 dist/
 package-lock.json
+index.html
 
 # Tooling
-.tox/
 .claude/
 
 # OS metadata

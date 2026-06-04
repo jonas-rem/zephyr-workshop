@@ -7,13 +7,13 @@
     "export": "slidev export"
   },
   "dependencies": {
-    "@slidev/cli": "^52.13.0",
-    "slidev-theme-academic": "^2.1.0"
+    "@slidev/cli": "52.16.0",
+    "slidev-theme-academic": "2.1.0"
   },
   "overrides": {
-    "esbuild": "^0.25.0"
+    "esbuild": "0.25.12"
   },
   "devDependencies": {
-    "playwright-chromium": "^1.57.0"
+    "playwright-chromium": "1.57.0"
   }
 }

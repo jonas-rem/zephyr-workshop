@@ -1,6 +1,7 @@
 *.pdf
 build/
 .cache/
+.npm-cache/
 twister-out*/
 
 
@@ -18,6 +19,7 @@ svg-inkscape/
 
 # Sphinx doc
 _build
+doc/.*
 doc/slides_dist/
 *.pygtex
 *.pygstyle

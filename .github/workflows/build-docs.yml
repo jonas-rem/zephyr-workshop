@@ -27,7 +27,9 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: doc
+        working-directory: .
+    env:
+      npm_config_cache: ${{ github.workspace }}/.npm-cache
 
     steps:
       - name: Checkout repository
@@ -38,23 +40,39 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '24'
 
+      - name: Install PDF build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            fonts-dejavu \
+            latexmk \
+            texlive-fonts-recommended \
+            texlive-latex-extra \
+            texlive-latex-recommended \
+            texlive-xetex \
+            xindy
+
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
-          pip install tox
-          npm --prefix slides install
+          npm --prefix slides install --no-save --package-lock=false
+          touch slides/node_modules/.installed
+        working-directory: doc
 
       - name: Install Playwright browsers
         run: |
           npm --prefix slides exec playwright install -- --with-deps chromium
+        working-directory: doc
 
       - name: Build Documentation
-        run: tox -e html
+        run: make docs
 
       - name: Upload artifact
         uses: actions/upload-artifact@v6

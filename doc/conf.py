@@ -31,12 +31,11 @@ extensions = []
 
 exclude_patterns = [
     "_build",
+    ".*",
+    "**/.*",
     "Thumbs.db",
     ".DS_Store",
-    ".tox",
-    "**/.tox",
     "slides",
-    "slides_dist",
 ]
 
 # -- Options for HTML output --------------------------------------------------
@@ -50,3 +49,16 @@ html_theme_options = {
     # "logo_only": True,
     "prev_next_buttons_location": None
 }
+
+# -- Options for LaTeX/PDF output ---------------------------------------------
+latex_engine = "xelatex"
+latex_elements = {
+    "fontpkg": r"""
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+""",
+}
+latex_documents = [
+    ("index", "zephyr-workshop-docs.tex", project, author, "manual"),
+]
