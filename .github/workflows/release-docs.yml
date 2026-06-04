@@ -44,10 +44,16 @@ jobs:
             xindy
 
       - name: Install dependencies
-        run: npm --prefix slides install --package-lock=false
+        timeout-minutes: 10
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+        run: |
+          npm --prefix slides install --no-save --package-lock=false
+          touch slides/node_modules/.installed
         working-directory: doc
 
       - name: Install Playwright browsers
+        timeout-minutes: 10
         run: npm --prefix slides exec playwright install -- --with-deps chromium
         working-directory: doc
 
