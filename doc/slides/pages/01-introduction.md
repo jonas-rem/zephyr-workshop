@@ -47,10 +47,9 @@ level: 1
 - Exploring key features and subsystems
 
 **Hands-on Sessions:**
-1. Development environment setup
-2. Build and run samples on native_sim
-3. Explore progressive examples
-4. Extend an application (Cold-Chain Monitoring)
+1. Build and run samples on native_sim
+2. Explore essential subsystems
+3. Build a live BLE Application with the Nordic nRF54L15 DK Board
 
 </div>
 
@@ -67,29 +66,6 @@ level: 1
 - Have you used an RTOS before?
 - Your experience with Zephyr?
 - What are your goals for the Workshop?
-
----
----
-
-## Areas of Work
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-- **Hardware:** Customer-specific hardware solutions, focus on low-power embedded systems
-- **nRF9160 SoC:** Development of IoT applications using the Nordic nRF9160 SoC for both hardware and firmware
-- **Zephyr:** Contributor to the Zephyr Project
-- **Example:** Pump Monitor, developed in collaboration with **BeST Berliner Sensortechnik GmbH**
-
-</div>
-
-<div class="flex flex-col items-center justify-center">
-  <img src="../public/images/jrov2201.jpg" class="h-60 object-contain" />
-  <div class="text-xs text-center mt-2">Pump Monitor for BeST Berliner Sensortechnik GmbH</div>
-</div>
-
-</div>
 
 ---
 ---

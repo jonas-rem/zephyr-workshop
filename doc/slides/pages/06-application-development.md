@@ -1,6 +1,7 @@
 ---
 layout: section
 level: 1
+hideInToc: true
 ---
 
 # Application Development
@@ -325,7 +326,7 @@ Run completed
 
 ---
 
-## Hands-on 4: Extend the Application - Cold-Chain Monitoring
+## Hands-on 5: Extend the Application - Cold-Chain Monitoring
 
 <div class="grid grid-cols-2 gap-4">
 

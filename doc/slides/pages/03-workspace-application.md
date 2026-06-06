@@ -200,30 +200,6 @@ HEAD is now at aad79bf [..]
 
 ---
 
-## T3: Forest Topology
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-- **Who:** One company developing multiple independent products, or service providers
-- **What:** Multiple applications at the same level, potentially with different lifecycles
-- **Solution:** Dedicated manifest repository containing no source code
-
-</div>
-
-<div class="h-full flex flex-col items-center justify-center">
-  <img src="../public/images/application_topologies_3.svg" class="h-80 object-contain" />
-</div>
-
-</div>
-
-<Footnotes y="col">
-  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html#t3-forest-topology">Zephyr Docs: T3 Topology</a></Footnote>
-</Footnotes>
-
----
-
 ## Zephyr Hardware Abstraction
 
 <div class="grid grid-cols-2 gap-4">

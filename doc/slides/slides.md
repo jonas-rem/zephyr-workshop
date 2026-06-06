@@ -2,7 +2,7 @@
 theme: academic
 colorSchema: light
 layout: cover
-coverAuthor: Jonas Remmert
+coverAuthor: Christian Hirsch, Jonas Remmert
 coverAuthorUrl: https://github.com/jonas-rem
 coverDate: ""
 title: Hands-on Zephyr Project Workshop
@@ -55,14 +55,13 @@ src: ./pages/04-code-examples.md
 ---
 
 ---
-src: ./pages/05-application-development.md
+src: ./pages/05-ble-hw-sample.md
 ---
 
 ---
-src: ./pages/06-summary.md
+src: ./pages/06-application-development.md
 ---
 
 ---
-src: ./pages/07-backup-slides.md
-hideInToc: true
+src: ./pages/07-summary.md
 ---
