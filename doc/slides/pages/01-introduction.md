@@ -9,10 +9,29 @@ level: 1
 
 ## Introduction
 
-- **Jonas Remmert**
+<div class="grid grid-cols-2 gap-8 h-72 items-stretch">
+
+<div class="flex flex-col justify-center rounded-xl border border-slate-200 bg-slate-50 p-8">
+
+### Christian Hirsch
+
+- TBD
+- TBD
+- **Experience:** TBD
+
+</div>
+
+<div class="flex flex-col justify-center rounded-xl border border-slate-200 bg-slate-50 p-8">
+
+### Jonas Remmert
+
 - SMIGHT GmbH
 - Developer for Low Power IoT products
-- **Experience:** RTOS (FreeRTOS, Zephyr), NXP MCUX, hardware development
+- **Experience:** RTOS (Zephyr, FreeRTOS), NXP MCUX, hardware development
+
+</div>
+
+</div>
 
 ---
 
