@@ -10,4 +10,4 @@ tests:
     integration_platforms:
       - native_sim
       - qemu_cortex_m3
-    timeout: 10
+    timeout: 25

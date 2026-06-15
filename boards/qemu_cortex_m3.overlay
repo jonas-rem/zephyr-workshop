@@ -2,11 +2,48 @@
  * Workshop board overlay for qemu_cortex_m3.
  *
  * - HDC1010 sensor on emulated I2C bus (for sensor samples)
+ * - Button sw0 and LED aliases on emulated GPIOs (for component tests)
  */
 
+#include <zephyr/dt-bindings/gpio/gpio.h>
 #include <zephyr/dt-bindings/i2c/i2c.h>
 
 / {
+	aliases {
+		sw0 = &button0;
+		led0 = &led0;
+		led1 = &led1;
+	};
+
+	gpio_emul0: gpio-emul0 {
+		compatible = "zephyr,gpio-emul";
+		status = "okay";
+		rising-edge;
+		falling-edge;
+		gpio-controller;
+		#gpio-cells = <2>;
+	};
+
+	buttons {
+		compatible = "gpio-keys";
+		button0: button_0 {
+			gpios = <&gpio_emul0 1 GPIO_ACTIVE_LOW>;
+			label = "User button";
+		};
+	};
+
+	leds {
+		compatible = "gpio-leds";
+		led0: led_0 {
+			gpios = <&gpio_emul0 2 GPIO_ACTIVE_LOW>;
+			label = "LED 0 (status)";
+		};
+		led1: led_1 {
+			gpios = <&gpio_emul0 3 GPIO_ACTIVE_LOW>;
+			label = "LED 1 (events)";
+		};
+	};
+
 	i2c0: i2c@100 {
 		compatible = "zephyr,i2c-emul-controller";
 		reg = <0x100 4>;
