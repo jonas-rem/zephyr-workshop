@@ -21,7 +21,7 @@ level: 1
 
 **Testability:**
 - Build testable modular applications
-- Many things can run with native_sim
+- Many things can run with qemu_cortex_m3
 - Testability on multiple levels via ZTest
 </v-clicks>
 </div>
@@ -47,7 +47,7 @@ level: 1
 </div>
 
 <Footnotes y="col">
-  <Footnote :number=1>Slides and workshop material available at: <a href="https://github.com/jonas-rem/zephyr-workshop">github.com/jonas-rem/zephyr-workshop</a></Footnote>
+  <Footnote :number=1>Slides and workshop material available at: <a href="https://github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26">github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26</a></Footnote>
 </Footnotes>
 
 ---
@@ -60,6 +60,6 @@ class: text-center
 <div class="text-sm text-gray-500 mt-12">
 
 Slides and workshop material remain available at<br>
-<a href="https://github.com/jonas-rem/zephyr-workshop">github.com/jonas-rem/zephyr-workshop</a>
+<a href="https://github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26">github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26</a>
 
 </div>

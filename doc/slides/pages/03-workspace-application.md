@@ -52,7 +52,7 @@ zephyrproject
   <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/application/index.html">docs.zephyrproject.org/latest/develop/application</a></Footnote>
   <Footnote :number=2><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html">docs.zephyrproject.org/latest/develop/west/workspaces</a></Footnote>
   <Footnote :number=3><a href="https://github.com/zephyrproject-rtos/example-application">github.com/zephyrproject-rtos/example-application</a></Footnote>
-  <Footnote :number=4><a href="https://github.com/jonas-rem/zephyr-workshop">github.com/jonas-rem/zephyr-workshop</a></Footnote>
+  <Footnote :number=4><a href="https://github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26">github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26</a></Footnote>
 </Footnotes>
 
 ---
@@ -368,42 +368,144 @@ DT_INST_FOREACH_STATUS_OKAY(FXOS8700_INIT)
 
 ---
 
-## Hands-on 2: Run Zephyr on native_sim!
+## Hands-on 1: Local Zephyr Workspace
 
-<div class="grid grid-cols-5 gap-4">
+<div class="grid grid-cols-[1.15fr_0.85fr] gap-8 items-center">
 
-<div class="col-span-3">
+<div>
 
-Build the __blinky__ sample for native_sim:
+Starting point: the Zephyr Getting Started Guide is complete and `west build`
+works in your local Zephyr workspace.
 
-```shell
-west build -b native_sim zephyr/samples/basic/blinky -p
-```
-
-And run it:
+Set the workshop repository as the active west manifest:
 
 ```shell
+cd zephyrproject
+git clone -b vienna-06-26 https://github.com/jonas-rem/zephyr-workshop.git
+west config manifest.path zephyr-workshop
+west update
+
+cd zephyr-workshop
+
+west build -b qemu_cortex_m3 samples/01_hello_world -p
 west build -t run
 ```
-<br>
 
-Watch the LED state toggle in the console. Match the devicetree definition
-(__led0__) with the sample code and generated header:
+</div>
 
-<div class="text-xxs">
+<div class="flex flex-col items-center">
+
+```text
+zephyrproject
+├── .west
+│   └── config
+├── zephyr
+├── modules
+└── zephyr-workshop
+    ├── app
+    ├── samples
+    └── doc
+```
+
+<div class="text-xs text-center mt-2">
+<code>.west/config</code>
+</div>
+
+```ini
+[manifest]
+path = zephyr-workshop
+```
+
+  <div class="text-xs text-center mt-2">West manifest path configured for the workshop repository</div>
+
+</div>
+
+</div>
+
+---
+
+## Hands-on 1: GitHub Codespaces
+
+<div class="grid grid-cols-[1fr_1fr] gap-6 items-center">
+
+<div>
+
+Use this path if you want a ready-to-use cloud environment or if your local setup
+does not work during the workshop.
+
+1. Open [github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26](https://github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26)
+2. Click **Code**, then **Codespaces**
+3. Create a new codespace on `vienna-06-26`
+4. Wait until the setup finishes
 
 ```shell
-zephyr/boards/native/native_sim/native_sim.dts
-zephyr/samples/basic/blinky/src/main.c
-build/zephyr/include/generated/zephyr/devicetree_generated.h
+west build -b qemu_cortex_m3 samples/01_hello_world -p
+west build -t run
 ```
 
 </div>
 
+<div class="flex flex-col items-center justify-center">
+
+```text
+zephyrproject
+├── .west
+├── zephyr
+├── modules
+└── zephyr-workshop
+    ├── app
+    ├── samples
+    └── doc
+```
+
+  <div class="text-xs text-center mt-2">Codespaces creates the workspace for you</div>
 </div>
 
-<div class="col-span-2 flex flex-col items-center justify-center">
-  <img src="../public/images/native_sim_blinky.jpg" class="h-60 object-contain rounded-lg shadow-lg" />
+</div>
+
+---
+
+## Hands-on 1: VS Code Dev Container
+
+<div class="grid grid-cols-[1fr_1fr] gap-6 items-center">
+
+<div>
+
+Use this path if you want a quick local setup without installing the full Zephyr
+toolchain directly on your machine. Local native setup is still preferred for
+hardware access.
+
+1. Install Docker and the VS Code **Dev Containers** extension
+2. Open the workshop repository in VS Code
+3. Check out the `vienna-06-26` branch
+4. Run **Dev Containers: Reopen in Container**
+5. Wait until the setup finishes
+
+```shell
+west build -b qemu_cortex_m3 samples/01_hello_world -p
+west build -t run
+```
+
+</div>
+
+<div class="flex flex-col items-center justify-center">
+
+```text
+Host machine
+├── Docker
+├── VS Code
+└── zephyr-workshop
+    └── .devcontainer
+
+Container
+└── /zephyrproject
+    ├── .west
+    ├── zephyr
+    ├── modules
+    └── zephyr-workshop
+```
+
+  <div class="text-xs text-center mt-2">Fast local fallback, but USB passthrough may need extra setup</div>
 </div>
 
 </div>

@@ -11,7 +11,7 @@ info: |
   ## Hands-on Zephyr Project Workshop
   Navigating Low Power IoT Development with Practical Examples
 
-  [github.com/jonas-rem/zephyr-workshop](https://github.com/jonas-rem/zephyr-workshop)
+  [github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26](https://github.com/jonas-rem/zephyr-workshop/tree/vienna-06-26)
 keywords: zephyr,rtos,embedded,iot
 exportFilename: zephyr-workshop-slides
 download: false
