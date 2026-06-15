@@ -2,10 +2,12 @@ tests:
   component.led:
     platform_allow:
       - native_sim
+      - qemu_cortex_m3
     tags:
       - led
       - zbus
       - component
     integration_platforms:
       - native_sim
+      - qemu_cortex_m3
     timeout: 10

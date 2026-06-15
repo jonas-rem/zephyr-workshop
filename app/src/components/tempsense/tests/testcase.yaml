@@ -2,6 +2,7 @@ tests:
   component.tempsense:
     platform_allow:
       - native_sim
+      - qemu_cortex_m3
     tags:
       - tempsense
       - zbus
@@ -10,4 +11,5 @@ tests:
       - workshop
     integration_platforms:
       - native_sim
+      - qemu_cortex_m3
     timeout: 5

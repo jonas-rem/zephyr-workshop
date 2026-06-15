@@ -3,6 +3,7 @@ sample:
 common:
   integration_platforms:
     - native_sim
+    - qemu_cortex_m3
     - reel_board
 tests:
   sample.basic.sensor:

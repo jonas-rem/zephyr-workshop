@@ -1,0 +1,25 @@
+/**
+ * Workshop board overlay for qemu_cortex_m3.
+ *
+ * - HDC1010 sensor on emulated I2C bus (for sensor samples)
+ */
+
+#include <zephyr/dt-bindings/i2c/i2c.h>
+
+/ {
+	i2c0: i2c@100 {
+		compatible = "zephyr,i2c-emul-controller";
+		reg = <0x100 4>;
+		status = "okay";
+		clock-frequency = <I2C_BITRATE_STANDARD>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		#forward-cells = <1>;
+
+		ti_hdc: ti_hdc@43 {
+			compatible = "ti,hdc";
+			reg = <0x43>;
+			status = "okay";
+		};
+	};
+};
