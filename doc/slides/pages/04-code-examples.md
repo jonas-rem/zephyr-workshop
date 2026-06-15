@@ -43,7 +43,7 @@ level: 1
 **Build and run:**
 
 ```shell
-west build -b native_sim samples/01_hello_world -p
+west build -b qemu_cortex_m3 samples/01_hello_world -p
 west build -t run
 ```
 
@@ -114,7 +114,7 @@ int main(void)
 ## 01_hello_world Application Build Output
 
 ```shell
-west build -b native_sim samples/01_hello_world/ -p
+west build -b qemu_cortex_m3 samples/01_hello_world/ -p
 -- Found host-tools: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
 -- Found toolchain: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
 [..]
@@ -190,7 +190,7 @@ build/
 
 ```shell
 *** Booting Zephyr OS build v4.1.0 ***
-Hello World! native_sim
+Hello World! qemu_cortex_m3
 ```
 
 ---
@@ -250,7 +250,7 @@ int main(void)
 
 ```
 *** Booting Zephyr OS build v4.1.0 ***
-Hello World! native_sim
+Hello World! qemu_cortex_m3
 [00:00:00.001,691] <err> hello_world: error string
 [00:00:00.001,843] <dbg> hello_world: main: debug string
 [00:00:00.001,859] <inf> hello_world: info string
@@ -495,7 +495,7 @@ printk("Temp = %d.%06d C, RH = %d.%06d %%\n",
 
 ```shell
 *** Booting Zephyr OS build v4.3.0 ***
-Running on native_sim!
+Running on qemu_cortex_m3!
 Dev 0x80525e0 name ti_hdc@43 is ready!
 Fetching...
 Temp = 4.059753 C, RH = 40.344238 %
@@ -508,7 +508,7 @@ Fetching...
 
 ---
 
-## Hands-on 3 - Test the samples
+## Hands-on 2 - Test the samples
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -518,24 +518,23 @@ Build and run the samples<sup>1</sup>:
 
 ```shell
 cd zephyr-workshop
-west build -b native_sim samples/04_shell -p
+west build -b qemu_cortex_m3 samples/04_shell -p
 west build -t run
-  uart connected to pseudotty: /dev/pts/6
-  uart_1 connected to pseudotty: /dev/pts/8
-  <inf> emul: Registering 1 emulator(s) for i2c@100
+  *** Booting Zephyr OS build v4.3.0 ***
+  uart:~$
 ```
 
-The shell is connected to **uart_1**, access via the displayed **/dev/pts/'n'**, e.g.:
+The shell is available directly in the QEMU console.
 
 ```shell
-tio /dev/pts/8
+help
+device list
+kernel threads
 uart:~$
 ```
 
-**Task:** The shell sample can already access devices that are registered in
-the devicetree. The emulated TI HDC1010 is in *zephyr-workshop/emulators/sensor/*.
-
-Try changing the simulated temperature.
+**Task:** Explore the available shell commands and inspect the devices that are
+registered from the qemu_cortex_m3 devicetree.
 
 </div>
 
@@ -547,33 +546,27 @@ samples
 ├── 02_logging
 ├── 03_workqueues
 ├── 04_shell
-├── 05_sensor
-├── 06_ble
-└── 07_display_cfb
+└── 05_sensor
 ```
 
 ```console
 uart:~$
   device              devmem
-  i2c                 help
-  section_cmd         sensor
+  help                kernel
+  log                 resize
 
 uart:~$ device list
 devices:
-- i2c@100 (READY)
-  DT node labels: i2c0
-- ti_hdc@43 (READY)
-  DT node labels: ti_hdc
+- uart@4000c000 (READY)
+  DT node labels: uart0
+- gpio@40004000 (READY)
+  DT node labels: gpio0
 
-uart:~$ sensor get ti_hdc@43
+uart:~$ kernel threads
 ```
-<div class="text-xs text-center mt-2">Zephyr shell on /dev/pts/8</div>
+<div class="text-xs text-center mt-2">Zephyr shell in the QEMU console</div>
 
 
 </div>
 
 </div>
-
-<Footnotes y="col">
-  <Footnote :number=1>Note: The ble samples requires a board to run.</Footnote>
-</Footnotes>

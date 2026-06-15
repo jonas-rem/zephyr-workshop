@@ -35,6 +35,26 @@ level: 1
 
 ---
 
+# Thank You, Nordic Semiconductor!
+
+<div class="grid grid-rows-[auto_1fr] gap-5 h-[28rem]">
+
+<div class="rounded-xl border border-slate-200 bg-slate-50 px-6 py-4 text-center">
+
+Nordic Semiconductor is sponsoring **nRF54L15 DK boards** for the **workshop
+participants**. Thank you for making the hands-on hardware part possible.
+
+</div>
+
+<div class="grid grid-cols-[1.45fr_0.85fr] gap-6 items-center min-h-0">
+  <img src="../public/images/nrf54l15_dk_prod_page.png" class="w-full max-h-[21rem] object-contain drop-shadow-xl" />
+  <img src="../public/images/nrf54l_series_block_diagram.png" class="w-full max-h-[20rem] object-contain rounded-lg drop-shadow-lg" />
+</div>
+
+</div>
+
+---
+
 ## Workshop Goals
 
 <div class="grid grid-cols-2 gap-4">
@@ -47,7 +67,7 @@ level: 1
 - Exploring key features and subsystems
 
 **Hands-on Sessions:**
-1. Build and run samples on native_sim
+1. Build and run samples on qemu_cortex_m3
 2. Explore essential subsystems
 3. Build a live BLE Application with the Nordic nRF54L15 DK Board
 
