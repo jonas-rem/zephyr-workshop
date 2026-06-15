@@ -11,6 +11,7 @@ on:
 
 jobs:
   build:
+    if: github.event_name != 'schedule' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     # Use ci-base image and install only the required toolchain to save disk
     # space
