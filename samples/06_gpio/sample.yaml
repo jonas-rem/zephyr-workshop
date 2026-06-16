@@ -1,0 +1,9 @@
+sample:
+  name: gpio build test
+common:
+  integration_platforms:
+    - native_sim
+    - reel_board
+tests:
+  sample.basic.gpio:
+    build_only: true
