@@ -8,7 +8,7 @@
 #include <zephyr/input/input.h>
 
 static const struct gpio_dt_spec led = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
-static const struct device *const button = DEVICE_DT_GET(DT_ALIAS(sw0));
+static const struct gpio_dt_spec button = GPIO_DT_SPEC_GET_OR(DT_ALIAS(sw0), gpios, {0});
 
 bool led_state = true;
 
@@ -25,16 +25,18 @@ static void button_input_cb(struct input_event *evt, void *user_data)
 			evt->value ? "pressed" : "released",
 			k_cycle_get_32());
 
-	ret = gpio_pin_toggle_dt(&led);
-	if (ret < 0) {
-		return 0;
-	}
+	if (evt->value == 1 && evt->code == button.pin) {
+		ret = gpio_pin_toggle_dt(&led);
+		if (ret < 0) {
+			return;
+		}
 
-	led_state = !led_state;
-	printf("LED state: %s\n", led_state ? "ON" : "OFF");
+		led_state = !led_state;
+		printf("LED state: %s\n", led_state ? "ON" : "OFF");
+	}
 }
 
-INPUT_CALLBACK_DEFINE(button, button_input_cb, NULL);
+INPUT_CALLBACK_DEFINE(NULL, button_input_cb, NULL);
 
 int main(void)
 {
