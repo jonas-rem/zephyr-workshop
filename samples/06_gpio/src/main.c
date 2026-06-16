@@ -51,7 +51,7 @@ int main(void)
 		return 0;
 	}
 
-	printf("Press the button\n");
+	printf("Press a button\n");
 
 	k_sleep(K_FOREVER);
 
