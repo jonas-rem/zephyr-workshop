@@ -15,9 +15,9 @@ level: 1
 
 ### Christian Hirsch
 
-- TBD
-- TBD
-- **Experience:** TBD
+- hirsch.zone
+- self-employed
+- **Experience:** RTOS (Zephyr), hardware development
 
 </div>
 
