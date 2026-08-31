@@ -4,3 +4,16 @@ boards:
     vendor: tiac
     socs:
       - name: nrf52840
+    revision:
+      # Revisions track the tags of the `ecad-coffeecaller` hardware repository.
+      format: major.minor.patch
+      default: "1.0.1"
+      revisions:
+        # First prototype run: 1x7 pin header, no servo headers, no reset
+        # button, LD1 on the NFC1 pin, different LED and button pin mapping.
+        - name: "0.9.0"
+        # Electrically identical to 1.0.1 as far as the SoC pin mapping goes,
+        # 1.0.1 only re-tuned the WS2812 level shifter. Listed so that
+        # `@1.0.0` resolves to itself instead of falling back to 0.9.0.
+        - name: "1.0.0"
+        - name: "1.0.1"
