@@ -1,0 +1,105 @@
+/*
+ * Copyright (c) 2026 TiaC Systems
+ * SPDX-License-Identifier: Apache-2.0
+ *
+ * TiaC CoffeeCaller nRF52, board revision 0.9.0.
+ *
+ * Hardware delta against the default revision (1.0.1), as extracted from the
+ * `ecad-coffeecaller` KiCad schematic at tag v0.9.0 (sheet `nrfCoffee`):
+ *
+ *   Function          rev 0.9.0            rev 1.0.x
+ *   ----------------  -------------------  -------------------
+ *   SW0 (KEY1)        P0.12                P0.04
+ *   LD1               P0.09 (= NFC1)       P1.06
+ *   LD2               P1.06                P1.07
+ *   LD3               P1.04                P1.02
+ *   LD4               P1.02                P1.04
+ *   Servo 1..4        not populated        P0.01/P0.00/P1.13/P1.11
+ *   Free pin header   J1, 1x7              X1, 2x8
+ *   Reset button      not populated        RST1 on P0.18 (nRESET)
+ *   NFC / u.FL        not populated        RF1 on P0.09/P0.10
+ *   qwIIC pull-ups    not populated        R12/R13, 5k1
+ *   WS2812 data path  direct via 220R      2N7002 level shifter
+ *
+ * Unchanged: SW1..SW4 (P0.31/P0.29/P0.02/P1.15), WS2812 chain of 4 on P0.26,
+ * buzzer on P1.10, qwIIC/SHT40 on P0.20/P0.24, UART0 on P0.06/P0.08,
+ * USB, SWD and the 32 MHz crystal.
+ */
+
+#include <zephyr/dt-bindings/gpio/gpio.h>
+
+/*
+ * LD1 sits on P0.09, which is an NFC antenna pin by default. Release both NFC
+ * pins to regular GPIO operation. Note: this writes UICR.NFCPINS and can only
+ * be reverted by erasing the UICR.
+ */
+&uicr {
+	nfct-pins-as-gpios;
+};
+
+/* KEY1 is wired to P0.12 instead of P0.04 */
+&button0 {
+	gpios = <&gpio0 12 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
+};
+
+/* The four white user LEDs are on a different set of pins */
+&ld1 {
+	gpios = <&gpio0 9 GPIO_ACTIVE_LOW>;
+};
+
+&ld2 {
+	gpios = <&gpio1 6 GPIO_ACTIVE_LOW>;
+};
+
+&ld3 {
+	gpios = <&gpio1 4 GPIO_ACTIVE_LOW>;
+};
+
+&ld4 {
+	gpios = <&gpio1 2 GPIO_ACTIVE_LOW>;
+};
+
+/*
+ * J1 is a 1x7 header instead of the 2x8 header X1 of revision 1.0.x:
+ *
+ *   1 - P0.04    5 - VBUS
+ *   2 - P0.06    6 - 3V3
+ *   3 - P0.08    7 - GND
+ *   4 - P1.09
+ */
+&coffeecaller_free_pin_header {
+	gpio-map = <0 0 &gpio0 4 0>,	/* P0.04 */
+		   <1 0 &gpio0 6 0>,	/* UART0 / P0.06 */
+		   <2 0 &gpio0 8 0>,	/* UART0 / P0.08 */
+		   <3 0 &gpio1 9 0>;	/* P1.09 */
+		   /*  4 - VBUS: not usable */
+		   /*  5 - 3V3: not usable */
+		   /*  6 - GND: not usable */
+};
+
+/*
+ * No external pull-ups on SDA/SCL on this revision, so fall back to the SoC
+ * internal pull-ups (~13 kOhm) to keep the on-board SHT40 usable at 100 kHz.
+ * Add external pull-ups if a longer qwIIC chain or a faster bus is needed.
+ */
+&i2c0_default {
+	group1 {
+		bias-pull-up;
+	};
+};
+
+/* HDR1 and HDR2, and therefore all four servo channels, are not populated */
+&pwm1 {
+	status = "disabled";
+};
+
+/ {
+	aliases {
+		/delete-property/ pwm-servo0;
+		/delete-property/ pwm-servo1;
+		/delete-property/ pwm-servo2;
+		/delete-property/ pwm-servo3;
+	};
+
+	/delete-node/ pwm_servo_motors;
+};
