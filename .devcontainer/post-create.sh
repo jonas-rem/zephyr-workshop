@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-sudo chown "$(id -u):$(id -g)" /zephyrproject
 cd /zephyrproject
 
 if [ ! -f .west/config ]; then

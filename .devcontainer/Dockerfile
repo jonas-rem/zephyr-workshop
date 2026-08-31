@@ -1,7 +1,8 @@
 FROM mcr.microsoft.com/devcontainers/base:debian-13
 
 # Create zephyrproject directory
-RUN mkdir -p /zephyrproject
+RUN mkdir -p /zephyrproject \
+    && chown -R vscode:vscode /zephyrproject
 
 # Install west and basic build dependencies
 RUN apt-get update \
