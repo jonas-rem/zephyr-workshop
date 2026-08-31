@@ -1,3 +1,5 @@
 build:
   cmake: emulators
   kconfig: emulators/Kconfig
+  settings:
+    board_root: .
