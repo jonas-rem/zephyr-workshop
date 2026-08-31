@@ -17,8 +17,8 @@
   "customizations": {
     "vscode": {
       "settings": {
-        "workbench.colorTheme": "Default Dark Modern",
-        "workbench.preferredDarkColorTheme": "Default Dark Modern",
+        "workbench.colorTheme": "Dark Modern",
+        "workbench.preferredDarkColorTheme": "Dark Modern",
         "workbench.startupEditor": "none",
         "workbench.tips.enabled": false,
         "workbench.welcomePage.walkthroughs.openOnInstall": false,
