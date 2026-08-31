@@ -1,0 +1,35 @@
+{
+  // Debugs whatever binary currently sits in build/.
+  // Building is done on the command line, e.g.:
+  //     west build -b native_sim -d build zephyr-workshop/samples/01_hello_world
+  // Then start the debugger here with F5.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Zephyr: debug native_sim",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/zephyr/zephyr.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/build",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for structs",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        },
+        {
+          // The container is not allowed to call personality(ADDR_NO_RANDOMIZE);
+          // without this, gdb warns on every launch.
+          "description": "Do not try to disable ASLR (not permitted in the container)",
+          "text": "set disable-randomization off",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

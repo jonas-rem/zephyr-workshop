@@ -1,37 +1,42 @@
 FROM mcr.microsoft.com/devcontainers/base:debian-13
 
 # Create zephyrproject directory
-RUN mkdir -p /zephyrproject \
-    && chown -R vscode:vscode /zephyrproject
+RUN mkdir -p /workspaces \
+    && chown -R vscode:vscode /workspaces
 
 # Install west and basic build dependencies
-RUN apt-get update \
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get update \
     && apt-get install -y --no-install-recommends \
-    cmake \
-    ninja-build \
-    gperf \
-    file \
     ccache \
+    clangd \
+    cmake \
     device-tree-compiler \
-    wget \
-    python3-dev \
-    python3-pip \
-    python3-venv \
-    python3-tk \
-    python3-jsonschema \
-    make \
+    file \
+    g++-multilib \
     gcc \
     gcc-multilib \
-    g++-multilib \
-    libsdl2-dev \
+    gdb \
+    gperf \
     libmagic1 \
-    ripgrep \
-    tio \
+    libsdl2-dev \
+    make \
     minicom \
+    ninja-build \
     picocom \
+    python3-dev \
+    python3-jsonschema \
+    python3-pip \
+    python3-tk \
+    python3-venv \
+    ripgrep \
     screen \
+    tio \
+    wget \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install west
 RUN pip3 install --break-system-packages west
+
+USER vscode
+WORKDIR /workspaces
