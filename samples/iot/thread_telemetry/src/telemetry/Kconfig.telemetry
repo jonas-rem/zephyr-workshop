@@ -1,6 +1,19 @@
 # Copyright (c) 2026 TiaC Systems
 # SPDX-License-Identifier: Apache-2.0
 
+menuconfig TELEMETRY_PUBLISH
+	bool "CoAP publishing"
+	depends on TELEMETRY_MESH && OPENTHREAD_COAP && TELEMETRY_NODE_NAME
+	default y
+	help
+	  POST every reading to the collector as JSON over CoAP. This is the
+	  last stage of the workshop, and the point of the whole node.
+
+	  Needs the mesh to send over and the node name to sign the reading
+	  with, so both have to be enabled first.
+
+if TELEMETRY_PUBLISH
+
 config TELEMETRY_URI_PATH
 	string "CoAP URI path the node posts to"
 	default "telemetry"
@@ -29,7 +42,7 @@ config TELEMETRY_INTERVAL_S
 	  Time between two telemetry publications.
 
 config TELEMETRY_INIT_PRIORITY
-	int "Telemetry init priority"
+	int "Init priority"
 	default 90
 	help
 	  SYS_INIT priority within the APPLICATION level. Starts CoAP and the
@@ -39,3 +52,5 @@ config TELEMETRY_INIT_PRIORITY
 module = TELEMETRY
 module-str = telemetry
 source "subsys/logging/Kconfig.template.log_config"
+
+endif # TELEMETRY_PUBLISH

@@ -1,14 +1,18 @@
 # Copyright (c) 2026 TiaC Systems
 # SPDX-License-Identifier: Apache-2.0
 
-config TELEMETRY_DISPLAY
-	bool "Visualise the readings on the RGB LED strip"
-	default y
+menuconfig TELEMETRY_DISPLAY
+	bool "LED strip display"
 	depends on LED_STRIP
+	default y
 	help
 	  Show the current temperature as a colour bar on the on-board WS2812
-	  strip, or the humidity as intensifying blue. SW0 switches between the
-	  two.
+	  strip, or the humidity on a blue-to-purple one. SW0 switches between
+	  the two, and so does "telemetry display".
+
+	  This is the second stage of the workshop. The gradients themselves are
+	  two arrays at the top of display.c -- changing them is part of the
+	  exercise; the options below set the ranges they are stretched over.
 
 if TELEMETRY_DISPLAY
 
@@ -55,7 +59,7 @@ config TELEMETRY_DISPLAY_BRIGHTNESS
 	  it is still too much.
 
 config TELEMETRY_DISPLAY_INIT_PRIORITY
-	int "Display init priority"
+	int "Init priority"
 	default 90
 	help
 	  SYS_INIT priority within the APPLICATION level. Starts the refresh

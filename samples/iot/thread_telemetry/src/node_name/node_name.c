@@ -6,13 +6,11 @@
 #include <errno.h>
 #include <string.h>
 
+#include <zephyr/drivers/hwinfo.h>
 #include <zephyr/init.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/settings/settings.h>
-
-#include <openthread.h>
-#include <openthread/platform/radio.h>
 
 #include "node_name.h"
 
@@ -25,24 +23,26 @@ static char node_name[NODE_NAME_SIZE];
 /* The shell writes the name while the publish path reads it. */
 static K_MUTEX_DEFINE(node_name_lock);
 
+/*
+ * The device ID rather than the Thread EUI-64, so that naming a board works
+ * in the stages of the workshop that have no radio at all.
+ */
 static void node_name_set_default(void)
 {
-	otInstance *ot = openthread_get_default_instance();
-	otExtAddress eui64;
+	uint8_t id[8];
+	ssize_t len;
 
-	if (ot == NULL) {
+	len = hwinfo_get_device_id(id, sizeof(id));
+	if (len < 3) {
+		LOG_WRN("No device ID available (%d), falling back to a fixed name", (int)len);
 		strcpy(node_name, "node-unknown");
 		return;
 	}
 
-	openthread_mutex_lock();
-	otPlatRadioGetIeeeEui64(ot, eui64.m8);
-	openthread_mutex_unlock();
+	snprintk(node_name, sizeof(node_name), "node-%02x%02x%02x", id[len - 3], id[len - 2],
+		 id[len - 1]);
 
-	snprintk(node_name, sizeof(node_name), "node-%02x%02x%02x", eui64.m8[5], eui64.m8[6],
-		 eui64.m8[7]);
-
-	LOG_DBG("Default name '%s' derived from the Thread EUI-64", node_name);
+	LOG_DBG("Default name '%s' derived from the %d byte device ID", node_name, (int)len);
 }
 
 static int node_name_settings_set(const char *key, size_t len, settings_read_cb read_cb,

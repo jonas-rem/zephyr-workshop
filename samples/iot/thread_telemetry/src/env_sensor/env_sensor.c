@@ -4,6 +4,7 @@
  */
 
 #include <errno.h>
+#include <stdlib.h>
 
 #include <zephyr/device.h>
 #include <zephyr/drivers/sensor.h>
@@ -71,6 +72,20 @@ int env_sensor_read(struct sensor_value *temp, struct sensor_value *hum)
 	}
 
 	return ret;
+}
+
+const char *env_sensor_str(char *buf, size_t size, const struct sensor_value *val)
+{
+	/*
+	 * val1 and val2 carry the same sign, so folding them into one centi-unit
+	 * integer keeps it. The sign is printed separately because for a value
+	 * such as -0.5 the whole part is 0, and "%d" would drop the minus.
+	 */
+	int32_t centi = val->val1 * 100 + val->val2 / 10000;
+
+	snprintk(buf, size, "%s%d.%02d", centi < 0 ? "-" : "", abs(centi) / 100, abs(centi) % 100);
+
+	return buf;
 }
 
 static int env_sensor_init(void)

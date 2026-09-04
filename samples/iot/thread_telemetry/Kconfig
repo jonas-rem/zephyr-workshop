@@ -3,6 +3,18 @@
 
 menu "Thread telemetry node"
 
+comment "Modules, in the order the workshop switches them on"
+
+rsource "src/env_sensor/Kconfig.env_sensor"
+rsource "src/sensor_console/Kconfig.sensor_console"
+rsource "src/node_name/Kconfig.node_name"
+rsource "src/display/Kconfig.display"
+rsource "src/mesh/Kconfig.mesh"
+rsource "src/telemetry/Kconfig.telemetry"
+rsource "src/status_led/Kconfig.status_led"
+
+comment "Application"
+
 config TELEMETRY_SHELL
 	bool "Shell commands of the telemetry node"
 	depends on SHELL
@@ -13,19 +25,12 @@ config TELEMETRY_SHELL
 	  only when this option is set, so the implementations stay free of
 	  shell code.
 
-rsource "src/env_sensor/Kconfig.env_sensor"
-rsource "src/mesh/Kconfig.mesh"
-rsource "src/node_name/Kconfig.node_name"
-rsource "src/telemetry/Kconfig.telemetry"
-rsource "src/display/Kconfig.display"
-rsource "src/status_led/Kconfig.status_led"
-
 module = TELEMETRY_APP
 module-str = app
 source "subsys/logging/Kconfig.template.log_config"
 
 endmenu
 
-menu "Zephyr Kernel"
+menu "Zephyr RTOS"
 source "Kconfig.zephyr"
 endmenu
