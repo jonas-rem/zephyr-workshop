@@ -11,7 +11,13 @@
 
 #include <zephyr/shell/shell.h>
 
+#include "app_status.h"
 #include "display.h"
+
+static void display_status(const struct shell *sh)
+{
+	APP_STATUS_PRINT(sh, "Display", "%s", display_mode_name(display_mode_get()));
+}
 
 static int cmd_display(const struct shell *sh, size_t argc, char **argv)
 {
@@ -33,6 +39,8 @@ static int cmd_display(const struct shell *sh, size_t argc, char **argv)
 
 	return 0;
 }
+
+APP_STATUS_ENTRY_DEFINE(d_display, display_status);
 
 SHELL_SUBCMD_ADD((telemetry), display, NULL,
 		 "Show or set the displayed quantity: telemetry display [temperature|humidity]",

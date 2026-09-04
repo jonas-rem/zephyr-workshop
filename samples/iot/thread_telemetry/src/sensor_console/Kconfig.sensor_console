@@ -1,0 +1,37 @@
+# Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+menuconfig TELEMETRY_SENSOR_CONSOLE
+	bool "Print the readings on the console"
+	default y if !TELEMETRY_PUBLISH
+	help
+	  Read the sensor periodically and print the reading. This is the whole
+	  node in the first stage of the workshop, before there is anywhere to
+	  send the data.
+
+	  The publishing module logs its own payload, so this defaults to off
+	  once publishing is enabled. Turn it back on to see the readings
+	  between two publications.
+
+if TELEMETRY_SENSOR_CONSOLE
+
+config TELEMETRY_SENSOR_CONSOLE_INTERVAL_S
+	int "Seconds between two logged readings"
+	default 5
+	range 1 3600
+	help
+	  Faster than the publish interval, so that a hand on the sensor shows
+	  up in the console within a few seconds.
+
+config TELEMETRY_SENSOR_CONSOLE_INIT_PRIORITY
+	int "Init priority"
+	default 90
+	help
+	  SYS_INIT priority within the APPLICATION level. Starts the periodic
+	  read, so it comes up after the sensor.
+
+module = TELEMETRY_SENSOR_CONSOLE
+module-str = sensor_console
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # TELEMETRY_SENSOR_CONSOLE

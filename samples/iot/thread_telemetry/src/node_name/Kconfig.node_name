@@ -1,6 +1,21 @@
 # Copyright (c) 2026 TiaC Systems
 # SPDX-License-Identifier: Apache-2.0
 
+menuconfig TELEMETRY_NODE_NAME
+	bool "Participant-chosen node name"
+	depends on SETTINGS
+	default y
+	select HWINFO
+	help
+	  Give the board a name that survives a reboot and a re-flash. Every
+	  publication carries it, so participants can find their own data on
+	  the shared dashboard.
+
+	  Without a stored name, one is derived from the device ID, so two
+	  unconfigured boards never collide.
+
+if TELEMETRY_NODE_NAME
+
 config TELEMETRY_NAME_MAX_LEN
 	int "Maximum length of the node name"
 	default 24
@@ -14,7 +29,7 @@ config TELEMETRY_NAME_MAX_LEN
 	  from this value, so raising it costs RAM but cannot overflow.
 
 config TELEMETRY_NODE_NAME_INIT_PRIORITY
-	int "Node name init priority"
+	int "Init priority"
 	default 80
 	help
 	  SYS_INIT priority within the APPLICATION level. The name has to be
@@ -23,3 +38,5 @@ config TELEMETRY_NODE_NAME_INIT_PRIORITY
 module = TELEMETRY_NODE_NAME
 module-str = node_name
 source "subsys/logging/Kconfig.template.log_config"
+
+endif # TELEMETRY_NODE_NAME

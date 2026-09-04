@@ -10,7 +10,17 @@
 
 #include <zephyr/shell/shell.h>
 
+#include "app_status.h"
 #include "node_name.h"
+
+static void node_name_status(const struct shell *sh)
+{
+	char name[NODE_NAME_SIZE];
+
+	(void)node_name_get(name, sizeof(name));
+
+	APP_STATUS_PRINT(sh, "Node name", "%s", name);
+}
 
 static int cmd_name(const struct shell *sh, size_t argc, char **argv)
 {
@@ -37,6 +47,8 @@ static int cmd_name(const struct shell *sh, size_t argc, char **argv)
 
 	return 0;
 }
+
+APP_STATUS_ENTRY_DEFINE(b_node_name, node_name_status);
 
 SHELL_SUBCMD_ADD((telemetry), name, NULL, "Show or set the node name: telemetry name [<name>]",
 		 cmd_name, 1, 1);

@@ -1,8 +1,23 @@
 # Copyright (c) 2026 TiaC Systems
 # SPDX-License-Identifier: Apache-2.0
 
+menuconfig TELEMETRY_MESH
+	bool "Thread mesh"
+	depends on NET_L2_OPENTHREAD
+	default y
+	help
+	  Track the node's Thread role and report it. This is what the
+	  publishing module and the status LED are built on, and it is the
+	  third stage of the workshop -- the two earlier stages build without
+	  any radio at all.
+
+	  Joining the mesh itself is OpenThread's business, configured with the
+	  CONFIG_OPENTHREAD_* options and the credentials in prj.conf.
+
+if TELEMETRY_MESH
+
 config TELEMETRY_MESH_INIT_PRIORITY
-	int "Thread mesh state init priority"
+	int "Init priority"
 	default 85
 	help
 	  SYS_INIT priority within the APPLICATION level. Only registers an
@@ -12,3 +27,5 @@ config TELEMETRY_MESH_INIT_PRIORITY
 module = TELEMETRY_MESH
 module-str = mesh
 source "subsys/logging/Kconfig.template.log_config"
+
+endif # TELEMETRY_MESH

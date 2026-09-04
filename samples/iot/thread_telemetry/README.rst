@@ -82,6 +82,91 @@ For the first prototype run of the board, select the revision explicitly:
 
    west build -b coffeecaller_nrf52@0.9.0/nrf52840 samples/iot/thread_telemetry
 
+Workshop stages
+***************
+
+The node is built up in three stages, and each one is a complete image on its
+own. A module that is not part of a stage is not compiled into it, so the
+difference is visible in the memory report rather than only in the behaviour:
+
+.. list-table::
+   :header-rows: 1
+
+   * - Stage
+     - Build
+     - The node is
+     - Flash
+   * - 1
+     - ``-DFILE_SUFFIX=sensor``
+     - sensor, console, name, shell
+     - ~100 KB
+   * - 2
+     - ``-DFILE_SUFFIX=display``
+     - stage 1 plus the LED strip
+     - ~110 KB
+   * - 3
+     - (no argument)
+     - the whole node, on the mesh
+     - ~340 KB
+
+.. code-block:: console
+
+   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=sensor
+   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=display
+   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry
+
+**Stage 1** is :file:`prj_sensor.conf`: no radio at all. The node reads the
+SHT4x every five seconds and prints it, and the shell already works:
+
+.. code-block:: console
+
+   [00:00:05.012,000] <inf> sensor_console: 22.41 C, 47.83 %rH
+
+   uart:~$ telemetry sensor
+   Sensor    : 22.43 C, 47.79 %rH
+
+**Stage 2** is :file:`prj_display.conf`, which adds ``CONFIG_LED_STRIP=y``.
+That alone is what makes ``CONFIG_TELEMETRY_DISPLAY`` available, so the
+display module appears in ``menuconfig`` and is built. The two gradients are
+arrays at the top of :file:`src/display/display.c`; changing the colours means
+editing them, while the ranges and the brightness are Kconfig options.
+
+**Stage 3** is :file:`prj.conf`, which brings in OpenThread. ``CONFIG_TELEMETRY_MESH``
+becomes available with it, and ``CONFIG_TELEMETRY_PUBLISH`` on top of that, so
+the node joins the mesh and starts posting. The console log switches itself off
+once publishing is on, because the publishing module logs its own payload --
+turn ``CONFIG_TELEMETRY_SENSOR_CONSOLE`` back on to see both.
+
+Switching modules on and off
+****************************
+
+Each module is one entry in ``menuconfig``, under *Thread telemetry node*:
+
+.. code-block:: none
+
+   Modules, in the order the workshop switches them on
+       Environment sensor  --->
+   [*] Print the readings on the console  --->
+   [*] Participant-chosen node name  --->
+   [*] LED strip display  --->
+   [*] Thread mesh  --->
+   [*] CoAP publishing  --->
+   [*] Mesh status LED  --->
+   Application
+   [*] Shell commands of the telemetry node
+
+Space toggles a module, enter opens its own options. Every module holds its
+options, its log level and its init priority in there, so nothing about it is
+spread across the tree.
+
+Turning a module off removes it from the build, along with its shell commands
+and its line in ``telemetry status``. The dependencies are expressed in
+Kconfig, so a module simply disappears when what it needs is not there:
+*Thread mesh* only exists with ``CONFIG_NET_L2_OPENTHREAD``, *CoAP publishing*
+needs the mesh and the node name, *Mesh status LED* needs the mesh, and *LED
+strip display* needs ``CONFIG_LED_STRIP``. The environment sensor is the one
+module without a switch, because every stage reads it.
+
 Setting the node name
 *********************
 
@@ -94,23 +179,48 @@ and survives a reboot and a re-flash:
    Node name is now 'bench-window' and survives a reboot
 
    uart:~$ telemetry status
+   Sensor    : 22.41 C, 47.83 %rH
    Node name : bench-window
-   Collector : coap://[ff03::1]/telemetry
-   Interval  : 15 s
+   Display   : temperature
    Mesh role : child
+   Collector : coap://[ff03::1]/telemetry
+   Publish   : every 15 s
 
-Without a stored name the node falls back to one derived from its EUI-64, such
-as ``node-a1b2c3``, so two unconfigured boards never collide on the dashboard.
+Each of those lines comes from the module it describes, so the output shrinks
+with the build: in stage 1 there are three of them. See `Composing the status
+command`_.
+
+Without a stored name the node falls back to one derived from the device ID,
+such as ``node-a1b2c3``, so two unconfigured boards never collide on the
+dashboard.
 
 Other commands:
 
 .. code-block:: console
 
+   uart:~$ telemetry sensor               # read the sensor once, right now
+   uart:~$ telemetry console 1            # log a reading every second (stage 1)
+   uart:~$ telemetry mesh                 # role, RLOC16, partition, parent, neighbors
    uart:~$ telemetry publish              # send one sample immediately
    uart:~$ telemetry collector fd11:22::1 # change the destination (not persisted)
    uart:~$ telemetry display humidity     # switch the LED strip without SW0
    uart:~$ ot state                       # OpenThread shell: child, router, leader...
    uart:~$ ot router table                # show the mesh topology
+
+``telemetry mesh`` is the node's own view of the mesh, which is the quickest
+way to find out where a board that does not show up on the dashboard got
+stuck:
+
+.. code-block:: console
+
+   uart:~$ telemetry mesh
+   Role      : child (attached)
+   Network   : 'ZephyrWorkshop', PAN 0x1234, channel 15
+   ML-EID    : fdde:ad00:beef:0:9c2b:1f7a:4e1d:8b03
+   RLOC16    : 0x4c01
+   Partition : 0x2f8a1c40, led by router 3
+   Parent    : 0x4c00, link quality in/out 3/3, RSSI -41 dBm
+   Neighbors : 0 children, 0 routers
 
 Each of these is contributed by the module that implements it, so
 ``telemetry --help`` lists exactly the commands that were built into the
@@ -191,7 +301,8 @@ default), far more often than readings are published, so the feedback feels
 immediate while the mesh traffic stays at one message per interval.
 
 Set ``CONFIG_TELEMETRY_DISPLAY=n`` to build without it. The whole module drops
-out of the build, including its ``telemetry display`` command.
+out of the build, including its ``telemetry display`` command and its
+``telemetry status`` line -- which is exactly what stage 1 is.
 
 Published data
 **************
@@ -231,6 +342,27 @@ Configuration
    * - Option
      - Default
      - Meaning
+   * - ``CONFIG_TELEMETRY_SENSOR_CONSOLE``
+     - ``y`` without publishing
+     - Print every reading on the console
+   * - ``CONFIG_TELEMETRY_SENSOR_CONSOLE_INTERVAL_S``
+     - ``5``
+     - Seconds between two printed readings
+   * - ``CONFIG_TELEMETRY_NODE_NAME``
+     - ``y``
+     - Name the board, stored in NVS
+   * - ``CONFIG_TELEMETRY_MESH``
+     - ``y`` with OpenThread
+     - Track the Thread role
+   * - ``CONFIG_TELEMETRY_PUBLISH``
+     - ``y`` with the mesh
+     - POST the readings to the collector
+   * - ``CONFIG_TELEMETRY_STATUS_LED``
+     - ``y`` with the mesh
+     - Let LD1 follow the attachment state
+   * - ``CONFIG_TELEMETRY_SHELL``
+     - ``y``
+     - Build the ``telemetry`` command tree
    * - ``CONFIG_TELEMETRY_COLLECTOR_ADDRESS``
      - ``ff03::1``
      - Destination of the CoAP POST
@@ -258,15 +390,10 @@ Configuration
    * - ``CONFIG_TELEMETRY_DISPLAY_BRIGHTNESS``
      - ``500``
      - Overall LED brightness, in permille
-   * - ``CONFIG_TELEMETRY_STATUS_LED``
-     - ``y``
-     - Let LD1 follow the Thread attachment state
-   * - ``CONFIG_TELEMETRY_SHELL``
-     - ``y``
-     - Build the ``telemetry`` command tree
 
 Each module also has a ``CONFIG_TELEMETRY_<module>_LOG_LEVEL`` and a
-``CONFIG_TELEMETRY_<module>_INIT_PRIORITY``; see `Module layout`_.
+``CONFIG_TELEMETRY_<module>_INIT_PRIORITY``, both in its own submenu; see
+`Module layout`_ and `Switching modules on and off`_.
 
 The nodes are built as Full Thread Devices (``CONFIG_OPENTHREAD_FTD``) so they
 route for each other and the mesh is actually visible in ``ot router table``.
@@ -285,12 +412,17 @@ implementation, its header, its :file:`Kconfig.<module>` and its
 
 .. code-block:: none
 
-   src/env_sensor/   read the SHT4x, serialised between callers
-   src/node_name/    the participant-chosen name, in NVS
-   src/mesh/         the Thread role, and the log line when it changes
-   src/telemetry/    format the JSON and POST it over CoAP
-   src/display/      the LED strip bar and SW0         (optional)
-   src/status_led/   LD1 follows the attachment state  (optional)
+   src/env_sensor/      read the SHT4x, serialised between callers
+   src/sensor_console/  print every reading                (stage 1)
+   src/node_name/       the participant-chosen name, in NVS
+   src/display/         the LED strip bar and SW0          (stage 2)
+   src/mesh/            the Thread role, and its log line  (stage 3)
+   src/telemetry/       format the JSON and POST it        (stage 3)
+   src/status_led/      LD1 follows the attachment state   (stage 3)
+
+Alongside them, :file:`src/main.c` reports that the boot finished,
+:file:`src/app_shell.c` owns the root of the ``telemetry`` command, and
+:file:`src/app_status.h` is how the modules fill that command in.
 
 Nothing is started from :file:`main.c`. Every module registers its own
 ``SYS_INIT`` hook at the ``APPLICATION`` level and brings itself up:
@@ -314,14 +446,17 @@ A ``SYS_INIT`` hook has nowhere to return an error to -- the kernel ignores the
 return value -- so each module logs its own failure and leaves the rest of the
 node running. A board with a dead LED strip still publishes.
 
-The optional modules are left out of the build entirely instead of being
-compiled and disabled at runtime, which is also why the sources are listed
-per module rather than globbed:
+A module that is switched off is left out of the build entirely instead of
+being compiled and disabled at runtime, which is also why the sources are
+listed per module rather than globbed:
 
 .. code-block:: cmake
 
-   add_subdirectory(src/telemetry)
+   add_subdirectory(src/env_sensor)
    add_subdirectory_ifdef(CONFIG_TELEMETRY_DISPLAY src/display)
+
+Only the environment sensor is unconditional. That is what makes the three
+stages differ by 240 KB of flash rather than by a runtime flag.
 
 Each module registers its own log module too, so ``display`` and
 ``telemetry`` appear under their own names in the log and can be silenced
@@ -340,8 +475,9 @@ is set:
    target_sources_ifdef(CONFIG_TELEMETRY_SHELL app PRIVATE display_shell.c)
 
 The single ``telemetry`` command that participants type is assembled from
-those files at link time. :file:`telemetry/telemetry_shell.c` creates the
-command set and registers the root command:
+those files at link time. :file:`src/app_shell.c` creates the command set and
+registers the root command -- and nothing else, so the command survives any
+module being switched off:
 
 .. code-block:: c
 
@@ -358,6 +494,42 @@ without any module knowing about the others:
 ``telemetry display`` therefore appears in ``telemetry --help`` exactly when
 the display module is built, and there is no ``#ifdef`` anywhere in the
 sources.
+
+Composing the status command
+============================
+
+``telemetry status`` has the same problem one level up: it has to print a line
+per module without knowing which modules exist. It does not keep a list.
+Instead each module's shell file contributes one entry to an iterable section,
+and the command walks whatever the linker collected:
+
+.. code-block:: c
+
+   /* src/display/display_shell.c */
+   static void display_status(const struct shell *sh)
+   {
+   	APP_STATUS_PRINT(sh, "Display", "%s", display_mode_name(display_mode_get()));
+   }
+
+   APP_STATUS_ENTRY_DEFINE(d_display, display_status);
+
+.. code-block:: c
+
+   /* src/app_shell.c */
+   STRUCT_SECTION_FOREACH(app_status_entry, entry) {
+   	entry->print(sh);
+   }
+
+This is the mechanism Zephyr itself uses for shell commands, settings handlers
+and devices, and it costs one linker fragment plus one line of CMake:
+
+.. code-block:: cmake
+
+   zephyr_linker_sources(SECTIONS sections-rom.ld)
+   zephyr_iterable_section(NAME app_status_entry KVMA RAM_REGION GROUP RODATA_REGION)
+
+The entries are sorted by section name, which is why each one carries a
+leading letter: it is the only thing that orders the output.
 
 Payload size
 ============
@@ -376,7 +548,7 @@ the name limit cannot silently start truncating publications:
      - 44
    * - Node name
      - ``CONFIG_TELEMETRY_NAME_MAX_LEN``
-   * - Two readings, ``2 * (CENTI_STR_SIZE - 1)``
+   * - Two readings, ``2 * (ENV_SENSOR_STR_SIZE - 1)``
      - 30
    * - Uptime in seconds, ``int64_t`` with sign
      - 20
@@ -393,8 +565,10 @@ costs airtime across the whole mesh.
 Formatting the readings
 =======================
 
-``centi_str()`` converts a :c:struct:`sensor_value` to two decimals without
-floating point, keeping ``CONFIG_CBPRINTF_FP_SUPPORT`` out of the image.
+:c:func:`env_sensor_str` converts a :c:struct:`sensor_value` to two decimals
+without floating point, keeping ``CONFIG_CBPRINTF_FP_SUPPORT`` out of the
+image. It lives with the sensor rather than with the publisher, so the console
+log, the shell and the JSON payload all render a reading the same way.
 
 ``val1`` and ``val2`` carry the same sign, so combining them into a single
 centi-unit integer preserves it. The sign is then printed separately, because
@@ -506,9 +680,12 @@ OpenThread for it. LD1 does not go through that module's state: OpenThread
 keeps a list of state changed callbacks, so :file:`src/status_led/` registers
 one of its own and the two concerns stay separate.
 
-The node name falls back to one derived from the last three bytes of the IEEE
-EUI-64, so a board that nobody has configured still appears under a unique
-name instead of colliding with every other unnamed board.
+The node name falls back to one derived from the last three bytes of the
+device ID that :c:func:`hwinfo_get_device_id` reports, so a board that nobody
+has configured still appears under a unique name instead of colliding with
+every other unnamed board. The Thread EUI-64 would do just as well, but the
+device ID is available in the stages that have no radio, which keeps the whole
+module independent of OpenThread.
 
 Resetting a board
 *****************

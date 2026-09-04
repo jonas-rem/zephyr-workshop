@@ -4,7 +4,6 @@
  */
 
 #include <errno.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include <zephyr/drivers/sensor.h>
@@ -24,13 +23,11 @@
 
 LOG_MODULE_REGISTER(telemetry, CONFIG_TELEMETRY_LOG_LEVEL);
 
-#define CENTI_STR_SIZE 16
-
 /* Payload size is derived from the name limit; see the sample documentation. */
 #define TELEMETRY_JSON_OVERHEAD     44
 #define TELEMETRY_UPTIME_MAX_DIGITS 20
 #define TELEMETRY_PAYLOAD_SIZE                                                                     \
-	(TELEMETRY_JSON_OVERHEAD + CONFIG_TELEMETRY_NAME_MAX_LEN + 2 * (CENTI_STR_SIZE - 1) +       \
+	(TELEMETRY_JSON_OVERHEAD + CONFIG_TELEMETRY_NAME_MAX_LEN + 2 * (ENV_SENSOR_STR_SIZE - 1) +  \
 	 TELEMETRY_UPTIME_MAX_DIGITS + 1)
 
 BUILD_ASSERT(TELEMETRY_PAYLOAD_SIZE <= 256,
@@ -45,28 +42,21 @@ static K_MUTEX_DEFINE(collector_lock);
 static char collector_addr[TELEMETRY_COLLECTOR_SIZE];
 static otIp6Address collector_ip;
 
-static void centi_str(char *buf, size_t size, const struct sensor_value *val)
-{
-	int32_t centi = val->val1 * 100 + val->val2 / 10000;
-
-	snprintk(buf, size, "%s%d.%02d", centi < 0 ? "-" : "", abs(centi) / 100, abs(centi) % 100);
-}
-
 static int telemetry_format(char *buf, size_t size, const struct sensor_value *temp,
 			    const struct sensor_value *hum)
 {
 	char name[NODE_NAME_SIZE];
-	char temp_str[CENTI_STR_SIZE];
-	char hum_str[CENTI_STR_SIZE];
+	char temp_str[ENV_SENSOR_STR_SIZE];
+	char hum_str[ENV_SENSOR_STR_SIZE];
 	int len;
 
 	(void)node_name_get(name, sizeof(name));
-	centi_str(temp_str, sizeof(temp_str), temp);
-	centi_str(hum_str, sizeof(hum_str), hum);
 
 	len = snprintk(buf, size,
 		       "{\"node\":\"%s\",\"temp_c\":%s,\"hum_pct\":%s,\"uptime_s\":%lld}",
-		       name, temp_str, hum_str, (long long)(k_uptime_get() / MSEC_PER_SEC));
+		       name, env_sensor_str(temp_str, sizeof(temp_str), temp),
+		       env_sensor_str(hum_str, sizeof(hum_str), hum),
+		       (long long)(k_uptime_get() / MSEC_PER_SEC));
 
 	if (len < 0 || (size_t)len >= size) {
 		LOG_ERR("Payload does not fit into %zu bytes", size);
