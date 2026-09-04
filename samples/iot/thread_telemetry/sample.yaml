@@ -1,0 +1,22 @@
+sample:
+  name: thread telemetry node
+  description: Publish SHT4x readings over CoAP on a pre-shared OpenThread mesh
+common:
+  # The sample reads the on-board SHT4x and needs an 802.15.4 radio, so it
+  # only builds for the workshop board.
+  integration_platforms:
+    - coffeecaller_nrf52/nrf52840
+  platform_allow:
+    - coffeecaller_nrf52/nrf52840
+  build_only: true
+tests:
+  sample.iot.thread_telemetry: {}
+  # The optional modules are left out of the build rather than compiled and
+  # disabled, so keep a scenario that actually builds without them.
+  sample.iot.thread_telemetry.minimal:
+    extra_configs:
+      - CONFIG_TELEMETRY_DISPLAY=n
+      - CONFIG_TELEMETRY_STATUS_LED=n
+      - CONFIG_SHELL=n
+      - CONFIG_OPENTHREAD_SHELL=n
+      - CONFIG_OPENTHREAD_PING_SENDER=n

@@ -1,0 +1,41 @@
+# Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+config TELEMETRY_URI_PATH
+	string "CoAP URI path the node posts to"
+	default "telemetry"
+	help
+	  URI path of the CoAP resource on the collector. The bridge next to
+	  the border router listens here and republishes every POST to MQTT.
+
+config TELEMETRY_COLLECTOR_ADDRESS
+	string "IPv6 address of the collector"
+	default "ff03::1"
+	help
+	  Destination of the CoAP POST. The default is the realm-local
+	  all-nodes multicast address, which reaches the border router without
+	  any per-node configuration -- that is what makes this sample work
+	  out of the box in a workshop room.
+
+	  Set a unicast address here (or use "telemetry collector <addr>" at
+	  runtime) once the collector address is known and the extra multicast
+	  traffic is no longer wanted.
+
+config TELEMETRY_INTERVAL_S
+	int "Publish interval in seconds"
+	default 15
+	range 1 3600
+	help
+	  Time between two telemetry publications.
+
+config TELEMETRY_INIT_PRIORITY
+	int "Telemetry init priority"
+	default 90
+	help
+	  SYS_INIT priority within the APPLICATION level. Starts CoAP and the
+	  periodic publish work, so it comes up after the sensor and the node
+	  name it depends on.
+
+module = TELEMETRY
+module-str = telemetry
+source "subsys/logging/Kconfig.template.log_config"

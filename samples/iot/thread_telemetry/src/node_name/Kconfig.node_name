@@ -1,0 +1,25 @@
+# Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+config TELEMETRY_NAME_MAX_LEN
+	int "Maximum length of the node name"
+	default 24
+	range 4 63
+	help
+	  Upper bound for the participant-chosen node name, excluding the
+	  terminating NUL. Longer names are rejected by "telemetry name".
+
+	  The name is sent in every publication, so this directly sets how much
+	  airtime each node spends per interval. The telemetry buffer is sized
+	  from this value, so raising it costs RAM but cannot overflow.
+
+config TELEMETRY_NODE_NAME_INIT_PRIORITY
+	int "Node name init priority"
+	default 80
+	help
+	  SYS_INIT priority within the APPLICATION level. The name has to be
+	  loaded from storage before the first publication is formatted.
+
+module = TELEMETRY_NODE_NAME
+module-str = node_name
+source "subsys/logging/Kconfig.template.log_config"

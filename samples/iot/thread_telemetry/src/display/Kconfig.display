@@ -1,0 +1,68 @@
+# Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+config TELEMETRY_DISPLAY
+	bool "Visualise the readings on the RGB LED strip"
+	default y
+	depends on LED_STRIP
+	help
+	  Show the current temperature as a colour bar on the on-board WS2812
+	  strip, or the humidity as intensifying blue. SW0 switches between the
+	  two.
+
+if TELEMETRY_DISPLAY
+
+config TELEMETRY_DISPLAY_INTERVAL_MS
+	int "LED strip refresh interval in milliseconds"
+	default 500
+	range 50 10000
+	help
+	  The strip is refreshed far more often than readings are published, so
+	  that a hand on the sensor produces immediate feedback.
+
+config TELEMETRY_DISPLAY_TEMP_MIN_C
+	int "Temperature shown at the bottom of the strip, in degrees Celsius"
+	default 20
+
+config TELEMETRY_DISPLAY_TEMP_MAX_C
+	int "Temperature shown at the top of the strip, in degrees Celsius"
+	default 40
+	help
+	  The default range is deliberately narrow: a hand on the board is the
+	  only heat source available, and it moves the reading by a few degrees.
+
+config TELEMETRY_DISPLAY_HUM_MIN_PCT
+	int "Relative humidity shown at minimum intensity, in percent"
+	default 20
+
+config TELEMETRY_DISPLAY_HUM_MAX_PCT
+	int "Relative humidity shown at full intensity, in percent"
+	default 80
+	help
+	  Breathing on the sensor is enough to cross this range.
+
+config TELEMETRY_DISPLAY_BRIGHTNESS
+	int "Overall LED brightness, in permille of full output"
+	default 500
+	range 1 1000
+	help
+	  Scales every pixel before it reaches the strip. The WS2812s are
+	  uncomfortably bright at full output when the board sits on a desk in
+	  front of someone, so the default is half.
+
+	  This is a linear duty cycle, while perceived brightness is not, so
+	  500 still looks roughly three quarters as bright as full. Go lower if
+	  it is still too much.
+
+config TELEMETRY_DISPLAY_INIT_PRIORITY
+	int "Display init priority"
+	default 90
+	help
+	  SYS_INIT priority within the APPLICATION level. Starts the refresh
+	  work, so it comes up after the sensor it reads.
+
+module = TELEMETRY_DISPLAY
+module-str = display
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # TELEMETRY_DISPLAY

@@ -1,0 +1,14 @@
+# Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+config TELEMETRY_MESH_INIT_PRIORITY
+	int "Thread mesh state init priority"
+	default 85
+	help
+	  SYS_INIT priority within the APPLICATION level. Only registers an
+	  OpenThread state changed callback, so it has no ordering constraint
+	  against the other modules.
+
+module = TELEMETRY_MESH
+module-str = mesh
+source "subsys/logging/Kconfig.template.log_config"
