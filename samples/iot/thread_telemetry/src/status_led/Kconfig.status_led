@@ -1,0 +1,23 @@
+# Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+config TELEMETRY_STATUS_LED
+	bool "Show the Thread attachment state on LD1"
+	default y
+	depends on GPIO
+	help
+	  Light LD1 while the node is attached to the mesh.
+
+if TELEMETRY_STATUS_LED
+
+config TELEMETRY_STATUS_LED_INIT_PRIORITY
+	int "Status LED init priority"
+	default 90
+	help
+	  SYS_INIT priority within the APPLICATION level.
+
+module = TELEMETRY_STATUS_LED
+module-str = status_led
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # TELEMETRY_STATUS_LED

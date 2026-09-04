@@ -1,0 +1,31 @@
+# Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+menu "Thread telemetry node"
+
+config TELEMETRY_SHELL
+	bool "Shell commands of the telemetry node"
+	depends on SHELL
+	default y
+	help
+	  Build the "telemetry" command tree. Every module keeps its shell
+	  bindings in its own <module>_shell.c, and those files are compiled
+	  only when this option is set, so the implementations stay free of
+	  shell code.
+
+rsource "src/env_sensor/Kconfig.env_sensor"
+rsource "src/mesh/Kconfig.mesh"
+rsource "src/node_name/Kconfig.node_name"
+rsource "src/telemetry/Kconfig.telemetry"
+rsource "src/display/Kconfig.display"
+rsource "src/status_led/Kconfig.status_led"
+
+module = TELEMETRY_APP
+module-str = app
+source "subsys/logging/Kconfig.template.log_config"
+
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu
