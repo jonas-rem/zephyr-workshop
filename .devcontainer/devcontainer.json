@@ -1,17 +1,18 @@
 {
   "name": "Zephyr Workshop",
-  "build": {
-    "dockerfile": "Dockerfile"
-  },
+  "image": "ghcr.io/jonas-rem/zephyr-workshop/devcontainer:latest",
   "workspaceFolder": "/workspaces",
-  "onCreateCommand": "bash /workspaces/zephyr-workshop/.devcontainer/post-create.sh",
+  "postCreateCommand": "bash /workspaces/zephyr-workshop/.devcontainer/post-create.sh",
+  "waitFor": "postCreateCommand",
   "hostRequirements": {
     "cpus": 4,
     "memory": "8gb"
   },
   "remoteEnv": {
     "LC_ALL": "C",
-    "CCACHE_IGNOREOPTIONS": "-specs=* --specs=*"
+    "CCACHE_IGNOREOPTIONS": "-specs=* --specs=*",
+    "ZEPHYR_BASE": "/opt/zephyrproject/zephyr",
+    "ZEPHYR_EXTRA_MODULES": "/workspaces/zephyr-workshop"
   },
   "remoteUser": "vscode",
   "customizations": {
@@ -25,21 +26,31 @@
         "workbench.tree.indent": 20,
         "update.showReleaseNotes": false,
         "editor.minimap.enabled": false,
+        "[c]": {
+          "editor.inlayHints.enabled": "off"
+        },
         "breadcrumbs.enabled": false,
         "extensions.ignoreRecommendations": true,
         "extensions.closeExtensionDetailsOnViewChange": true,
         "security.workspace.trust.startupPrompt": "never",
         "security.workspace.trust.banner": "never",
         "telemetry.telemetryLevel": "off",
+        "nrf-connect.enableTelemetry": false,
         "C_Cpp.showInitialConfiguration": false,
         "C_Cpp.showOnlineInstallationValidationNotifications": false,
         "C_Cpp.intelliSenseCachePath": "",
         "C_Cpp.intelliSenseEngine": "disabled",
         "cmake.configureOnOpen": false,
+        "cmake.enableAutomaticKitScan": false,
         "cmake.showOptionsMovedNotification": false,
+        "cmake.showConfigureWithDebuggerNotification": false,
         "git.autofetch": false,
+        "clangd.checkUpdates": false,
+        "clangd.onConfigChanged": "restart",
+        "clangd.onConfigChangedForceEnable": true,
         "clangd.arguments": [
-					"--header-insertion=never"
+					"--header-insertion=never",
+					"--query-driver=/opt/zephyr-sdk/current/**/bin/*,/usr/bin/gcc,/usr/bin/g++"
 				]
       },
       "extensions": [
