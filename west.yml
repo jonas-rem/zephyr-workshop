@@ -6,7 +6,7 @@ manifest:
   projects:
     - name: zephyr
       remote: zephyrproject-rtos
-      revision: main
+      revision: v4.4.2
       import:
         # By using name-allowlist we can clone only the modules that are
         # strictly needed by the application.
@@ -17,8 +17,4 @@ manifest:
           - mbedtls
           - tf-psa-crypto
           - hal_nordic
-          - hal_stm32
-          - hal_nxp
-          - hal_ti
-          - hal_atmel
           - segger

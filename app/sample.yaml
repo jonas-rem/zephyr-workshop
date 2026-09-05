@@ -23,7 +23,6 @@ tests:
     extra_args: EXTRA_CONF_FILE=test_cfg/button_component.conf
     integration_platforms:
       - native_sim
-      - stm32f4_disco
       - reel_board
     tags: button
     harness: console
@@ -36,7 +35,6 @@ tests:
     extra_args: EXTRA_CONF_FILE=test_cfg/led_component.conf
     integration_platforms:
       - native_sim
-      - stm32f4_disco
       - reel_board
     tags: led
     harness: console
