@@ -28,7 +28,8 @@ to start it in your browser follow the steps:
    :alt: Create a new Codespace
    :align: center
 
-The setup will take a few minutes as it installs all required dependencies.
+Codespaces pulls a prebuilt image with the Zephyr SDK and a pinned
+Zephyr tree. Create-time setup only initializes the west workspace.
 
 .. image:: ../slides/public/images/codespaces_setting_up.png
    :alt: Codespaces starting
@@ -51,9 +52,9 @@ Once your Codespace is ready, test it with the Hello World example.
    host:~$ west build -b native_sim zephyr/samples/hello_world -p
      building..
    host:~$ west build -t run
-     *** Booting Zephyr OS build v4.3.0 ***
+     *** Booting Zephyr OS build v4.4.2 ***
      Hello World! native_sim/native
 
 This output confirms that the Zephyr build was successfull. The command ``west
 build -t run`` executes ``build//zephyr/zephyr.exe``. Zephyr Version
-(``v4.3.0``) as well as the Board (``native_sim/native``) is printed.
+(``v4.4.2``) as well as the Board (``native_sim/native``) is printed.

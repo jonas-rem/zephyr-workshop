@@ -15,6 +15,28 @@ Workshop-specific releases use branches named `<city-MM.YY>` and tags named
 Pushing a release tag, for example `git push origin v0.9.0-vienna-06.26`,
 triggers CI to create a GitHub Release with docs/slides PDF and HTML artifacts.
 
+### Devcontainer Image
+
+Codespaces uses `ghcr.io/jonas-rem/zephyr-workshop/devcontainer:latest`.
+The image bakes host tools, the Zephyr SDK, and Zephyr `v4.4.2` plus the
+modules listed in `west.yml`. Keep `west.yml` and the image in sync.
+
+Rebuild locally from the repository root:
+
+```shell
+docker build -f .devcontainer/Dockerfile \
+  -t ghcr.io/jonas-rem/zephyr-workshop/devcontainer:latest .
+```
+
+Log in to GHCR, then push:
+
+```shell
+docker login ghcr.io
+docker push ghcr.io/jonas-rem/zephyr-workshop/devcontainer:latest
+```
+
+The GHCR package must be public for Codespaces users without package access.
+
 ### Building the Documentation
 
 The documentation is located in the `doc` folder. Install
