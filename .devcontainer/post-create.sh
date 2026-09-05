@@ -1,15 +1,23 @@
 #!/bin/bash
 set -e
 
+# remoteEnv sets ZEPHYR_BASE to the baked tree. Unset it so west init
+# uses the mounted workspace instead of /opt/zephyrproject.
+unset ZEPHYR_BASE
+
 cd /workspaces
+
+# Image-baked trees live outside the Codespaces mount; link them in before
+# west init so the imported zephyr manifest is already visible.
+for name in zephyr modules; do
+    if [ ! -e "$name" ]; then
+        ln -sfn "/opt/zephyrproject/$name" "$name"
+    fi
+done
 
 if [ ! -f .west/config ]; then
     west init -l zephyr-workshop
 fi
-
-west update --narrow -o=--depth=1
-pip install -r zephyr/scripts/requirements.txt --break-system-packages
-west zephyr-export
 
 # make clangd file visible for the plugin
 if [ ! -f .clangd ]; then
@@ -21,4 +29,7 @@ if [ ! -e .vscode ]; then
     ln -s zephyr-workshop/.vscode
 fi
 
-west sdk install --gnu-toolchains arm-zephyr-eabi x86_64-zephyr-elf
+# CMake linker snippets need one real Zephyr tree. The workspace
+# symlink at /workspaces/zephyr would mix /workspaces and /opt paths.
+west config zephyr.base /opt/zephyrproject/zephyr
+west config build.dir-fmt /workspaces/build
