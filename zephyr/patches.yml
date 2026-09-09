@@ -1,0 +1,10 @@
+patches:
+  - path: zephyr/0001-samples-drivers-display-add-light-intensity-paramete.patch
+    sha256sum: 4acf1b4647499dd200e279cc9bb1725f8b22a696ceceeb12f84538911bc95160
+    module: zephyr
+    author: Stephan Linz
+    email: linz@li-pro.net
+    date: 2026-08-18
+    upstreamable: false
+    comments: |
+      Adds light intensity parameters in 'samples/drivers/display'.
