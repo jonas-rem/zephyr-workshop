@@ -1,0 +1,188 @@
+From d11127e37316be28fcaf81c7710ca3e52d773985 Mon Sep 17 00:00:00 2001
+From: Stephan Linz <linz@li-pro.net>
+Date: Tue, 18 Aug 2026 23:49:58 +0200
+Subject: [PATCH] samples: drivers: display: add light intensity parameters
+
+Some displays, particularly those based on LED technology, require
+a reduced brightness range per color channel for safety reasons. This
+ensures that LED matrix displays do not draw excessive electrical
+current and that the luminous flux they generate does not pose a
+risk of physical injury (e.g., glared by direct eye exposure to LEDs).
+
+To achieve this, a newly introduced bitmask Kconfig symbol can now be
+preset so that only a color value with an upper limit can be written
+to each channel via the display API. Another new Kconfig symbol can
+also be used to change the background color, which is set to white
+by default, to black or any other grayscale.
+
+Signed-off-by: Stephan Linz <linz@li-pro.net>
+---
+ samples/drivers/display/Kconfig       | 32 +++++++++++++++++++
+ samples/drivers/display/src/display.c | 44 +++++++++++++++------------
+ 2 files changed, 56 insertions(+), 20 deletions(-)
+
+diff --git a/samples/drivers/display/Kconfig b/samples/drivers/display/Kconfig
+index 019033b6dec..db4b8fcd8c8 100644
+--- a/samples/drivers/display/Kconfig
++++ b/samples/drivers/display/Kconfig
+@@ -23,3 +23,35 @@ config HEAP_MEM_POOL_ADD_SIZE_SAMPLE
+ 	default 65536
+ 	help
+ 	  Maximum size of the buffer for rendering rectangles
++
++# Workaround for not being able to have commas in macro arguments
++UINT8_RANGE := 0, $(UINT8_MAX)
++UINT8_MIN_HEX := $(min_hex, $(UINT8_RANGE))
++UINT8_MAX_HEX := $(max_hex, $(UINT8_RANGE))
++UINT8_6PP_HEX := $(div_hex, $(UINT8_MAX), 16)
++
++config SAMPLE_MASK_INTENSITY
++	hex "Maximum intensity in all color channels as bit-mask"
++	default $(UINT8_6PP_HEX) if LED_STRIP_MATRIX
++	default $(UINT8_MAX_HEX)
++	range $(UINT8_MIN_HEX) $(UINT8_MAX_HEX)
++	help
++	  Some displays, particularly those based on LED technology,
++	  require a reduced brightness range per color channel for
++	  safety reasons. This ensures that LED matrix displays do
++	  not draw excessive electrical current and that the luminous
++	  flux they generate does not pose a risk of physical injury
++	  (e.g., glared by direct eye exposure to LEDs).
++
++config SAMPLE_INIT_INTENSITY
++	hex "Initial intensity in all color channels"
++	default $(UINT8_MIN_HEX) if LED_STRIP_MATRIX
++	range $(UINT8_MIN_HEX) $(UINT8_MIN_HEX) if LED_STRIP_MATRIX
++	default $(UINT8_MAX_HEX)
++	range $(UINT8_MAX_HEX) $(UINT8_MAX_HEX)
++	help
++	  Some displays, particularly those based on LED technology,
++	  do not require initialization with a white background. From
++	  an energy efficiency standpoint and to avoid other well known
++	  disruptive effects, the background of this type of displays
++	  should be initialized as black (i.e., with the LEDs turned off).
+diff --git a/samples/drivers/display/src/display.c b/samples/drivers/display/src/display.c
+index 88d13012d83..69dbed5915e 100644
+--- a/samples/drivers/display/src/display.c
++++ b/samples/drivers/display/src/display.c
+@@ -44,17 +44,19 @@ static void fill_buffer_argb8888(enum corner corner, uint8_t grey, uint8_t *buf,
+ 
+ 	switch (corner) {
+ 	case TOP_LEFT:
+-		r = 0xFF;
++		r = (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		break;
+ 	case TOP_RIGHT:
+-		g = 0xFF;
++		g = (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		break;
+ 	case BOTTOM_RIGHT:
+-		b = 0xFF;
++		b = (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		break;
+ 	case BOTTOM_LEFT:
+ 	default:
+-		r = grey; g = grey; b = grey;
++		r = grey & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
++		g = grey & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
++		b = grey & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		break;
+ 	}
+ 
+@@ -86,17 +88,19 @@ static void fill_buffer_rgb888(enum corner corner, uint8_t grey, uint8_t *buf,
+ 
+ 	switch (corner) {
+ 	case TOP_LEFT:
+-		r = 0xFF;
++		r = (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		break;
+ 	case TOP_RIGHT:
+-		g = 0xFF;
++		g = (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		break;
+ 	case BOTTOM_RIGHT:
+-		b = 0xFF;
++		b = (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		break;
+ 	case BOTTOM_LEFT:
+ 	default:
+-		r = grey; g = grey; b = grey;
++		r = grey & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
++		g = grey & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
++		b = grey & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		break;
+ 	}
+ 
+@@ -120,16 +124,16 @@ static uint16_t get_rgb565_color(enum corner corner, uint8_t grey)
+ 
+ 	switch (corner) {
+ 	case TOP_LEFT:
+-		color = 0xF800u;
++		color = (0x1Fu & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY)) << 11;
+ 		break;
+ 	case TOP_RIGHT:
+-		color = 0x07E0u;
++		color = (0x3Fu & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY)) << 5;
+ 		break;
+ 	case BOTTOM_RIGHT:
+-		color = 0x001Fu;
++		color = 0x1Fu & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		break;
+ 	case BOTTOM_LEFT:
+-		grey_5bit = grey & 0x1Fu;
++		grey_5bit = grey & 0x1Fu & (uint8_t)(CONFIG_SAMPLE_MASK_INTENSITY);
+ 		/* shift the green an extra bit, it has 6 bits */
+ 		color = grey_5bit << 11 | grey_5bit << (5 + 1) | grey_5bit;
+ 		break;
+@@ -360,24 +364,24 @@ int sample_display_draw(void)
+ 	case PIXEL_FORMAT_ABGR_8888:
+ 	case PIXEL_FORMAT_RGBA_8888:
+ 	case PIXEL_FORMAT_BGRA_8888:
+-		bg_color = 0xFFu;
++		bg_color = (uint8_t)(CONFIG_SAMPLE_INIT_INTENSITY);
+ 		fill_buffer_fnc = fill_buffer_argb8888;
+ 		break;
+ 	case PIXEL_FORMAT_RGB_888:
+ 	case PIXEL_FORMAT_BGR_888:
+-		bg_color = 0xFFu;
++		bg_color = (uint8_t)(CONFIG_SAMPLE_INIT_INTENSITY);
+ 		fill_buffer_fnc = fill_buffer_rgb888;
+ 		break;
+ 	case PIXEL_FORMAT_RGB_565:
+-		bg_color = 0xFFu;
++		bg_color = (uint8_t)(CONFIG_SAMPLE_INIT_INTENSITY);
+ 		fill_buffer_fnc = fill_buffer_rgb565;
+ 		break;
+ 	case PIXEL_FORMAT_RGB_565X:
+-		bg_color = 0xFFu;
++		bg_color = (uint8_t)(CONFIG_SAMPLE_INIT_INTENSITY);
+ 		fill_buffer_fnc = fill_buffer_rgb565x;
+ 		break;
+ 	case PIXEL_FORMAT_L_8:
+-		bg_color = 0xFFu;
++		bg_color = (uint8_t)(CONFIG_SAMPLE_INIT_INTENSITY);
+ 		fill_buffer_fnc = fill_buffer_l_8;
+ 		break;
+ 	case PIXEL_FORMAT_L_4:
+@@ -385,15 +389,15 @@ int sample_display_draw(void)
+ 		fill_buffer_fnc = fill_buffer_l_4;
+ 		break;
+ 	case PIXEL_FORMAT_AL_88:
+-		bg_color = 0x00u;
++		bg_color = (uint8_t)(~CONFIG_SAMPLE_INIT_INTENSITY);
+ 		fill_buffer_fnc = fill_buffer_al_88;
+ 		break;
+ 	case PIXEL_FORMAT_MONO01:
+-		bg_color = 0xFFu;
++		bg_color = (uint8_t)(CONFIG_SAMPLE_INIT_INTENSITY);
+ 		fill_buffer_fnc = fill_buffer_mono01;
+ 		break;
+ 	case PIXEL_FORMAT_MONO10:
+-		bg_color = 0x00u;
++		bg_color = (uint8_t)(~CONFIG_SAMPLE_INIT_INTENSITY);
+ 		fill_buffer_fnc = fill_buffer_mono10;
+ 		break;
+ 	default:
+-- 
+2.50.1
+
