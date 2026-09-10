@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Navimatix GmbH
+# SPDX-FileCopyrightText: Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+identifier: waveshare_rp2350_matrix/rp2350a/hazard3
+name: Waveshare RP2350-Matrix (Hazard3)
+vendor: waveshare
+type: mcu
+arch: riscv
+flash: 1024
+ram: 520
+toolchain:
+  - zephyr
+supported:
+  - adc
+  - clock
+  - counter
+  - display
+  - dma
+  - flash
+  - gpio
+  - hwinfo
+  - i2c
+  - led_strip
+  - pwm
+  - sensor
+  - serial
+  - spi
+  - usb
+  - usbd
+  - watchdog
