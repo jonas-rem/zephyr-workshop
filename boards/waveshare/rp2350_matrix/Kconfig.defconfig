@@ -1,0 +1,84 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Navimatix GmbH
+# SPDX-FileCopyrightText: Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+if BOARD_WAVESHARE_RP2350_MATRIX
+
+
+
+
+##############################################################################
+#
+# MCU core function units; basicly required for most of all others
+#
+
+config CLOCK_CONTROL
+	default y
+	depends on DT_HAS_RASPBERRYPI_PICO_CLOCK_ENABLED && \
+		   DT_HAS_RASPBERRYPI_PICO_CLOCK_CONTROLLER_ENABLED
+
+config GPIO
+	default y
+	depends on DT_HAS_RASPBERRYPI_PICO_GPIO_ENABLED
+
+config RESET
+	default y
+	depends on DT_HAS_RASPBERRYPI_PICO_RESET_ENABLED
+
+
+
+
+##############################################################################
+#
+# USB Device Controler as CDC/ACM device class for default serial console
+#
+
+source "boards/common/usb/Kconfig.cdc_acm_serial.defconfig"
+
+if BOARD_SERIAL_BACKEND_CDC_ACM
+
+# USB device not self powerd, consumes 480mA
+config USB_SELF_POWERED
+	default n
+
+config CDC_ACM_SERIAL_SELF_POWERED
+	default n
+	depends on USB_DEVICE_STACK_NEXT && USBD_CDC_ACM_CLASS
+
+config CDC_ACM_SERIAL_MAX_POWER
+	default 240
+	depends on USB_DEVICE_STACK_NEXT && USBD_CDC_ACM_CLASS
+
+endif # BOARD_SERIAL_BACKEND_CDC_ACM
+
+
+
+
+##############################################################################
+#
+# Board specific 6DOF IMU device driver default setup (own event thread)
+#
+
+choice QMI8658A_TRIGGER_MODE
+#	default QMI8658A_TRIGGER_GLOBAL_THREAD
+	default QMI8658A_TRIGGER_OWN_THREAD
+	default QMI8658A_TRIGGER_NONE
+	depends on SENSOR && QMI8658A
+endchoice
+
+
+
+
+##############################################################################
+#
+# Board specific 8x8 RGB LED (strip) matrix display driver default setup
+#
+
+config LED_STRIP
+	default y
+	depends on DISPLAY
+
+
+
+
+endif # BOARD_WAVESHARE_RP2350_MATRIX
