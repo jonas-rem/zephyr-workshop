@@ -33,3 +33,10 @@ fi
 # symlink at /workspaces/zephyr would mix /workspaces and /opt paths.
 west config zephyr.base /opt/zephyrproject/zephyr
 west config build.dir-fmt /workspaces/build
+
+# Patches live in the mounted repo, the baked Zephyr tree is unpatched.
+# The marker keeps a re-run from failing on already-applied patches.
+if [ ! -f .west/patches-applied ]; then
+    west patch apply
+    touch .west/patches-applied
+fi
