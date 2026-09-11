@@ -1,0 +1,76 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Navimatix GmbH
+# SPDX-FileCopyrightText: Copyright (c) 2021-2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+sample:
+  name: My Shell console build an execution tests
+common:
+  tags:
+    - shell
+tests:
+  sample.myshell.build:
+    integration_platforms:
+      - qemu_x86
+      - reel_board
+    extra_args:
+      - platform:qemu_x86/atom:CONFIG_COMPILER_WARNINGS_AS_ERRORS=n
+    build_only: true
+
+  sample.myshell.boot:
+    integration_platforms:
+      - qemu_x86
+      - reel_board
+    extra_args:
+      - platform:qemu_x86/atom:CONFIG_COMPILER_WARNINGS_AS_ERRORS=n
+    harness: console
+    harness_config:
+      fixture: fixture_console
+      type: one_line
+      regex:
+        - "Hardware Evaluation! (.*)"
+
+  sample.myshell.cmd:
+    platform_allow:
+      - qemu_x86
+      - waveshare_rp2350_matrix/rp2350a/m33
+      - waveshare_rp2350_matrix/rp2350a/m33
+    platform_exclude:
+      - native_sim
+    integration_platforms:
+      - qemu_x86
+    extra_args:
+      - platform:qemu_x86/atom:CONFIG_COMPILER_WARNINGS_AS_ERRORS=n
+    filter: CONFIG_QEMU_TARGET and CONFIG_SERIAL and
+            (dt_chosen_enabled("zephyr,shell-uart") or
+             CONFIG_XTENSA_SIM_CONSOLE)
+    min_flash: 128
+    min_ram: 16
+    timeout: 300
+    harness: pytest
+    harness_config:
+      fixture: fixture_console
+      pytest_dut_scope: session
+      pytest_root:
+        - "pytest/test_myshell.py"
+
+  sample.myboard.hil:
+    platform_allow:
+      - waveshare_rp2350_matrix/rp2350a/m33
+      - waveshare_rp2350_matrix/rp2350a/hazard3
+    platform_exclude:
+      - native_sim
+      - qemu_x86
+    integration_platforms:
+      - waveshare_rp2350_matrix/rp2350a/m33
+      - waveshare_rp2350_matrix/rp2350a/hazard3
+    filter: CONFIG_SERIAL and
+            dt_chosen_enabled("zephyr,shell-uart")
+    min_flash: 128
+    min_ram: 16
+    timeout: 300
+    harness: pytest
+    harness_config:
+      fixture: fixture_product
+      pytest_dut_scope: session
+      pytest_root:
+        - "pytest/test_myboard.py"
