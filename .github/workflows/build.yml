@@ -20,6 +20,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      ZEPHYR_EXTRA_MODULES: ${{ github.workspace }}
     container:
       image: ghcr.io/jonas-rem/zephyr-workshop/devcontainer:latest
       options: --user root
@@ -52,4 +54,4 @@ jobs:
         env:
           ZEPHYR_BASE: /opt/zephyrproject/zephyr
         run: |
-          west twister -T app -T samples --integration --exclude-tag workshop
+          util/run_twister_integration.sh
