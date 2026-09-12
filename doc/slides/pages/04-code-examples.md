@@ -56,7 +56,7 @@ samples/01_hello_world/
 ├── CMakeLists.txt
 ├── prj.conf
 ├── README.rst
-├── sample.yaml
+├── tests.yaml
 ├── 01_hello_world
 └── src
     └── main.c
