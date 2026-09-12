@@ -54,4 +54,16 @@ jobs:
         env:
           ZEPHYR_BASE: /opt/zephyrproject/zephyr
         run: |
-          util/run_twister_integration.sh
+          util/run_twister_integration.sh --inline-logs
+
+      - name: Upload Twister logs
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: twister-logs
+          path: |
+            twister-out/**/build.log
+            twister-out/*.json
+            twister-out/*.xml
+          if-no-files-found: warn
+          retention-days: 7
