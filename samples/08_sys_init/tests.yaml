@@ -18,7 +18,4 @@ common:
       - "Module 2 initialized.*APPLICATION.*priority: 999"
       - "Hello World!.*"
 tests:
-  sample.basic.sys_init:
-    tags:
-      - sys_init
-      - initialization
+  sample.basic.sys_init: {}

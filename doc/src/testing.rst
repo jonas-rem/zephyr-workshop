@@ -48,6 +48,5 @@ Additional Resources
 .. _Pytest: https://docs.zephyrproject.org/latest/develop/test/pytest.html
 .. _app: https://github.com/jonas-rem/zephyr-workshop/tree/main/app
 
-.. _sample.yaml: https://github.com/jonas-rem/zephyr-workshop/blob/main/app/sample.yaml
 .. _LED blinking patterns: https://github.com/jonas-rem/zephyr-workshop/blob/main/app/src/components/led/led.c
 .. _05_sensor: https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/05_sensor

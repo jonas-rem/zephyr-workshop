@@ -46,7 +46,7 @@ own source files, build configuration, and Kconfig options.
    ├── Kconfig
    ├── prj.conf
    ├── README.rst
-   ├── sample.yaml
+   ├── tests.yaml
    ├── src
    │   ├── common
    │   │   ├── CMakeLists.txt
@@ -348,7 +348,7 @@ The application uses a multi-level testing approach:
    cases and test them in a reproducible and automatic way in CI (e.g. multiple
    button presses in rapid succession).
 
-3. **Build Tests** (via ``app/test_cfg/`` and ``app/sample.yaml``):
+3. **Build Tests** (via ``app/test_cfg/`` and ``app/tests.yaml``):
    The same configurations that are used to interactively operate a component via
    its shell commands can be used for build tests. These are mainly build tests and
    can be build for multiple targets (e.g. native_sim, reel_board). This tests
@@ -409,7 +409,7 @@ Each component includes its own tests that are co-located with the source code:
    └── button/tests/
        ├── src/test_button.c
        ├── prj.conf
-       └── testcase.yaml
+       └── tests.yaml
 
 These tests use the GPIO emulator to simulate hardware button presses and verify
 that the component correctly publishes ``SYS_BUTTON_PRESSED`` events to the
@@ -450,14 +450,18 @@ automatically discovers all tests in the application, including component tests.
    host:~$ west twister -T app/ --integration
    INFO    - Zephyr version: v4.3.0
    [ .. ]
-   INFO    - 6 of 7 executed test configurations passed (85.71%)
-   INFO    - 13 of 13 executed test cases passed (100.00%)
    INFO    - Run completed
+
+The number of executed configurations depends on the connected hardware.
 
 This runs:
 
-- Component tests: ``component.button``, ``component.sys_ctrl``
+- Component tests: ``component.button``, ``component.led``,
+  ``component.sensor_log``, ``component.sys_ctrl``, ``component.temp_alert``,
+  ``component.tempsense``
 - build tests: ``basic.app``, ``app.test.button``, ``app.test.led``, ``app.test.sys_ctrl``
+- Tracing build tests: ``app.tracing.native_ctf``, ``app.tracing.usb_ctf``,
+  ``app.tracing.sysview_rtt``
 
 **Run specific test suites:**
 
@@ -469,8 +473,8 @@ This runs:
    # Build tests (shell-based, use console harness)
    host:~$ west twister -T app/ -s app.test.button --integration
 
-    # Build test for the whole app
-    host:~$ west twister -T app/ -s basic.app --integration
+   # Build test for the whole app
+   host:~$ west twister -T app/ -s basic.app --integration
 
 Test Reports and Debugging
 ==========================

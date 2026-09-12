@@ -41,7 +41,7 @@ zephyrproject
             ├── CMakeLists.txt
             ├── prj.conf
             ├── README.rst
-            ├── sample.yaml
+            ├── tests.yaml
             └── src
 ```
 </div>
