@@ -1,6 +1,7 @@
 common:
   harness: display
-  tags: display
+  tags:
+    - display
   integration_platforms:
     - reel_board@2
 sample:
