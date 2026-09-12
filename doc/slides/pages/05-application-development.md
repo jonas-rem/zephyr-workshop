@@ -189,7 +189,7 @@ SYS_INIT(init, APPLICATION,
 app/src/components/button/tests/
 ├── CMakeLists.txt
 ├── prj.conf
-├── testcase.yaml
+├── tests.yaml
 └── src/
     └── test_button.c
 ```
@@ -291,7 +291,7 @@ junit2html twister-out/twister_report.xml report.html
 **Zephyr Test Runner (Twister)**
 - `west twister` - Automates building and running tests
 - Supports multiple platforms (real HW or simulation)
-- Component tests via `testcase.yaml`
+- Component tests via `tests.yaml`
 
 </div>
 

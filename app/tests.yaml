@@ -2,11 +2,11 @@ sample:
   description: Application
   name: app
 common:
-  tags: introduction
+  tags:
+    - introduction
 tests:
   # Main application with all components
   basic.app:
-    tags: introduction
     integration_platforms:
       - native_sim
       - reel_board
@@ -20,11 +20,13 @@ tests:
   # Tests each component in isolation with console harness
 
   app.test.button:
-    extra_args: EXTRA_CONF_FILE=test_cfg/button_component.conf
+    extra_conf_files:
+      - test_cfg/button_component.conf
     integration_platforms:
       - native_sim
       - reel_board
-    tags: button
+    tags:
+      - button
     harness: console
     harness_config:
       type: one_line
@@ -32,11 +34,13 @@ tests:
         - "Button component started"
 
   app.test.led:
-    extra_args: EXTRA_CONF_FILE=test_cfg/led_component.conf
+    extra_conf_files:
+      - test_cfg/led_component.conf
     integration_platforms:
       - native_sim
       - reel_board
-    tags: led
+    tags:
+      - led
     harness: console
     harness_config:
       type: one_line
@@ -44,10 +48,12 @@ tests:
         - "LED component initialized"
 
   app.test.sys_ctrl:
-    extra_args: EXTRA_CONF_FILE=test_cfg/sys_ctrl_component.conf
+    extra_conf_files:
+      - test_cfg/sys_ctrl_component.conf
     integration_platforms:
       - native_sim
-    tags: sys_ctrl
+    tags:
+      - sys_ctrl
     harness: console
     harness_config:
       type: one_line
@@ -57,29 +63,35 @@ tests:
   # Build tests for tracing configurations
   app.tracing.native_ctf:
     build_only: true
-    extra_args: EXTRA_CONF_FILE=prj_native_ctf.conf
+    extra_conf_files:
+      - prj_native_ctf.conf
     platform_allow:
       - native_sim
     integration_platforms:
       - native_sim
-    tags: tracing
+    tags:
+      - tracing
 
   app.tracing.usb_ctf:
     build_only: true
-    extra_args: EXTRA_CONF_FILE=prj_usb_ctf.conf
+    extra_conf_files:
+      - prj_usb_ctf.conf
     platform_allow:
       - nrf52840dk/nrf52840
     integration_platforms:
       - nrf52840dk/nrf52840
     depends_on: usb_device
-    tags: tracing
+    tags:
+      - tracing
 
   app.tracing.sysview_rtt:
     build_only: true
-    extra_args: EXTRA_CONF_FILE=prj_sysview_rtt.conf
+    extra_conf_files:
+      - prj_sysview_rtt.conf
     platform_allow:
       - nrf52840dk/nrf52840
     integration_platforms:
       - nrf52840dk/nrf52840
     filter: CONFIG_HAS_SEGGER_RTT
-    tags: tracing
+    tags:
+      - tracing
