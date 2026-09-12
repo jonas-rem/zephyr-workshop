@@ -5,6 +5,12 @@ set -e
 # uses the mounted workspace instead of /opt/zephyrproject.
 unset ZEPHYR_BASE
 
+WORKSHOP_DIR=/workspaces/zephyr-workshop
+
+if [ "$(git -C "$WORKSHOP_DIR" branch --show-current)" = "stuttgart-09.27" ]; then
+    git -C "$WORKSHOP_DIR" pull --ff-only origin stuttgart-09.27
+fi
+
 cd /workspaces
 
 # Image-baked trees live outside the Codespaces mount; link them in before
@@ -18,6 +24,9 @@ done
 if [ ! -f .west/config ]; then
     west init -l zephyr-workshop
 fi
+
+west update --narrow -o=--depth=1
+west zephyr-export
 
 # make clangd file visible for the plugin
 if [ ! -f .clangd ]; then
