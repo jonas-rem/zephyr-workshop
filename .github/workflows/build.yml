@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - stuttgart-09.27
   pull_request:
     branches:
       - main
+      - stuttgart-09.27
   schedule:
     - cron: '0 8 * * *'  # Run daily at 8 AM UTC
   workflow_dispatch:  # Allow manual trigger
