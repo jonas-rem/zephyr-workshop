@@ -62,7 +62,10 @@ USER vscode
 RUN west zephyr-export \
     && west sdk install \
         --install-dir /opt/zephyr-sdk/current \
-        --gnu-toolchains arm-zephyr-eabi x86_64-zephyr-elf
+        --gnu-toolchains \
+        arm-zephyr-eabi \
+        riscv64-zephyr-elf \
+        x86_64-zephyr-elf
 
 ENV ZEPHYR_SDK_INSTALL_DIR=/opt/zephyr-sdk/current
 WORKDIR /workspaces
