@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: Copyright (c) 2026 Navimatix GmbH
+# SPDX-FileCopyrightText: Copyright (c) 2026 TiaC Systems
+# SPDX-License-Identifier: Apache-2.0
+
+sample:
+  description: Animated color wheel on an RGB LED matrix
+  name: colorwheel
+common:
+  tags:
+    - zephyr-workshop
+    - drivers
+    - display
+    - led_strip
+  sysbuild: false
+  build_only: true
+  filter: dt_chosen_enabled("zephyr,display") and
+          dt_compat_enabled("led-strip-matrix")
+tests:
+  sample.colorwheel.boards:
+    platform_allow:
+      - rp2040_matrix/rp2040
+      - waveshare_rp2350_matrix/rp2350a/hazard3
+      - waveshare_rp2350_matrix/rp2350a/m33
+    integration_platforms:
+      - rp2040_matrix/rp2040
+      - waveshare_rp2350_matrix/rp2350a/hazard3
+      - waveshare_rp2350_matrix/rp2350a/m33
