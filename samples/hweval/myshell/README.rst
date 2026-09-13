@@ -85,7 +85,7 @@ use the following command (integration test):
 
 .. code-block:: console
 
-   west twister -vv -G -X fixture_console -T samples/hweval/myshell
+   host:~$ west twister -vv -G -X fixture_console -T samples/hweval/myshell
 
 .. rubric:: Sample Output
 
@@ -122,15 +122,15 @@ use the following command:
 
 .. code-block:: console
 
-   west twister -v -G -X fixture_product -T samples/hweval/myshell \
-                --scenario sample.myboard.hil \
-                --platform waveshare_rp2350_matrix/rp2350a/m33 \
-                --flash-before \
-                --west-runner uf2 \
-                --device-testing \
-                --device-flash-timeout 60 \
-                --device-serial /dev/ttyACM0 \
-                --device-serial-baud 115200
+   host:~$ west twister -v -G -X fixture_product -T samples/hweval/myshell \
+                        --scenario sample.myboard.hil \
+                        --platform waveshare_rp2350_matrix/rp2350a/m33 \
+                        --flash-before \
+                        --west-runner uf2 \
+                        --device-testing \
+                        --device-flash-timeout 60 \
+                        --device-serial /dev/ttyACM0 \
+                        --device-serial-baud 115200
 
 .. rubric:: Sample Output
 
