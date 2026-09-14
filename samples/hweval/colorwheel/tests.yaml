@@ -7,10 +7,10 @@ sample:
   name: colorwheel
 common:
   tags:
-    - zephyr-workshop
     - drivers
     - display
     - led_strip
+    - workshop
   sysbuild: false
   build_only: true
   filter: dt_chosen_enabled("zephyr,display") and

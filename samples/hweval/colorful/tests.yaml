@@ -7,9 +7,9 @@ sample:
   name: colorful
 common:
   tags:
-    - zephyr-workshop
     - display
     - drivers
+    - workshop
 tests:
   sample.display.colorful.sdl:
     build_only: true

@@ -7,11 +7,11 @@ sample:
   name: level
 common:
   tags:
-    - zephyr-workshop
     - drivers
     - display
     - led_strip
     - sensors
+    - workshop
   sysbuild: false
   build_only: true
   depends_on:
