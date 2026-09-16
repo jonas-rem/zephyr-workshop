@@ -195,46 +195,68 @@ zephyr_udc0: &usbd {
 
 
 /*****************************************************************************
+ *   __                          _                               _            
+ *  /_ |       /\               | |                             | |           
+ *   | |      /  \   ___ ___ ___| | ___ _ __ ___  _ __ ___   ___| |_ ___ _ __ 
+ *   | |     / /\ \ / __/ __/ _ \ |/ _ \ '__/ _ \| '_ ` _ \ / _ \ __/ _ \ '__|
+ *   | |    / ____ \ (_| (_|  __/ |  __/ | | (_) | | | | | |  __/ ||  __/ |   
+ *   |_|   /_/    \_\___\___\___|_|\___|_|  \___/|_| |_| |_|\___|\__\___|_|   
+ *
+ *
+ */
+
+/*****************************************************************************
  *
  * Board specific 6DOF IMU device driver default setup (fast I2C & interrupt)
  *
  */
 
-/ {
-	aliases {
-		accel0 = &qmi8658;
-		6dof-motion-drdy0 = &qmi8658;
-	};
-};
+//	/ {
+//		aliases {
+//			accel0 = &qmi8658;
+//			6dof-motion-drdy0 = &qmi8658;
+//		};
+//	};
+//
+//	&i2c1 {
+//		status = "okay";
+//		pinctrl-0 = <&i2c1_default>;
+//		pinctrl-names = "default";
+//		clock-frequency = <I2C_BITRATE_FAST>;
+//
+//		/* Accelerometer and Gyroscope with QMI8658A sensor. */
+//		qmi8658: qmi8658a@6b {
+//			compatible = "qst,qmi8658a";
+//			friendly-name = "on-board accelerometer/gyroscope";
+//			status = "okay";
+//
+//			reg = <0x6b>;
+//
+//			/* GP9 as INT2 from QMI8658A sensor. */
+//			int-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
+//			int-pin = <2>;
+//
+//			/* Standard filter parameters for QMI8658A sensor IMU. */
+//			accel-fs = <2>;
+//			gyro-fs = <512>;
+//			accel-odr = <224>;
+//			gyro-odr = <224>;
+//		};
+//	};
 
-&i2c1 {
-	status = "okay";
-	pinctrl-0 = <&i2c1_default>;
-	pinctrl-names = "default";
-	clock-frequency = <I2C_BITRATE_FAST>;
-
-	/* Accelerometer and Gyroscope with QMI8658A sensor. */
-	qmi8658: qmi8658a@6b {
-		compatible = "qst,qmi8658a";
-		friendly-name = "on-board accelerometer/gyroscope";
-		status = "okay";
-
-		reg = <0x6b>;
-
-		/* GP9 as INT2 from QMI8658A sensor. */
-		int-gpios = <&gpio0 9 GPIO_ACTIVE_HIGH>;
-		int-pin = <2>;
-
-		/* Standard filter parameters for QMI8658A sensor IMU. */
-		accel-fs = <2>;
-		gyro-fs = <512>;
-		accel-odr = <224>;
-		gyro-odr = <224>;
-	};
-};
 
 
 
+/*****************************************************************************
+ *   ___      _      ______ _____     _____ _        _       
+ *  |__ \    | |    |  ____|  __ \   / ____| |      (_)      
+ *     ) |   | |    | |__  | |  | | | (___ | |_ _ __ _ _ __  
+ *    / /    | |    |  __| | |  | |  \___ \| __| '__| | '_ \ 
+ *   / /_    | |____| |____| |__| |  ____) | |_| |  | | |_) |
+ *  |____|   |______|______|_____/  |_____/ \__|_|  |_| .__/ 
+ *                                                    | |
+ *                                                    |_|
+ */
 
 /*****************************************************************************
  *
@@ -242,46 +264,57 @@ zephyr_udc0: &usbd {
  *
  */
 
-/ {
-	aliases {
-		led-strip = &led_strip;
-	};
-};
+//	/ {
+//		aliases {
+//			led-strip = &led_strip;
+//		};
+//	};
+//
+//	&pio0 {
+//		status = "okay";
+//
+//		pio-ws2812 {
+//			compatible = "worldsemi,ws2812-rpi_pico-pio";
+//			status = "okay";
+//
+//			pinctrl-0 = <&pio0_ws2812_default>;
+//			pinctrl-names = "default";
+//
+//			/* HI: 0x3F0: 1111110000: 0.750 us high and 0.500 us low */
+//			/* LO: 0x380: 1110000000: 0.375 us high and 0.875 us low */
+//			bit-waveform = <3>, <3>, <4>;
+//
+//			ws2812_8x8: ws2812-8x8 {
+//				status = "okay";
+//
+//				chain-length = <(8*8)>; /* 8x8 panel with RGB pixel */
+//				color-mapping = <LED_COLOR_ID_RED
+//						 LED_COLOR_ID_GREEN
+//						 LED_COLOR_ID_BLUE>;
+//
+//				/* PIO0:OUT @ GP16 and Tbit = 1.25 us / 10 */
+//				gpios = <&gpio0 25 GPIO_ACTIVE_HIGH>;
+//				frequency = <DT_FREQ_K(800)>;
+//				reset-delay = <280>;
+//			};
+//		};
+//	};
+//
+// led_strip: &ws2812_8x8 {};
 
-&pio0 {
-	status = "okay";
-
-	pio-ws2812 {
-		compatible = "worldsemi,ws2812-rpi_pico-pio";
-		status = "okay";
-
-		pinctrl-0 = <&pio0_ws2812_default>;
-		pinctrl-names = "default";
-
-		/* HI: 0x3F0: 1111110000: 0.750 us high and 0.500 us low */
-		/* LO: 0x380: 1110000000: 0.375 us high and 0.875 us low */
-		bit-waveform = <3>, <3>, <4>;
-
-		ws2812_8x8: ws2812-8x8 {
-			status = "okay";
-
-			chain-length = <(8*8)>; /* 8x8 panel with RGB pixel */
-			color-mapping = <LED_COLOR_ID_RED
-					 LED_COLOR_ID_GREEN
-					 LED_COLOR_ID_BLUE>;
-
-			/* PIO0:OUT @ GP16 and Tbit = 1.25 us / 10 */
-			gpios = <&gpio0 25 GPIO_ACTIVE_HIGH>;
-			frequency = <DT_FREQ_K(800)>;
-			reset-delay = <280>;
-		};
-	};
-};
-
-led_strip: &ws2812_8x8 {};
 
 
 
+/*****************************************************************************
+ *   ____      _      ______ _____    _____  _           _             
+ *  |___ \    | |    |  ____|  __ \  |  __ \(_)         | |            
+ *    __) |   | |    | |__  | |  | | | |  | |_ ___ _ __ | | __ _ _   _ 
+ *   |__ <    | |    |  __| | |  | | | |  | | / __| '_ \| |/ _` | | | |
+ *   ___) |   | |____| |____| |__| | | |__| | \__ \ |_) | | (_| | |_| |
+ *  |____/    |______|______|_____/  |_____/|_|___/ .__/|_|\__,_|\__, |
+ *                                                | |             __/ |
+ *                                                |_|            |___/
+ */
 
 /*****************************************************************************
  *
@@ -289,23 +322,23 @@ led_strip: &ws2812_8x8 {};
  *
  */
 
-/ {
-	chosen {
-		zephyr,display = &led_strip_matrix;
-	};
-
-	led_strip_matrix: led-strip-matrix {
-		compatible = "led-strip-matrix";
-	};
-};
-
-&led_strip_matrix {
-	/* LED strip with circulative layout */
-	led-strips = <&led_strip>;
-	circulative;
-
-	/* 8x8 panel with RGB pixel and alpha channel */
-	width = <8>;
-	height = <8>;
-	pixel-format = <PANEL_PIXEL_FORMAT_ARGB_8888>;
-};
+//	/ {
+//		chosen {
+//			zephyr,display = &led_strip_matrix;
+//		};
+//
+//		led_strip_matrix: led-strip-matrix {
+//			compatible = "led-strip-matrix";
+//		};
+//	};
+//
+//	&led_strip_matrix {
+//		/* LED strip with circulative layout */
+//		led-strips = <&led_strip>;
+//		circulative;
+//
+//		/* 8x8 panel with RGB pixel and alpha channel */
+//		width = <8>;
+//		height = <8>;
+//		pixel-format = <PANEL_PIXEL_FORMAT_ARGB_8888>;
+//	};
