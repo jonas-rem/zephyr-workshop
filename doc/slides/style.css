@@ -154,6 +154,51 @@ figcaption.mt-3.text-center.text-xs,
   color: var(--color-header-bg);
 }
 
+.cover-authors {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2rem;
+  margin-top: 7rem;
+  text-align: center;
+  color: var(--color-dark-teal);
+}
+
+.cover-author-topic {
+  min-height: 2.5em;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cover-author-name {
+  margin-top: 0.6rem;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.cover-author-company {
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+@media (max-width: 700px) {
+  .cover-authors {
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .cover-author-topic {
+    font-size: 0.7rem;
+  }
+
+  .cover-author-name,
+  .cover-author-company {
+    font-size: 0.85rem;
+  }
+}
+
 /* Section Transition Pages */
 .slidev-layout.section {
   display: flex;
