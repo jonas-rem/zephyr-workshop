@@ -127,103 +127,6 @@ HEAD is now at aad79bf [..]
 
 ---
 
-## T1: Zephyr is the Manifest Repository
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-- **Who:** User creates one application for testing
-- **What:** One variant of an application
-- **Solution:** Make changes inside the Zephyr tree for simplicity<sup>1</sup>
-
-</div>
-
-<div class="h-full flex flex-col items-center justify-center">
-  <img src="../public/images/application_topologies_1.svg" class="h-80 object-contain" />
-</div>
-
-</div>
-
-<Footnotes y="col">
-  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html#t1-star-topology-zephyr-is-the-manifest-repository">Zephyr Docs: T1 Topology</a></Footnote>
-</Footnotes>
-
----
-
-## T2: Application is the Manifest Repository
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-- **Who:** One company developing one product
-- **What:** Application-focused development with one or more board variants
-- **Solution:** Application repository acts as the central manifest repository
-
-</div>
-
-<div class="h-full flex flex-col items-center justify-center">
-  <img src="../public/images/application_topologies_2.svg" class="h-80 object-contain" />
-</div>
-
-</div>
-
-<Footnotes y="col">
-  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html#t2-star-topology-application-is-the-manifest-repository">Zephyr Docs: T2 Topology</a></Footnote>
-</Footnotes>
-
----
-
-## T2: Applied to multiple Projects
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-- **Who:** Service provider developing different products for multiple companies
-- **What:** Development states and lifecycles for products differ significantly
-- **Solution:** Same Star topology with dedicated manifest repository
-- **Note:** Switching between projects with west update (via changed config)
-
-</div>
-
-<div class="h-full flex flex-col items-center justify-center">
-  <img src="../public/images/application_topologies_4.svg" class="h-80 object-contain" />
-</div>
-
-</div>
-
-<Footnotes y="col">
-  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html#t2-star-topology-application-is-the-manifest-repository">Zephyr Docs: T2 Topology</a></Footnote>
-</Footnotes>
-
----
-
-## T3: Forest Topology
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-- **Who:** One company developing multiple independent products, or service providers
-- **What:** Multiple applications at the same level, potentially with different lifecycles
-- **Solution:** Dedicated manifest repository containing no source code
-
-</div>
-
-<div class="h-full flex flex-col items-center justify-center">
-  <img src="../public/images/application_topologies_3.svg" class="h-80 object-contain" />
-</div>
-
-</div>
-
-<Footnotes y="col">
-  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/west/workspaces.html#t3-forest-topology">Zephyr Docs: T3 Topology</a></Footnote>
-</Footnotes>
-
----
-
 ## Zephyr Hardware Abstraction
 
 <div class="grid grid-cols-2 gap-4">
@@ -232,8 +135,8 @@ HEAD is now at aad79bf [..]
 
 - **Vendor HALs:** Hardware abstraction available from vendors. Abstracted via Zephyr APIs and drivers
 - **Devicetree:** Decouples the application from the hardware
-- **Architecture:** ARM, RISC-V, x86, ARC, NIOS II, Tensilica, Xtensa
-- **Other:** 600+ boards, 180+ sensors
+- **Architecture:** ARM, RISC-V, x86..
+- **Other:** 1100+ boards, 270+ sensors
 
 </div>
 
@@ -246,15 +149,12 @@ arm    common          nios2  sparc
 arm64  Kconfig         posix  x86
 
 zephyrproject:~$ ls modules/hal/
-altera        espressif   nordic      silabs
-ambiq         ethos_u     nuvoton     st
-atmel         gigadevice  nxp         stm32
-cirrus-logic  infineon    openisa     telink
+hal_nxp       hal_nordic    hal_silabs
 [..]
 
 zephyrproject/zephyr:~$ ls boards/
-96boards               firefly       native_sim
-actinius               gd            rak
+infineon      st            native/native_sim
+[..]
 ...
 ```
 
@@ -364,70 +264,20 @@ suitable version "1.7.0", minimum required is "1.4.6")
 ## Zephyr Hardware Abstraction - Practical Usage in Code
 
 ```c
+struct sensor_value data[3];
 const struct device *const dev = DEVICE_DT_GET(DT_ALIAS(accel0));
 
 if (!device_is_ready(dev)) {
-    printf("Device %s is not ready\n", dev->name);
-    return 0;
+	printf("Device %s is not ready\n", dev->name);
+	return 0;
 }
+
+sensor_sample_fetch(dev);
+sensor_channel_get(dev, SENSOR_CHAN_ACCEL_XYZ, data);
+
+printf("%16s [m/s^2]:    (%12.6f, %12.6f, %12.6f)\n", dev->name,
+       sensor_value_to_double(&data[0]), sensor_value_to_double(&data[1]),
+       sensor_value_to_double(&data[2]));
 ```
 
 <div class="text-xs text-center mt-1">Application: `samples/sensor/accel_trig/src/main.c`</div>
-<br>
-
-```c
-#define DT_DRV_COMPAT nxp_fxos8700
-
-static const struct fxos8700_config fxos8700_config_##inst = {
-    .bus_cfg.i2c = I2C_DT_SPEC_INST_GET(inst),
-    .range = DT_INST_PROP(inst, range),
-    ...
-};
-
-SENSOR_DEVICE_DT_INST_DEFINE(inst, ...);
-DT_INST_FOREACH_STATUS_OKAY(FXOS8700_INIT)
-```
-
-<div class="text-xs text-center mt-1">Driver: `drivers/sensor/nxp/fxos8700/fxos8700.c`</div>
-
----
-
-## Hands-on 2: Run Zephyr on native_sim!
-
-<div class="grid grid-cols-5 gap-4">
-
-<div class="col-span-3">
-
-Build the __blinky__ sample for native_sim:
-
-```shell
-west build -b native_sim zephyr/samples/basic/blinky -p
-```
-
-And run it:
-
-```shell
-west build -t run
-```
-<br>
-
-Watch the LED state toggle in the console. Match the devicetree definition
-(__led0__) with the sample code and generated header:
-
-<div class="text-xxs">
-
-```shell
-zephyr/boards/native/native_sim/native_sim.dts
-zephyr/samples/basic/blinky/src/main.c
-build/zephyr/include/generated/zephyr/devicetree_generated.h
-```
-
-</div>
-
-</div>
-
-<div class="col-span-2 flex flex-col items-center justify-center">
-  <img src="../public/images/native_sim_blinky.jpg" class="h-60 object-contain rounded-lg shadow-lg" />
-</div>
-
-</div>

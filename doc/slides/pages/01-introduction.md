@@ -22,16 +22,16 @@ level: 1
 
 <div>
 
-**Theory:**
+**Theory Part:**
 - Introduction to Zephyr RTOS
 - Understanding the development ecosystem
 - Exploring key features and subsystems
+- Getting started with the Codespaces Environment
 
-**Hands-on Sessions:**
-1. Development environment setup
-2. Build and run samples on native_sim
-3. Explore progressive examples
-4. Extend an application (Cold-Chain Monitoring)
+**Breakout Sessions:**
+- Hardware Bringup
+- IoT
+- Simulation & Testing
 
 </div>
 
@@ -47,32 +47,8 @@ level: 1
 
 - Have you used an RTOS before?
 - Your experience with Zephyr?
-- What are your goals for the Workshop?
+- Worked on a project with Zephyr in the company you work for?
 
----
----
-
-## Areas of Work
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-- **Hardware:** Customer-specific hardware solutions, focus on low-power embedded systems
-- **nRF9160 SoC:** Development of IoT applications using the Nordic nRF9160 SoC for both hardware and firmware
-- **Zephyr:** Contributor to the Zephyr Project
-- **Example:** Pump Monitor, developed in collaboration with **BeST Berliner Sensortechnik GmbH**
-
-</div>
-
-<div class="flex flex-col items-center justify-center">
-  <img src="../public/images/jrov2201.jpg" class="h-60 object-contain" />
-  <div class="text-xs text-center mt-2">Pump Monitor for BeST Berliner Sensortechnik GmbH</div>
-</div>
-
-</div>
-
----
 ---
 
 ## Open Source and Vendor-Neutral Governance
@@ -83,14 +59,14 @@ level: 1
 
 - Governed by the Linux Foundation
 - Vendor-neutrality: fairness and interoperability
-- Technical Steering Committee (TSC) and Working Groups (WG)
-- Security and tooling (e.g. SBOM) as integral part
-- **Alternative to vendor SDKs**
+- Security and tooling (e.g. SBOM)
+- Technical Steering Committee (TSC)
+- Working Groups (WG)<br>-> **Open to participation for everyone**
 
 </div>
 
 <div class="flex flex-col items-center justify-center">
-  <img src="../public/images/lf-stacked-color.svg" class="h-40 object-contain" />
+  <img src="../public/images/lf-stacked-color.svg" class="h-25 object-contain" />
   <div class="text-xs text-center mt-2">The Linux Foundation logo</div>
 </div>
 
@@ -105,6 +81,6 @@ level: 1
 - Overview: [zephyrproject.org/products-running-zephyr](https://www.zephyrproject.org/products-running-zephyr/)
 - Wildlife Tracking and Protection (OpenCollar)
 - Wind Turbines (Vestas)
-- Irrigation (Gardena)
+- Chromebook (Google)
 - Hearing Aid (Oticon)
 - Wastewater Pump Monitoring (BeST Berliner Sensortechnik, German Railways - DB)

@@ -229,9 +229,13 @@ LOG_MODULE_REGISTER(hello_world, LOG_LEVEL_DBG);
 
 int main(void)
 {
-	LOG_INF("info string");
+        [..]
+        printk("Hello World! %s\n", CONFIG_BOARD);
 
-	return 0;
+        LOG_ERR("error string");
+        [..]
+
+        return 0;
 }
 ```
 <div class="text-xs text-center mt-2">samples/02_logging/src/main.c</div>
@@ -252,64 +256,7 @@ int main(void)
 *** Booting Zephyr OS build v4.1.0 ***
 Hello World! native_sim
 [00:00:00.001,691] <err> hello_world: error string
-[00:00:00.001,843] <dbg> hello_world: main: debug string
-[00:00:00.001,859] <inf> hello_world: info string
-[00:00:00.001,874] <dbg> hello_world: main: int8_t 1, uint8_t 2
-[00:00:00.001,887] <dbg> hello_world: main: int16_t 16, uint16_t 17
-[00:00:00.001,899] <dbg> hello_world: main: int32_t 32, uint32_t 33
-[00:00:00.001,921] <dbg> hello_world: main: int64_t 64, uint64_t 65
-[00:00:00.001,956] <dbg> hello_world: main: char !
-[00:00:00.002,383] <dbg> hello_world: main: s str static str c str
-[00:00:00.002,567] <dbg> hello_world: main: d str dynamic str
-[00:00:00.002,607] <dbg> hello_world: main: mixed str dynamic str --- ...
-[00:00:00.002,640] <dbg> hello_world: main: mixed c/s ! static str ...
-[00:00:00.002,653] <dbg> hello_world: main: pointer 0x5c3e
-[00:00:00.002,674] <dbg> hello_world: main: HeXdUmP!
-                                      48 45 58 44 55 4d 50 21  20 23 40  |HEXDUMP!  #@
-```
-
----
-
-## 03_workqueues Sample
-
-**Description:**
-- Workqueue and Timer Example
-
-**Learn:**
-- Workqueue, Timers, Runtime Contexts (IRQ, Thread)
-- Queue of work items
-- Work items are executed in a thread context
-- Timer is used to schedule work items
-- System workqueue is enabled by default
-
-**Sample:**
-- Executes a function in different contexts
-
----
-
-## 03_workqueues Sample - Console Output
-
-```shell
-*** Booting Zephyr OS build v4.1.0 ***
-Work Item Executed - runtime context:
- Thread Name: main
- Thread Priority: 0
-
-Work Item Executed - runtime context:
- Thread Name: sysworkq
- Thread Priority: -1
-
-Work Item Executed - runtime context:
- Thread Name: my_work_q_thread
- Thread Priority: 5
-
-Timer Expired!!
-Work Item Executed - runtime context:
- ISR Context!
-
-Work Item Executed - runtime context:
- Thread Name: sysworkq
- Thread Priority: -1
+[..]
 ```
 
 ---
@@ -446,249 +393,15 @@ channel type=16(humidity) index=0 shift=6 num_samples=1
 ```
 
 ---
-
-## 05_sensor Sample
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-**Description:**
-- TI HDC1010: I2C Temperature and Humidity Sensor<sup>1</sup>
-
-**Learn:**
-- Get Temperature and Humidity e.g. on the reel board via Sensor API
-
-**Sample:**
-- Demonstrates Sensor API
-
-</div>
-
-<div class="flex flex-col items-center justify-center">
-
-```c
-sensor_sample_fetch(dev);
-sensor_channel_get(dev, SENSOR_CHAN_AMBIENT_TEMP,
-	           &temp);
-sensor_channel_get(dev, SENSOR_CHAN_HUMIDITY,
-	           &humidity);
-
-/* print the result */
-printk("Temp = %d.%06d C, RH = %d.%06d %%\n",
-       temp.val1, temp.val2,
-       humidity.val1, humidity.val2);
-```
-
-<div class="text-xs text-center mt-2">samples/05_sensor/src/main.c</div>
-
-</div>
-
-</div>
-
-<Footnotes y="col">
-  <Footnote :number=1>Equivalent in the Zephyr main Repository: zephyr/samples/sensor/ti_hdc.</Footnote>
-</Footnotes>
-
+layout: center
+class: text-center
 ---
 
-## 05_sensor Sample - Console Output
+## Questions?
 
-```shell
-*** Booting Zephyr OS build v4.3.0 ***
-Running on native_sim!
-Dev 0x80525e0 name ti_hdc@43 is ready!
-Fetching...
-Temp = 4.059753 C, RH = 40.344238 %
-Fetching...
-Temp = 3.677062 C, RH = 45.675659 %
-Fetching...
-Temp = 4.165496 C, RH = 58.164978 %
-Fetching...
-```
+<div class="text-sm text-gray-500 mt-12">
 
----
-
-## 06_ble Sample
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-**Description:**
-- BLE Peripheral device, temperature monitor<sup>1</sup>
-
-**Learn:**
-- BLE peripheral role and advertising
-- Health Thermometer Service (HTS)
-
-**Sample:**
-- App to connect: nRF Connect for Mobile (Android, iOS)
+Slides and workshop material remain available at<br>
+<a href="https://github.com/jonas-rem/zephyr-workshop">github.com/jonas-rem/zephyr-workshop</a>
 
 </div>
-
-<div class="flex flex-col items-center justify-center">
-
-```ini
-CONFIG_BT=y
-CONFIG_LOG=y
-CONFIG_BT_SMP=y
-CONFIG_BT_PERIPHERAL=y
-CONFIG_BT_DIS=y
-CONFIG_BT_DIS_PNP=n
-CONFIG_BT_BAS=y
-CONFIG_BT_DEVICE_NAME="Zephyr Health Thermometer"
-CONFIG_BT_DEVICE_APPEARANCE=768
-CONFIG_CBPRINTF_FP_SUPPORT=y
-CONFIG_SENSOR_SHELL=y
-CONFIG_SENSOR_INFO=y
-CONFIG_I2C_SHELL=y
-```
-
-<div class="text-xs text-center mt-2">samples/06_ble/prj.conf</div>
-
-</div>
-
-</div>
-
-<Footnotes y="col">
-  <Footnote :number=1>Equivalent in the Zephyr main Repository: zephyr/samples/bluetooth/peripheral_ht.</Footnote>
-</Footnotes>
-
----
-
-## 06_ble Sample - Console Output
-
-```shell
-*** Booting Zephyr OS build v4.1.0 ***
-[00:00:00.380,645] <inf> bt_hci_core: HW Platform: Nordic Semiconductor (0x0002)
-[00:00:00.380,676] <inf> bt_hci_core: HW Variant: nRF52x (0x0002)
-[00:00:00.380,706] <inf> bt_hci_core: Firmware: Standard Bluetooth controller ...
-[00:00:00.381,347] <inf> bt_hci_core: Identity: D0:6F:6B:78:0C:E8 (random)
-[00:00:00.381,378] <inf> bt_hci_core: HCI: version 5.4 (0x0d) revision 0x0000, ...
-[00:00:00.381,408] <inf> bt_hci_core: LMP: version 5.4 (0x0d) subver 0xffff
-Bluetooth initialized
-temp device is 0x28b5c, name is temp@4000c000
-Advertising successfully started
-Connected
-temperature is 24C
-temperature is 23.75C
-Indication success
-Indication complete
-```
-
----
-
-## 06_ble Sample - Connect with a Smartphone
-
-<div class="grid grid-cols-2 gap-8">
-
-<div class="flex flex-col items-center">
-  <img src="../public/images/nrf_connect_scan.png" class="h-72" />
-  <div class="text-xs text-center mt-2">Scanning for BLE devices</div>
-</div>
-
-<div class="flex flex-col items-center">
-  <img src="../public/images/nrf_connect_ble_connected.png" class="h-72" />
-  <div class="text-xs text-center mt-2">Connected with nRF Connect App</div>
-</div>
-
-</div>
-
----
----
-
-## 07_display_cfb Sample
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-**Control the passive Display** <br> <br>
-
-- **Description:** Character Framebuffer Sample<sup>1</sup>
-- **Sample:** Writes text to the display
-
-</div>
-
-<div class="flex flex-col items-center justify-center">
-  <img src="../public/images/reel_board_passive_display.jpg" class="h-60 object-contain" />
-  <div class="text-xs text-center mt-2">Updated display on the reel board</div>
-</div>
-
-</div>
-
-<Footnotes y="col">
-  <Footnote :number=1>Equivalent in the Zephyr main Repository: zephyr/samples/subsys/display/cfb.</Footnote>
-</Footnotes>
-
----
-
-## Hands-on 3 - Test the samples
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-Build and run the samples<sup>1</sup>:
-
-```shell
-cd zephyr-workshop
-west build -b native_sim samples/04_shell -p
-west build -t run
-  uart connected to pseudotty: /dev/pts/6
-  uart_1 connected to pseudotty: /dev/pts/8
-  <inf> emul: Registering 1 emulator(s) for i2c@100
-```
-
-The shell is connected to **uart_1**, access via the displayed **/dev/pts/'n'**, e.g.:
-
-```shell
-tio /dev/pts/8
-uart:~$
-```
-
-**Task:** The shell sample can already access devices that are registered in
-the devicetree. The emulated TI HDC1010 is in *zephyr-workshop/emulators/sensor/*.
-
-Try changing the simulated temperature.
-
-</div>
-
-<div class="flex flex-col items-center justify-center">
-
-```text
-samples
-├── 01_hello_world
-├── 02_logging
-├── 03_workqueues
-├── 04_shell
-├── 05_sensor
-├── 06_ble
-└── 07_display_cfb
-```
-
-```console
-uart:~$
-  device              devmem
-  i2c                 help
-  section_cmd         sensor
-
-uart:~$ device list
-devices:
-- i2c@100 (READY)
-  DT node labels: i2c0
-- ti_hdc@43 (READY)
-  DT node labels: ti_hdc
-
-uart:~$ sensor get ti_hdc@43
-```
-<div class="text-xs text-center mt-2">Zephyr shell on /dev/pts/8</div>
-
-
-</div>
-
-</div>
-
-<Footnotes y="col">
-  <Footnote :number=1>Note: The ble samples requires a board to run.</Footnote>
-</Footnotes>

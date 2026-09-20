@@ -2,8 +2,6 @@
 theme: academic
 colorSchema: light
 layout: cover
-coverAuthor: Jonas Remmert
-coverAuthorUrl: https://github.com/jonas-rem
 coverDate: ""
 title: Hands-on Zephyr Project Workshop
 routerMode: hash
@@ -32,7 +30,25 @@ themeConfig:
 
 # Hands-on Zephyr Project Workshop
 
-## Navigating Low Power IoT Development with Practical Examples
+## Navigating Development with Practical Examples
+
+<div class="cover-authors">
+  <div>
+    <div class="cover-author-topic">Track 1 - HW Bringup</div>
+    <div class="cover-author-name">Stephan Linz<br>Jan Behrens</div>
+    <div class="cover-author-company">Navimatix GmbH</div>
+  </div>
+  <div>
+    <div class="cover-author-topic">Track 2 - IoT</div>
+    <div class="cover-author-name">Dr. Tobias Kästner<br>Andreas Kurz</div>
+    <div class="cover-author-company">Inovex GmbH</div>
+  </div>
+  <div>
+    <div class="cover-author-topic">Intro | Track 3 - Sim & Testing</div>
+    <div class="cover-author-name">Jonas Remmert</div>
+    <div class="cover-author-company">SMIGHT GmbH</div>
+  </div>
+</div>
 
 ---
 src: ./pages/00-toc.md
@@ -55,6 +71,10 @@ src: ./pages/04-code-examples.md
 ---
 
 ---
+src: ./pages/07-breakout-sessions.md
+---
+
+---
 src: ./pages/05-application-development.md
 ---
 
@@ -62,7 +82,9 @@ src: ./pages/05-application-development.md
 src: ./pages/06-summary.md
 ---
 
+<!--
 ---
 src: ./pages/07-backup-slides.md
 hideInToc: true
 ---
+-->
