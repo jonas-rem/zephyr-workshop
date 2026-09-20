@@ -6,7 +6,6 @@ tests:
       - temp_alert
       - zbus
       - component
-      - workshop
     integration_platforms:
       - native_sim
     timeout: 5
