@@ -26,6 +26,8 @@ static void alert_work_handler(struct k_work *work)
 {
 	int err;
 
+	ARG_UNUSED(work);
+
 	err = zbus_chan_pub(&event_ch, &pending_alert, K_NO_WAIT);
 	if (err) {
 		LOG_ERR("Failed to publish alert: %d", err);
@@ -34,20 +36,29 @@ static void alert_work_handler(struct k_work *work)
 
 static void temp_alert_event_cb(const struct zbus_channel *chan)
 {
-	/* TODO Workshop: Implement temperature threshold logic
-	 *
-	 * 1. Get the message from the channel using zbus_chan_const_msg()
-	 * 2. Check if it's a SYS_SENSOR_READING event, ignore others
-	 * 3. Get temperature from msg->sensor.temp
-	 * 4. Compare against CONFIG_TEMP_ALERT_THRESHOLD
-	 * 5. Track consecutive readings above threshold (use consecutive_high_count)
-	 * 6. After 2 consecutive readings above threshold:
-	 *    - Set pending_alert.event = SYS_TEMP_ALERT
-	 *    - Set pending_alert.sensor.temp = temperature
-	 *    - Submit alert_work via k_work_submit()
-	 * 7. Reset counter when temperature drops below threshold
-	 * 8. Update in_alert_state flag appropriately
-	 */
+	const struct event_msg *msg = zbus_chan_const_msg(chan);
+
+	if (msg->event != SYS_SENSOR_READING) {
+		return;
+	}
+
+	if (msg->sensor.temp <= CONFIG_TEMP_ALERT_THRESHOLD) {
+		consecutive_high_count = 0;
+		in_alert_state = false;
+		return;
+	}
+
+	if (!in_alert_state) {
+		consecutive_high_count++;
+		if (consecutive_high_count < TEMP_ALERT_CONSECUTIVE_COUNT) {
+			return;
+		}
+		in_alert_state = true;
+	}
+
+	pending_alert.event = SYS_TEMP_ALERT;
+	pending_alert.sensor.temp = msg->sensor.temp;
+	k_work_submit(&alert_work);
 }
 
 ZBUS_LISTENER_DEFINE(temp_alert_listener, temp_alert_event_cb);

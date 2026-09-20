@@ -34,44 +34,52 @@ static bool has_entries;
 
 static void store_entry(const struct log_entry *entry)
 {
-	/* TODO Workshop: Implement ring buffer storage
-	 *
-	 * 1. Get entry size using sizeof(struct log_entry)
-	 * 2. Try to write to ring buffer using ring_buf_put()
-	 * 3. If write fails (buffer full):
-	 *    - Log warning "Log buffer full, overwriting oldest entry"
-	 *    - Clear space by reading oldest entry: ring_buf_get(&log_ring_buf, NULL, entry_size)
-	 *    - Try writing again
-	 * 4. Set has_entries = true after successful storage
-	 */
+	size_t entry_size = sizeof(struct log_entry);
+	uint32_t written;
+
+	written = ring_buf_put(&log_ring_buf, (const uint8_t *)entry, entry_size);
+	if (written != entry_size) {
+		LOG_WRN("Log buffer full, overwriting oldest entry");
+		ring_buf_get(&log_ring_buf, NULL, entry_size);
+		written = ring_buf_put(&log_ring_buf, (const uint8_t *)entry, entry_size);
+	}
+
+	if (written == entry_size) {
+		has_entries = true;
+	}
 }
 
 static void sensor_log_event_cb(const struct zbus_channel *chan)
 {
-	/* TODO Workshop: Implement event logging
-	 *
-	 * 1. Get message from channel using zbus_chan_const_msg(chan)
-	 * 2. Create a log_entry struct
-	 * 3. Set entry.timestamp using k_uptime_get()
-	 * 4. Switch on msg->event:
-	 *    - SYS_SENSOR_READING: set type to LOG_ENTRY_SENSOR, store temp
-	 *    - SYS_TEMP_ALERT: set type to LOG_ENTRY_ALERT, store temp
-	 *    - default: return early (ignore other events like button presses)
-	 * 5. Call store_entry(&entry) to save the entry
-	 */
+	const struct event_msg *msg = zbus_chan_const_msg(chan);
+	struct log_entry entry = { .timestamp = k_uptime_get() };
+
+	switch (msg->event) {
+	case SYS_SENSOR_READING:
+		entry.type = LOG_ENTRY_SENSOR;
+		entry.data.temp = msg->sensor.temp;
+		break;
+	case SYS_TEMP_ALERT:
+		entry.type = LOG_ENTRY_ALERT;
+		entry.data.temp = msg->sensor.temp;
+		break;
+	default:
+		return;
+	}
+
+	store_entry(&entry);
 }
 
 static void sensor_log_sys_ctl_cb(const struct zbus_channel *chan)
 {
-	/* TODO Workshop: Implement state change logging
-	 *
-	 * 1. Get state from channel using zbus_chan_const_msg(chan)
-	 * 2. Create a log_entry struct
-	 * 3. Set entry.timestamp using k_uptime_get()
-	 * 4. Set entry.type to LOG_ENTRY_STATE
-	 * 5. Set entry.data.state to the received state value
-	 * 6. Call store_entry(&entry) to save the entry
-	 */
+	const enum sys_states *state = zbus_chan_const_msg(chan);
+	struct log_entry entry = {
+		.timestamp = k_uptime_get(),
+		.type = LOG_ENTRY_STATE,
+		.data.state = *state,
+	};
+
+	store_entry(&entry);
 }
 
 ZBUS_LISTENER_DEFINE(sensor_log_event_listener, sensor_log_event_cb);
