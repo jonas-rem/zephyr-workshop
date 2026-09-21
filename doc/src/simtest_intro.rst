@@ -33,15 +33,29 @@ Framing Questions
 Different Emulation and Simulation Methods
 ******************************************
 
-.. figure:: /_static/images/simulation_options_comparison.svg
-   :align: center
-   :width: 100%
-   :alt: Comparison of simulation and hardware testing options by speed,
-         hardware accuracy, and debugging visibility
-   :target: https://docs.zephyrproject.org/latest/boards/native/doc/arch_soc.html#comparison-with-other-options
+.. only:: html
 
-   Comparison of Zephyr execution targets. Source: `Zephyr POSIX architecture
-   documentation <https://docs.zephyrproject.org/latest/boards/native/doc/arch_soc.html#comparison-with-other-options>`_.
+   .. figure:: /_static/images/simulation_options_comparison.svg
+      :align: center
+      :width: 100%
+      :alt: Comparison of simulation and hardware testing options by speed,
+            hardware accuracy, and debugging visibility
+      :target: https://docs.zephyrproject.org/latest/boards/native/doc/arch_soc.html#comparison-with-other-options
+
+      Comparison of Zephyr execution targets. Source: `Zephyr POSIX architecture
+      documentation <https://docs.zephyrproject.org/latest/boards/native/doc/arch_soc.html#comparison-with-other-options>`_.
+
+.. only:: latex
+
+   .. figure:: /_static/images/simulation_options_comparison.pdf
+      :align: center
+      :width: 100%
+      :alt: Comparison of simulation and hardware testing options by speed,
+            hardware accuracy, and debugging visibility
+      :target: https://docs.zephyrproject.org/latest/boards/native/doc/arch_soc.html#comparison-with-other-options
+
+      Comparison of Zephyr execution targets. Source: `Zephyr POSIX architecture
+      documentation <https://docs.zephyrproject.org/latest/boards/native/doc/arch_soc.html#comparison-with-other-options>`_.
 
 
 Whiteboard Templates
