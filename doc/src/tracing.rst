@@ -283,7 +283,7 @@ Build and run:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim app -p -- -DEXTRA_CONF_FILE=prj_native_ctf.conf
+   host:~$ west build -b native_sim samples/simulation -p -- -DEXTRA_CONF_FILE=prj_native_ctf.conf
    host:~$ mkdir -p traces
    host:~$ ./build/zephyr/zephyr.exe -trace-file=traces/channel0_0
 
@@ -304,7 +304,7 @@ Build and flash to the board:
 
 .. code-block:: console
 
-   host:~$ west build -b nrf52840dk/nrf52840 app -p -- -DEXTRA_CONF_FILE=prj_usb_ctf.conf
+   host:~$ west build -b nrf52840dk/nrf52840 samples/simulation -p -- -DEXTRA_CONF_FILE=prj_usb_ctf.conf
    host:~$ west flash
 
 Connect the board's USB port to your host. The board will enumerate as a USB
@@ -367,7 +367,7 @@ Build and flash to the board:
 
 .. code-block:: console
 
-   host:~$ west build -b nrf52840dk/nrf52840 app -p -- -DEXTRA_CONF_FILE=prj_sysview_rtt.conf
+   host:~$ west build -b nrf52840dk/nrf52840 samples/simulation -p -- -DEXTRA_CONF_FILE=prj_sysview_rtt.conf
    host:~$ west flash
 
 **SystemView Software Installation:**

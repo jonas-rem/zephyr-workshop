@@ -12,7 +12,7 @@
 
 #include "message_channel.h"
 
-LOG_MODULE_REGISTER(app_test_sensor, CONFIG_APP_TEST_SENSOR_LOG_LEVEL);
+LOG_MODULE_REGISTER(app_simulation_sensor, CONFIG_APP_TEST_SENSOR_LOG_LEVEL);
 
 static const struct device *sensor_device;
 static uint32_t read_count;

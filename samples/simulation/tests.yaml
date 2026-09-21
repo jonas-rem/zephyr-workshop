@@ -1,9 +1,9 @@
 sample:
   description: Simplified event-driven test application
-  name: app_test
+  name: app_simulation
 
 tests:
-  app_test.basic:
+  app_simulation.basic:
     platform_allow:
       - native_sim
       - reel_board
@@ -14,9 +14,9 @@ tests:
     harness_config:
       type: one_line
       regex:
-        - "App test booted"
+        - "App simulation booted"
 
-  app_test.e2e.native_sim:
+  app_simulation.e2e.native_sim:
     platform_allow:
       - native_sim
     integration_platforms:
@@ -29,13 +29,13 @@ tests:
         - pytest/test_sensor_shell.py
         - pytest/test_button_shell.py
     tags:
-      - app_test
+      - app_simulation
       - e2e
       - pytest
       - shell
     timeout: 20
 
-  app_test.e2e.hil:
+  app_simulation.e2e.hil:
     platform_allow:
       - reel_board
     harness: pytest
@@ -45,7 +45,7 @@ tests:
       fixture:
         - workshop_app
     tags:
-      - app_test
+      - app_simulation
       - e2e
       - hil
       - pytest

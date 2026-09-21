@@ -10,7 +10,7 @@
 
 #include "message_channel.h"
 
-LOG_MODULE_REGISTER(app_test_led, CONFIG_APP_TEST_LED_LOG_LEVEL);
+LOG_MODULE_REGISTER(app_simulation_led, CONFIG_APP_TEST_LED_LOG_LEVEL);
 
 #define LED0_NODE DT_ALIAS(led0)
 

@@ -40,13 +40,13 @@ Additional Resources
 
 **Links to source code from the zephyr-workshop repo**
 
-- :doc:`Application README <../app/README>` - Integration testing details
+- :doc:`Application README <../samples/simulation/README>` - Integration testing details
 - `05_sensor`_ - Sensor emulator sample with E2E testing
 
 .. _Twister: https://docs.zephyrproject.org/latest/develop/test/twister.html
 .. _ZTest: https://docs.zephyrproject.org/latest/develop/test/ztest.html
 .. _Pytest: https://docs.zephyrproject.org/latest/develop/test/pytest.html
-.. _app: https://github.com/jonas-rem/zephyr-workshop/tree/main/app
+.. _app: https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/simulation
 
-.. _LED blinking patterns: https://github.com/jonas-rem/zephyr-workshop/blob/main/app/src/components/led/led.c
+.. _LED blinking patterns: https://github.com/jonas-rem/zephyr-workshop/blob/main/samples/simulation/src/components/led/led.c
 .. _05_sensor: https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/basics/05_sensor

@@ -1,11 +1,11 @@
 tests:
-  app_test.component.sensor:
+  app_simulation.component.sensor:
     platform_allow:
       - native_sim
     integration_platforms:
       - native_sim
     tags:
-      - app_test
+      - app_simulation
       - component
       - sensor
       - zbus

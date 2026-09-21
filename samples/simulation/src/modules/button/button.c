@@ -14,7 +14,7 @@
 
 #include "message_channel.h"
 
-LOG_MODULE_REGISTER(app_test_button, CONFIG_APP_TEST_BUTTON_LOG_LEVEL);
+LOG_MODULE_REGISTER(app_simulation_button, CONFIG_APP_TEST_BUTTON_LOG_LEVEL);
 
 #define SW0_NODE DT_ALIAS(sw0)
 #define DEBOUNCE_MS 10

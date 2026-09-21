@@ -1,11 +1,11 @@
 tests:
-  app_test.component.button:
+  app_simulation.component.button:
     platform_allow:
       - native_sim
     integration_platforms:
       - native_sim
     tags:
-      - app_test
+      - app_simulation
       - component
       - gpio
       - zbus
