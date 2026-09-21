@@ -18,18 +18,18 @@ deck and code examples are ideal to conduct trainings.
 
    src/introduction
    src/setup
-   src/architecture
    src/testing
    src/tracing
    src/llm_future
 
 
 .. toctree::
-   :caption: Application
+   :caption: Simulation & Testing Track
    :maxdepth: 1
 
-   app/README
-   src/task_app_extension
+   src/simtest_intro
+   src/simtest_cheatsheet
+
 
 .. toctree::
    :caption: Samples

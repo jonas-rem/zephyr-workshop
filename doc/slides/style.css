@@ -158,7 +158,8 @@ figcaption.mt-3.text-center.text-xs,
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 2rem;
-  margin-top: 7rem;
+  margin-top: 4.5rem;
+  align-items: start;
   text-align: center;
   color: var(--color-dark-teal);
 }

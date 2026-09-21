@@ -47,17 +47,40 @@ level: 1
 <div>
 
 **Button**
-- Switch between system states (active, sleep)
+- Debounced `sw0` press
+- Publishes `button_event_ch`
+
+**Sensor**
+- Reads the HDC on `BUTTON_EVENT_0_PRESSED`
+- Publishes lifecycle events on `sensor_event_ch`
 
 **LED**
-- Indicate system state
-- Run in own thread for smooth animations
+- On while a read is in progress
 
 </div>
 
-<div class="flex flex-col items-center justify-center">
-  <img src="../public/images/zbus_application.png" class="h-60 object-contain" />
-  <div class="text-xs text-center mt-2">Minimal modular application with zbus</div>
+<div>
+
+<div class="text-xs">
+
+```text
+button_event_ch                            sensor_event_ch
+           │                                      │
+           │             ┌──────────┐             │
+           │◀─── event ──│  Button  │             │
+           │             └──────────┘             │
+           │             ┌──────────┐             │
+           │─── event ──▶│  Sensor  │─── event ──▶│
+           │             └──────────┘             │
+           │             ┌──────────┐             │
+           │─── event ──▶│   LED    │◀── event ───│
+           │             └──────────┘             │
+```
+
+</div>
+
+<div class="text-xs text-center mt-2">Button, sensor, and LED on typed channels</div>
+
 </div>
 
 </div>
@@ -72,8 +95,8 @@ level: 1
 
 - **General:** Code reuse, maintainability, readability
 - **IPC:** Communication via Zbus
-- **Context:** Each component can be controlled independently
-- **Testing:** Components can be tested separately
+- **Context:** Each module is Kconfig-gated
+- **Testing:** Each module has its own test
 
 </div>
 
@@ -84,22 +107,16 @@ app/
 ├── CMakeLists.txt
 ├── Kconfig
 ├── prj.conf
+├── tests.yaml
 └── src
-    ├── common
-    │   ├── CMakeLists.txt
-    │   ├── message_channel.c
-    │   └── message_channel.h
     ├── main.c
-    └── components
-        ├── button
-        │   ├── button.c
-        │   ├── CMakeLists.txt
-        │   ├── Kconfig.button
-        │   └── tests/
-        └── led
-            ├── led.c
-            ├── CMakeLists.txt
-            └── Kconfig.led
+    ├── common
+    │   ├── message_channel.h
+    │   └── message_types.h
+    └── modules
+        ├── button/
+        ├── led/
+        └── sensor/
 ```
 
 </div>
@@ -108,62 +125,45 @@ app/
 
 ---
 
-## Starting Components via System Initialization (SYS_INIT)
+## Starting the Modules
 
 <div class="grid grid-cols-2 gap-4">
 
 <div>
 
-**Automatic Initialization**
+**Button:** `SYS_INIT`, before `main()`
 
-- Runs after drivers/ZBus, before `main()`
-- Configurable priority
+**Sensor and LED:** static threads, init inside the thread
 
-**Boot Sequence:**
+**Boot sequence:**
 ```text
 Kernel
   ↓
-drivers/ZBus
+drivers / ZBus channels
   ↓
-SYS_INIT functions via priority
+SYS_INIT (button)
   ↓
-Component threads
-  ↓
-main()
+static threads (sensor, LED) and main()
 ```
-<v-click>
-
-<br>
-
-**Benefits:**
-
-- Testability via Decoupled modules
-
-</v-click>
 
 </div>
 
 <div>
 
-<v-click>
-
 **button.c:**
 ```c
-SYS_INIT(init, APPLICATION,
-         CONFIG_BUTTON_MODULE_INIT_PRIORITY);
+SYS_INIT(button_init, APPLICATION,
+         CONFIG_APP_TEST_BUTTON_INIT_PRIORITY);
 ```
 
-**Boot Log:**
+**Boot log:**
 ```text
-*** Booting Zephyr OS build v4.3.0 ***
-<inf> button_module: Set up button at gpio_emul pin 1
-<inf> button_module: Button module started
-<inf> sys_ctrl: System control started
-<inf> led_module: LED module started
-<inf> app: Main thread going to sleep.
+*** Booting Zephyr OS build v4.4.0 ***
+<inf> app_test_button: Button initialized
+<inf> app_test: App test booted
+<inf> app_test_led: LED initialized
+<inf> app_test_sensor: Sensor initialized
 ```
-
-</v-click>
 
 </div>
 
@@ -171,22 +171,21 @@ SYS_INIT(init, APPLICATION,
 
 ---
 
-## Testing Components in Isolation
+## Testing Modules in Isolation
 
 <div class="grid grid-cols-2 gap-4">
 
 <div>
 
-**Isolated testing of components**
+**Component test per module**
 - Zephyr Test framework (`Ztest`)
-- represents an integration test
-- co-located with components
-- Interfaces abstracted via Zbus
-- Hardware emulation via `native_sim`
+- Co-located with the module
+- Contract is the Zbus channel
+- Hardware via `native_sim` emulators
 
-**Test Structure:**
+**Test structure:**
 ```text
-app/src/components/button/tests/
+app/src/modules/button/tests/
 ├── CMakeLists.txt
 ├── prj.conf
 ├── tests.yaml
@@ -198,27 +197,22 @@ app/src/components/button/tests/
 
 <div>
 
-**test_button.c**: direct access to zbus events and emulated hardware (button, sensor, led).
+**test_button.c:** press the emulated GPIO, observe `button_event_ch`.
 
 <br>
 
-**Running Component Tests:**
+**Running component tests:**
 ```bash
-# Single component test
-west twister -T app/src/components/button/tests \
+# One module
+west twister -T app/src/modules/button/tests \
   -v --integration -p native_sim
 
-# All component tests
-west twister -T app/src/components/ --integration
+# All modules
+west twister -T app/src/modules --integration
 
-# Use existing build artifacts for faster testing
-west build -b native_sim app/src/components/button/tests
+# Log on the console
+west build -b native_sim app/src/modules/button/tests
 west build -t run
-  *** Booting Zephyr OS build v4.3.0 ***
-  START - test_button_press_sleep_to_standby
-  [00:00:00.060,000] <inf> sys_ctrl: System state sleep
-   PASS - test_button_press_sleep_to_standby in 0.000 s
-  [..]
 ```
 
 </div>
@@ -227,53 +221,45 @@ west build -t run
 
 ---
 
-## Testing Components in Isolation - Results
+## Testing Modules in Isolation - Results
 
 <div class="grid grid-cols-2 gap-4 items-start">
 
 <div>
 
-**Run Button Test**
+**Run button test**
 
 ```bash
-west twister -T app/src/components/button/tests \
+west twister -T app/src/modules/button/tests \
   --integration -p native_sim
 ```
 
-**Key Artifacts**
+**Key artifacts**
 ```text
 twister-out/
-├── twister_report.xml          # JUnit XML report
-└── native_sim_native/
-    └── host/zephyr-workshop/
-        └── app/src/components/
-            └── button/tests/
-                └── component.button/
-                    ├── handler.log       # Test output
-                    └── build.log         # Build output
+└── native_sim/
+    └── .../button/tests/
+        └── app_test.component.button/
+            ├── handler.log
+            └── build.log
 ```
 
 </div>
 
 <div>
 
-**Sample Output** (handler.log)
+**Sample output** (handler.log)
 ```text
-Running TESTSUITE button_test_suite
-START - test_button_module_initialized
- PASS - test_button_module_initialized in 0.000 seconds
-START - test_button_press_creates_event
- PASS - test_button_press_creates_event in 0.190 seconds
-...
-TESTSUITE button_test_suite succeeded
-SUITE PASS - 100.00% [button_test_suite]:
-  pass = 4, fail = 0, skip = 0, total = 4
-```
-
-**Generate HTML Report**
-```bash
-pip install junit2html
-junit2html twister-out/twister_report.xml report.html
+Running TESTSUITE button_test
+START - test_press_publishes_request
+ PASS - test_press_publishes_request
+START - test_bounce_publishes_one_request
+ PASS - test_bounce_publishes_one_request
+START - test_repeated_presses_publish_repeated_requests
+ PASS - test_repeated_presses_publish_repeated_requests
+TESTSUITE button_test succeeded
+SUITE PASS - 100.00% [button_test]:
+  pass = 3, fail = 0, skip = 0, total = 3
 ```
 
 </div>
@@ -289,108 +275,33 @@ junit2html twister-out/twister_report.xml report.html
 <div>
 
 **Zephyr Test Runner (Twister)**
-- `west twister` - Automates building and running tests
-- Supports multiple platforms (real HW or simulation)
-- Component tests via `tests.yaml`
+- `west twister` builds and runs tests
+- Host (`native_sim`) or hardware
+- Scenarios come from `tests.yaml`
 
 </div>
 
 <div>
 
-**Run Integration Tests:**
+**Integration run:**
 ```shell
-west twister -T app/ --integration
+west twister -T app --integration
 ```
 
 <br>
 
-Run all tests found in the **app/** dir. This can be build-only, unit-,
-integration- or e2e tests. With or without hardware.
-
-<br>
-
-
-**Output:**
-```text
-Total complete:   14/  14  100%
-    built (not run):    8,
-    failed:             0,
-    error:              0
-Run completed
-```
-
-</div>
-
-</div>
-
----
-
-## Hands-on 4: Extend the Application - Cold-Chain Monitoring
-
-<div class="grid grid-cols-2 gap-4">
-
-<div>
-
-1. **tempsense**
-- Read temp, publish to `event_ch`
-
-2. **temp_alert**
-- Watch readings, emit alert if ≥5°C
-
-3. **sensor_log**
-- Record all events from ``event_ch``
-- expose records via shell
-
-Hints:
-- Start with one of the components
-- channels and existing components are already prepared
-- Tests exist, use them to develop
-
-</div>
-
-<div>
-
-<div class="text-xs">
+Boot, component, and `native_sim` end-to-end tests under `app/`:
 
 ```text
-event_ch                                     sys_ctl_ch
-   │               ┌────────────┐                  │
-   │◀─── PRESSED ──│  Button    │                  │
-   │               └────────────┘                  │
-   │               ┌────────────┐                  │
-   │──── PRESSED ─▶│  sys_ctrl  │── ACTIVE/SLEEP ─▶│
-   │               └────────────┘                  │
-   │               ┌────────────┐                  │
-   │─ TEMP/ALERT ─▶│    LED     │◀─ ACTIVE/SLEEP ──│
-   │               └────────────┘                  │
-
-   │   ----------- New Components ------------     │
-   │               ┌────────────┐                  │
-   │◀──── TEMP ────│ tempsense  │◀─ ACTIVE/SLEEP ──│
-   │               └────────────┘                  │
-   │               ┌────────────┐                  │
-   │◀─── ALERT ────│ temp_alert │                  │
-   │──── TEMP ────▶│            │                  │
-   │               └────────────┘                  │
-   │               ┌────────────┐                  │
-   │─ TEMP/ALERT ─▶│ sensor_log │◀─ ACTIVE/SLEEP ──│
-   │               └────────────┘                  │
+app_test.basic
+app_test.component.button
+app_test.component.led
+app_test.component.sensor
+app_test.e2e.native_sim
 ```
 
-</div>
-
-<div class="text-xs text-center mt-2">Cold-Chain Monitoring Architecture</div>
-
+`app_test.e2e.hil` is the same shell test on `reel_board`. It is not in the integration set.
 
 </div>
 
 </div>
-
-<Footnotes y="col">
-  <Footnote :number="1">
-    Full details at:
-    <a href="https://jonas-rem.github.io/zephyr-workshop/src/task_app_extension.html">
-      jonas-rem.github.io/zephyr-workshop/task_app_extension.html
-    </a>
-  </Footnote>
-</Footnotes>

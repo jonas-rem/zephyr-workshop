@@ -47,6 +47,8 @@ themeConfig:
     <div class="cover-author-topic">Intro | Track 3 - Sim & Testing</div>
     <div class="cover-author-name">Jonas Remmert</div>
     <div class="cover-author-company">SMIGHT GmbH</div>
+    <div class="cover-author-name">Reto Schneider</div>
+    <div class="cover-author-company">Siemens AG</div>
   </div>
 </div>
 
