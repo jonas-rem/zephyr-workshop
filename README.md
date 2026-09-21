@@ -27,7 +27,7 @@ Resources to get started with Zephyr:
 The application demonstrates a button-driven sensor read. The button publishes
 a typed ZBus event, the sensor reads the emulated HDC, and the LED shows the
 read activity. The modules can be built and tested on `native_sim`.
-([source](https://github.com/jonas-rem/zephyr-workshop/tree/main/app))
+([source](https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/simulation))
 
 ### Samples
 
@@ -77,4 +77,4 @@ licensed under [Apache 2.0](LICENSE), documentation and slides under [CC BY-SA
 4.0](LICENSE_SLIDES).
 
 [Workshop Slides]: https://jonas-rem.github.io/zephyr-workshop/src/slides.html
-[Application]: https://jonas-rem.github.io/zephyr-workshop/app/README.html
+[Application]: https://jonas-rem.github.io/zephyr-workshop/samples/simulation/README.html

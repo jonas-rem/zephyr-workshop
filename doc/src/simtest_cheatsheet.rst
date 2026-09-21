@@ -9,7 +9,7 @@ Build and Run
 
 .. code-block:: console
 
-   $ west build -b native_sim app -p
+   $ west build -b native_sim samples/simulation -p
    $ west build -t run
 
 The ``native_sim`` console accepts these shell commands:
@@ -26,31 +26,31 @@ Twister
 .. code-block:: console
 
    # All application tests
-   $ west twister -T app --integration
+   $ west twister -T samples/simulation --integration
 
    # All component tests
-   $ west twister -T app/src/modules --integration
+   $ west twister -T samples/simulation/src/modules --integration
 
    # Component tests individually
-   $ west twister -T app/src/modules/button/tests --integration
-   $ west twister -T app/src/modules/led/tests --integration
-   $ west twister -T app/src/modules/sensor/tests --integration
+   $ west twister -T samples/simulation/src/modules/button/tests --integration
+   $ west twister -T samples/simulation/src/modules/led/tests --integration
+   $ west twister -T samples/simulation/src/modules/sensor/tests --integration
 
    # End-to-end test on native_sim
-   $ west twister -T app -s app_test.e2e.native_sim --integration
+   $ west twister -T samples/simulation -s app_simulation.e2e.native_sim --integration
 
    # End-to-end test on reel_board
-   $ west twister -T app -s app_test.e2e.hil -p reel_board \
+   $ west twister -T samples/simulation -s app_simulation.e2e.hil -p reel_board \
      --device-testing --device-serial /dev/ttyACM0 -X workshop_app
 
    # App boot test
-   $ west twister -T app -s app_test.basic --integration
+   $ west twister -T samples/simulation -s app_simulation.basic --integration
 
    # List tests without running them
-   $ west twister -T app --integration --list-tests
+   $ west twister -T samples/simulation --integration --list-tests
 
    # Show failure logs inline
-   $ west twister -T app --integration --inline-logs
+   $ west twister -T samples/simulation --integration --inline-logs
 
 Artifacts
 *********
@@ -70,13 +70,13 @@ test.
 .. code-block:: console
 
    # Button
-   $ west build -b native_sim app/src/modules/button/tests -p
+   $ west build -b native_sim samples/simulation/src/modules/button/tests -p
    $ west build -t run
 
    # LED
-   $ west build -b native_sim app/src/modules/led/tests -p
+   $ west build -b native_sim samples/simulation/src/modules/led/tests -p
    $ west build -t run
 
    # Sensor
-   $ west build -b native_sim app/src/modules/sensor/tests -p
+   $ west build -b native_sim samples/simulation/src/modules/sensor/tests -p
    $ west build -t run

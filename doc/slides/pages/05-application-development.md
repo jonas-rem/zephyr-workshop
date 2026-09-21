@@ -103,7 +103,7 @@ button_event_ch                            sensor_event_ch
 <div>
 
 ```text
-app/
+samples/simulation/
 ├── CMakeLists.txt
 ├── Kconfig
 ├── prj.conf
@@ -159,10 +159,10 @@ SYS_INIT(button_init, APPLICATION,
 **Boot log:**
 ```text
 *** Booting Zephyr OS build v4.4.0 ***
-<inf> app_test_button: Button initialized
-<inf> app_test: App test booted
-<inf> app_test_led: LED initialized
-<inf> app_test_sensor: Sensor initialized
+<inf> app_simulation_button: Button initialized
+<inf> app_simulation: App simulation booted
+<inf> app_simulation_led: LED initialized
+<inf> app_simulation_sensor: Sensor initialized
 ```
 
 </div>
@@ -185,7 +185,7 @@ SYS_INIT(button_init, APPLICATION,
 
 **Test structure:**
 ```text
-app/src/modules/button/tests/
+samples/simulation/src/modules/button/tests/
 ├── CMakeLists.txt
 ├── prj.conf
 ├── tests.yaml
@@ -204,14 +204,14 @@ app/src/modules/button/tests/
 **Running component tests:**
 ```bash
 # One module
-west twister -T app/src/modules/button/tests \
+west twister -T samples/simulation/src/modules/button/tests \
   -v --integration -p native_sim
 
 # All modules
-west twister -T app/src/modules --integration
+west twister -T samples/simulation/src/modules --integration
 
 # Log on the console
-west build -b native_sim app/src/modules/button/tests
+west build -b native_sim samples/simulation/src/modules/button/tests
 west build -t run
 ```
 
@@ -230,7 +230,7 @@ west build -t run
 **Run button test**
 
 ```bash
-west twister -T app/src/modules/button/tests \
+west twister -T samples/simulation/src/modules/button/tests \
   --integration -p native_sim
 ```
 
@@ -239,7 +239,7 @@ west twister -T app/src/modules/button/tests \
 twister-out/
 └── native_sim/
     └── .../button/tests/
-        └── app_test.component.button/
+        └── app_simulation.component.button/
             ├── handler.log
             └── build.log
 ```
@@ -285,22 +285,22 @@ SUITE PASS - 100.00% [button_test]:
 
 **Integration run:**
 ```shell
-west twister -T app --integration
+west twister -T samples/simulation --integration
 ```
 
 <br>
 
-Boot, component, and `native_sim` end-to-end tests under `app/`:
+Boot, component, and `native_sim` end-to-end tests under `samples/simulation/`:
 
 ```text
-app_test.basic
-app_test.component.button
-app_test.component.led
-app_test.component.sensor
-app_test.e2e.native_sim
+app_simulation.basic
+app_simulation.component.button
+app_simulation.component.led
+app_simulation.component.sensor
+app_simulation.e2e.native_sim
 ```
 
-`app_test.e2e.hil` is the same shell test on `reel_board`. It is not in the integration set.
+`app_simulation.e2e.hil` is the same shell test on `reel_board`. It is not in the integration set.
 
 </div>
 

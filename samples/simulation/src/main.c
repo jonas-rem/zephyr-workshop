@@ -5,10 +5,10 @@
 
 #include <zephyr/logging/log.h>
 
-LOG_MODULE_REGISTER(app_test, LOG_LEVEL_INF);
+LOG_MODULE_REGISTER(app_simulation, LOG_LEVEL_INF);
 
 int main(void)
 {
-	LOG_INF("App test booted");
+	LOG_INF("App simulation booted");
 	return 0;
 }
