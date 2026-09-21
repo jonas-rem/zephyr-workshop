@@ -45,6 +45,27 @@ For other boards with external sensor:
    host:~$ west build -b nucleo_l496zg samples/05_sensor -p
    host:~$ west flash
 
+Changing Emulated Values
+************************
+
+On ``native_sim``, run the application with the shell on ``uart1``:
+
+.. code-block:: console
+
+   host:~$ west build -b native_sim samples/05_sensor -p
+   host:~$ ./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
+
+Connect to the shell from another terminal and set the sensor channels:
+
+.. code-block:: console
+
+   host:~$ screen /tmp/zephyr_shell
+   uart:~$ sensor_emul set temp 25.5
+   uart:~$ sensor_emul set humidity 62.5
+
+The application reads these values through the TI HDC driver and Sensor API.
+Explicitly setting a channel disables random sample generation until restart.
+
 Sample Output
 *************
 
