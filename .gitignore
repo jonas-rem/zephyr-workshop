@@ -24,6 +24,8 @@ doc/slides_dist/
 *.pygtex
 *.pygstyle
 .venv
+__pycache__/
+*.pyc
 
 # Open Code Agents file
 AGENTS.md

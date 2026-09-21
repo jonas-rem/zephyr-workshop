@@ -1,0 +1,12 @@
+tests:
+  app_test.component.led:
+    platform_allow:
+      - native_sim
+    integration_platforms:
+      - native_sim
+    tags:
+      - app_test
+      - component
+      - gpio
+      - zbus
+    timeout: 5
