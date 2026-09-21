@@ -1,7 +1,7 @@
 08 System Initialization
 ########################
 
-**Link to Source:** `samples/08_sys_init <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/08_sys_init>`_
+**Link to Source:** `samples/basics/08_sys_init <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/basics/08_sys_init>`_
 
 Overview
 ********
@@ -37,7 +37,7 @@ This application can be built and executed on native_sim as follows:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/08_sys_init -p
+   host:~$ west build -b native_sim samples/basics/08_sys_init -p
 
 
 Check Init Levels

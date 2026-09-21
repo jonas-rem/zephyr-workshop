@@ -1,7 +1,7 @@
 01 Hello World
 ##############
 
-**Link to Source:** `samples/01_hello_world <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/01_hello_world>`_
+**Link to Source:** `samples/basics/01_hello_world <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/basics/01_hello_world>`_
 
 Overview
 ********
@@ -22,14 +22,14 @@ This application can be built and executed on native_sim as follows:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/01_hello_world -p
+   host:~$ west build -b native_sim samples/basics/01_hello_world -p
    host:~$ west build -t run
 
 To build for a real board (e.g., reel_board@2), use:
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/01_hello_world -p
+   host:~$ west build -b reel_board@2 samples/basics/01_hello_world -p
    host:~$ west flash
 
 Sample Output

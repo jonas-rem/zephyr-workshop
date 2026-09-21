@@ -1,7 +1,7 @@
 07 Display
 ##########
 
-**Link to Source:** `samples/07_display_cfb <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/07_display_cfb>`_
+**Link to Source:** `samples/basics/07_display_cfb <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/basics/07_display_cfb>`_
 
 Overview
 ********
@@ -37,7 +37,7 @@ Building
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/07_display_cfb -p
+   host:~$ west build -b reel_board@2 samples/basics/07_display_cfb -p
    host:~$ west flash
 
 Sample Output
@@ -63,7 +63,7 @@ The display will show:
 Customization
 *************
 
-Edit ``samples/07_display_cfb/src/main.c`` to change the displayed text:
+Edit ``samples/basics/07_display_cfb/src/main.c`` to change the displayed text:
 
 .. code-block:: c
 

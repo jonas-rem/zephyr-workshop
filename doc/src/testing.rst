@@ -49,4 +49,4 @@ Additional Resources
 .. _app: https://github.com/jonas-rem/zephyr-workshop/tree/main/app
 
 .. _LED blinking patterns: https://github.com/jonas-rem/zephyr-workshop/blob/main/app/src/components/led/led.c
-.. _05_sensor: https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/05_sensor
+.. _05_sensor: https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/basics/05_sensor

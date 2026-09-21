@@ -1,7 +1,7 @@
 04 Shell
 ########
 
-**Link to Source:** `samples/04_shell <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/04_shell>`_
+**Link to Source:** `samples/basics/04_shell <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/basics/04_shell>`_
 
 Overview
 ********
@@ -34,7 +34,7 @@ This application can be built and executed on QEMU x86 as follows:
 
 .. code-block:: console
 
-   host:~$ west build -b qemu_x86 samples/04_shell -p
+   host:~$ west build -b qemu_x86 samples/basics/04_shell -p
    host:~$ west build -t run
 
 To exit QEMU, press ``CTRL+a, x``.
@@ -43,7 +43,7 @@ To build for a real board (e.g., reel_board@2), use:
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/04_shell -p
+   host:~$ west build -b reel_board@2 samples/basics/04_shell -p
    host:~$ west flash
 
 Sample Output

@@ -1,7 +1,7 @@
 06 BLE
 ######
 
-**Link to Source:** `samples/06_ble <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/06_ble>`_
+**Link to Source:** `samples/basics/06_ble <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/basics/06_ble>`_
 
 Overview
 ********
@@ -41,14 +41,14 @@ Building
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/06_ble -p
+   host:~$ west build -b reel_board@2 samples/basics/06_ble -p
    host:~$ west flash
 
 Or for nRF52 DK:
 
 .. code-block:: console
 
-   host:~$ west build -b nrf52dk_nrf52832 samples/06_ble -p
+   host:~$ west build -b nrf52dk_nrf52832 samples/basics/06_ble -p
    host:~$ west flash
 
 Sample Output

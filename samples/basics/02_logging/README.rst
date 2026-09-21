@@ -1,7 +1,7 @@
 02 Logging
 ##########
 
-**Link to Source:** `samples/02_logging <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/02_logging>`_
+**Link to Source:** `samples/basics/02_logging <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/basics/02_logging>`_
 
 Overview
 ********
@@ -29,14 +29,14 @@ This application can be built and executed on native_sim as follows:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/02_logging -p
+   host:~$ west build -b native_sim samples/basics/02_logging -p
    host:~$ west build -t run
 
 To build for a real board (e.g., reel_board@2), use:
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/02_logging -p
+   host:~$ west build -b reel_board@2 samples/basics/02_logging -p
    host:~$ west flash
 
 Sample Output
