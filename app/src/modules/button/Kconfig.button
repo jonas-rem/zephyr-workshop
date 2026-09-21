@@ -1,0 +1,21 @@
+config APP_TEST_BUTTON
+	bool "Button module"
+	default y
+	depends on GPIO && ZBUS
+
+if APP_TEST_BUTTON
+
+module = APP_TEST_BUTTON
+module-str = BUTTON
+source "subsys/logging/Kconfig.template.log_config"
+
+config APP_TEST_BUTTON_INIT_PRIORITY
+	int "Button initialization priority"
+	default 80
+
+config APP_TEST_BUTTON_SHELL
+	bool "Button emulator shell command"
+	default y
+	depends on SHELL && GPIO_EMUL
+
+endif

@@ -1,12 +1,12 @@
 sample:
-  description: Application
-  name: app
-common:
-  tags:
-    - introduction
+  description: Simplified event-driven test application
+  name: app_test
+
 tests:
-  # Main application with all components
-  basic.app:
+  app_test.basic:
+    platform_allow:
+      - native_sim
+      - reel_board
     integration_platforms:
       - native_sim
       - reel_board
@@ -14,84 +14,41 @@ tests:
     harness_config:
       type: one_line
       regex:
-        - "System booted"
+        - "App test booted"
 
-  # Component-specific tests using Kconfig options
-  # Tests each component in isolation with console harness
-
-  app.test.button:
-    extra_conf_files:
-      - test_cfg/button_component.conf
+  app_test.e2e.native_sim:
+    platform_allow:
+      - native_sim
     integration_platforms:
       - native_sim
+    harness: pytest
+    extra_dtc_overlay_files:
+      - pytest/native_sim.overlay
+    harness_config:
+      pytest_root:
+        - pytest/test_sensor_shell.py
+        - pytest/test_button_shell.py
+    tags:
+      - app_test
+      - e2e
+      - pytest
+      - shell
+    timeout: 20
+
+  app_test.e2e.hil:
+    platform_allow:
       - reel_board
-    tags:
-      - button
-    harness: console
+    harness: pytest
     harness_config:
-      type: one_line
-      regex:
-        - "Button component started"
-
-  app.test.led:
-    extra_conf_files:
-      - test_cfg/led_component.conf
-    integration_platforms:
-      - native_sim
-      - reel_board
+      pytest_root:
+        - pytest/test_sensor_shell.py
+      fixture:
+        - workshop_app
     tags:
-      - led
-    harness: console
-    harness_config:
-      type: one_line
-      regex:
-        - "LED component initialized"
-
-  app.test.sys_ctrl:
-    extra_conf_files:
-      - test_cfg/sys_ctrl_component.conf
-    integration_platforms:
-      - native_sim
-    tags:
-      - sys_ctrl
-    harness: console
-    harness_config:
-      type: one_line
-      regex:
-        - "System booted"
-
-  # Build tests for tracing configurations
-  app.tracing.native_ctf:
-    build_only: true
-    extra_conf_files:
-      - prj_native_ctf.conf
-    platform_allow:
-      - native_sim
-    integration_platforms:
-      - native_sim
-    tags:
-      - tracing
-
-  app.tracing.usb_ctf:
-    build_only: true
-    extra_conf_files:
-      - prj_usb_ctf.conf
-    platform_allow:
-      - nrf52840dk/nrf52840
-    integration_platforms:
-      - nrf52840dk/nrf52840
-    depends_on: usb_device
-    tags:
-      - tracing
-
-  app.tracing.sysview_rtt:
-    build_only: true
-    extra_conf_files:
-      - prj_sysview_rtt.conf
-    platform_allow:
-      - nrf52840dk/nrf52840
-    integration_platforms:
-      - nrf52840dk/nrf52840
-    filter: CONFIG_HAS_SEGGER_RTT
-    tags:
-      - tracing
+      - app_test
+      - e2e
+      - hil
+      - pytest
+      - shell
+    # Covers flashing over DAPLink, boot and the test itself.
+    timeout: 120

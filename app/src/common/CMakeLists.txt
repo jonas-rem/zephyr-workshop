@@ -1,1 +1,1 @@
-target_sources(app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/message_channel.c)
+target_sources(app PRIVATE message_channel.c message_types.c)

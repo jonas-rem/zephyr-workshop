@@ -1,0 +1,7 @@
+menu "Application"
+rsource "../Kconfig.sensor"
+endmenu
+
+menu "Zephyr Kernel"
+source "Kconfig.zephyr"
+endmenu
