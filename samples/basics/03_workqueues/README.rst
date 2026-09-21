@@ -1,7 +1,7 @@
 03 Workqueues
 #############
 
-**Link to Source:** `samples/03_workqueues <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/03_workqueues>`_
+**Link to Source:** `samples/basics/03_workqueues <https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/basics/03_workqueues>`_
 
 Overview
 ********
@@ -31,14 +31,14 @@ This application can be built and executed on native_sim as follows:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/03_workqueues -p
+   host:~$ west build -b native_sim samples/basics/03_workqueues -p
    host:~$ west build -t run
 
 To build for a real board (e.g., reel_board@2), use:
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/03_workqueues -p
+   host:~$ west build -b reel_board@2 samples/basics/03_workqueues -p
    host:~$ west flash
 
 Sample Output

@@ -37,12 +37,14 @@ zephyrproject
 └── zephyr-workshop
     ├── west.yml
     └── samples
-        └── 01_hello_world
-            ├── CMakeLists.txt
-            ├── prj.conf
-            ├── README.rst
-            ├── tests.yaml
-            └── src
+        └── basics
+            └── 01_hello_world
+                ├── CMakeLists.txt
+                ├── prj.conf
+                ├── README.rst
+                ├── tests.yaml
+                └── src
+                    └── main.c
 ```
 </div>
 

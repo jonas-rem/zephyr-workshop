@@ -1,7 +1,7 @@
 {
   // Debugs whatever binary currently sits in build/.
   // Building is done on the command line, e.g.:
-  //     west build -b native_sim -d build zephyr-workshop/samples/01_hello_world
+  //     west build -b native_sim -d build zephyr-workshop/samples/basics/01_hello_world
   // Then start the debugger here with F5.
   "version": "0.2.0",
   "configurations": [

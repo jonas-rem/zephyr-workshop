@@ -35,14 +35,14 @@ deck and code examples are ideal to conduct trainings.
    :caption: Samples
    :maxdepth: 1
 
-   samples/01_hello_world/README
-   samples/02_logging/README
-   samples/03_workqueues/README
-   samples/04_shell/README
-   samples/05_sensor/README
-   samples/06_ble/README
-   samples/07_display_cfb/README
-   samples/08_sys_init/README
+   samples/basics/01_hello_world/README
+   samples/basics/02_logging/README
+   samples/basics/03_workqueues/README
+   samples/basics/04_shell/README
+   samples/basics/05_sensor/README
+   samples/basics/06_ble/README
+   samples/basics/07_display_cfb/README
+   samples/basics/08_sys_init/README
 
 
 .. note::

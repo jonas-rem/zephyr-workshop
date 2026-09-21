@@ -43,7 +43,7 @@ level: 1
 **Build and run:**
 
 ```shell
-west build -b native_sim samples/01_hello_world -p
+west build -b native_sim samples/basics/01_hello_world -p
 west build -t run
 ```
 
@@ -52,7 +52,7 @@ west build -t run
 <div class="flex flex-col items-center justify-center">
 
 ```text
-samples/01_hello_world/
+samples/basics/01_hello_world/
 ├── CMakeLists.txt
 ├── prj.conf
 ├── README.rst
@@ -85,7 +85,7 @@ project(hello_world)
 target_sources(app PRIVATE src/main.c)
 ```
 
-<div class="text-xs text-center mt-2">`samples/01_hello_world/CMakeLists.txt`</div>
+<div class="text-xs text-center mt-2">`samples/basics/01_hello_world/CMakeLists.txt`</div>
 
 ---
 
@@ -107,14 +107,14 @@ int main(void)
 }
 ```
 
-<div class="text-xs text-center mt-2">`samples/01_hello_world/src/main.c`</div>
+<div class="text-xs text-center mt-2">`samples/basics/01_hello_world/src/main.c`</div>
 
 ---
 
 ## 01_hello_world Application Build Output
 
 ```shell
-west build -b native_sim samples/01_hello_world/ -p
+west build -b native_sim samples/basics/01_hello_world/ -p
 -- Found host-tools: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
 -- Found toolchain: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
 [..]
@@ -220,7 +220,7 @@ Hello World! native_sim
 ```ini
 CONFIG_LOG=y
 ```
-<div class="text-xs text-center mt-2">samples/02_logging/prj.conf</div><br><br>
+<div class="text-xs text-center mt-2">samples/basics/02_logging/prj.conf</div><br><br>
 
 ```c
 #include <zephyr/logging/log.h>
@@ -238,7 +238,7 @@ int main(void)
         return 0;
 }
 ```
-<div class="text-xs text-center mt-2">samples/02_logging/src/main.c</div>
+<div class="text-xs text-center mt-2">samples/basics/02_logging/src/main.c</div>
 
 </div>
 
@@ -304,7 +304,7 @@ CONFIG_SENSOR_INFO=y
 CONFIG_I2C_SHELL=y
 ```
 
-<div class="text-xs text-center mt-2">samples/04_shell/prj.conf</div>
+<div class="text-xs text-center mt-2">samples/basics/04_shell/prj.conf</div>
 
 </div>
 
