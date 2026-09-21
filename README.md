@@ -22,12 +22,11 @@ Resources to get started with Zephyr:
 - [Application]
 - [GitHub Codespaces Setup](https://jonas-rem.github.io/zephyr-workshop/src/setup.html)
 
-### Modular Application
+### Application
 
-The [Application] is a minimal firmware example, consisting of 3 components.
-A button-controlled state machine (Sleep / Standby) with an LED, built using a
-modular architecture. Components communicate via ZBus, keeping button and LED
-logic decoupled and independently testable.
+The application demonstrates a button-driven sensor read. The button publishes
+a typed ZBus event, the sensor reads the emulated HDC, and the LED shows the
+read activity. The modules can be built and tested on `native_sim`.
 ([source](https://github.com/jonas-rem/zephyr-workshop/tree/main/app))
 
 ### Samples

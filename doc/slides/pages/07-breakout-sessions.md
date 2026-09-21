@@ -27,7 +27,7 @@ layout: default
 ## Intro | Track 3 - Sim & Testing
 
 **Content:**
-- Software in the Loop (SiL) with Zephyr
+- Software in the Loop (SiL) Development with Zephyr
 - native_sim simulation
 - Sensor emulation
 - Testing
@@ -39,4 +39,4 @@ layout: default
 - Discuss fundamentals of SW Architecture and how Zephyr can solve this
 
 
-<div class="absolute bottom-0 text-sm opacity-50">Presented by Jonas Remmert</div>
+<div class="absolute bottom-0 text-sm opacity-50">Presented by Jonas Remmert and Reto Schneider</div>
