@@ -8,8 +8,10 @@
 
 #include <zephyr/device.h>
 #include <zephyr/drivers/emul.h>
+#include <zephyr/drivers/emul_sensor.h>
 #include <zephyr/drivers/i2c.h>
 #include <zephyr/drivers/i2c_emul.h>
+#include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <zephyr/random/random.h>
 #include <zephyr/sys/byteorder.h>
@@ -48,6 +50,8 @@ struct ti_hdc_emul_data {
 	uint16_t reg_manufid;    /* reg 0xFE */
 	uint16_t reg_deviceid;   /* reg 0xFF */
 	uint32_t sample_count;   /* number of temperature readings generated */
+	bool fixed_sample;       /* sample was set through the sensor emulator API */
+	struct k_mutex sample_lock;
 };
 
 struct ti_hdc_emul_cfg {
@@ -135,16 +139,19 @@ static int ti_hdc_emul_transfer(const struct emul *target,
 		int remaining = msgs[0].len;
 		uint8_t *buf = msgs[0].buf;
 
+		k_mutex_lock(&data->sample_lock, K_FOREVER);
 		while (remaining >= 2) {
 			int ret = ti_hdc_emul_reg_read(data, reg, buf);
 
 			if (ret < 0) {
+				k_mutex_unlock(&data->sample_lock);
 				return ret;
 			}
 			buf += 2;
 			remaining -= 2;
 			reg++;
 		}
+		k_mutex_unlock(&data->sample_lock);
 		return 0;
 	}
 
@@ -162,9 +169,11 @@ static int ti_hdc_emul_transfer(const struct emul *target,
 
 	/* Pattern B: write-only (sample trigger) — generate new readings */
 	if (num_msgs == 1) {
-		if (data->cur_reg == TI_HDC_REG_TEMP) {
+		k_mutex_lock(&data->sample_lock, K_FOREVER);
+		if (data->cur_reg == TI_HDC_REG_TEMP && !data->fixed_sample) {
 			ti_hdc_emul_generate_sample(data);
 		}
+		k_mutex_unlock(&data->sample_lock);
 		return 0;
 	}
 
@@ -174,16 +183,19 @@ static int ti_hdc_emul_transfer(const struct emul *target,
 		int remaining = msgs[1].len;
 		uint8_t *buf = msgs[1].buf;
 
+		k_mutex_lock(&data->sample_lock, K_FOREVER);
 		while (remaining >= 2) {
 			int ret = ti_hdc_emul_reg_read(data, reg, buf);
 
 			if (ret < 0) {
+				k_mutex_unlock(&data->sample_lock);
 				return ret;
 			}
 			buf += 2;
 			remaining -= 2;
 			reg++;
 		}
+		k_mutex_unlock(&data->sample_lock);
 		return 0;
 	}
 
@@ -202,8 +214,92 @@ static int ti_hdc_emul_init(const struct emul *target,
 	data->cur_reg = 0;
 	data->reg_manufid = 0x5449;   /* TI manufacturer ID */
 	data->reg_deviceid = 0x1000;  /* HDC1000/1010 device ID */
+	k_mutex_init(&data->sample_lock);
 
 	ti_hdc_emul_generate_sample(data);
+
+	return 0;
+}
+
+static int ti_hdc_emul_set_channel(const struct emul *target, struct sensor_chan_spec ch,
+				   const q31_t *value, int8_t shift)
+{
+	struct ti_hdc_emul_data *data = target->data;
+	int64_t scaled;
+	int64_t lower;
+	int64_t upper;
+	uint32_t raw;
+
+	if (value == NULL || shift < 0 || shift > 31) {
+		return -EINVAL;
+	}
+	if (ch.chan_idx != 0) {
+		return -ENOTSUP;
+	}
+
+	scaled = (int64_t)*value * BIT64(shift);
+
+	switch (ch.chan_type) {
+	case SENSOR_CHAN_AMBIENT_TEMP:
+		lower = -40LL * BIT64(31);
+		upper = 125LL * BIT64(31);
+		if (scaled < lower || scaled > upper) {
+			return -ERANGE;
+		}
+
+		raw = DIV_ROUND_CLOSEST((scaled - lower) * BIT64(16), 165LL * BIT64(31));
+		k_mutex_lock(&data->sample_lock, K_FOREVER);
+		data->reg_temp = MIN(raw, UINT16_MAX);
+		data->fixed_sample = true;
+		k_mutex_unlock(&data->sample_lock);
+		break;
+	case SENSOR_CHAN_HUMIDITY:
+		lower = 0;
+		upper = 100LL * BIT64(31);
+		if (scaled < lower || scaled > upper) {
+			return -ERANGE;
+		}
+
+		raw = DIV_ROUND_CLOSEST(scaled * BIT64(16), upper);
+		k_mutex_lock(&data->sample_lock, K_FOREVER);
+		data->reg_humidity = MIN(raw, UINT16_MAX);
+		data->fixed_sample = true;
+		k_mutex_unlock(&data->sample_lock);
+		break;
+	default:
+		return -ENOTSUP;
+	}
+
+	return 0;
+}
+
+static int ti_hdc_emul_get_sample_range(const struct emul *target, struct sensor_chan_spec ch,
+					q31_t *lower, q31_t *upper, q31_t *epsilon, int8_t *shift)
+{
+	ARG_UNUSED(target);
+
+	if (lower == NULL || upper == NULL || epsilon == NULL || shift == NULL) {
+		return -EINVAL;
+	}
+	if (ch.chan_idx != 0) {
+		return -ENOTSUP;
+	}
+
+	*shift = 8;
+	switch (ch.chan_type) {
+	case SENSOR_CHAN_AMBIENT_TEMP:
+		*lower = (-40LL * BIT64(31)) >> *shift;
+		*upper = (125LL * BIT64(31)) >> *shift;
+		*epsilon = DIV_ROUND_UP(165LL * BIT64(31), BIT64(16)) >> *shift;
+		break;
+	case SENSOR_CHAN_HUMIDITY:
+		*lower = 0;
+		*upper = (100LL * BIT64(31)) >> *shift;
+		*epsilon = DIV_ROUND_UP(100LL * BIT64(31), BIT64(16)) >> *shift;
+		break;
+	default:
+		return -ENOTSUP;
+	}
 
 	return 0;
 }
@@ -212,12 +308,18 @@ static const struct i2c_emul_api ti_hdc_emul_api = {
 	.transfer = ti_hdc_emul_transfer,
 };
 
+static const struct emul_sensor_driver_api ti_hdc_emul_backend_api = {
+	.set_channel = ti_hdc_emul_set_channel,
+	.get_sample_range = ti_hdc_emul_get_sample_range,
+};
+
 #define TI_HDC_EMUL(n)                                             \
 	static const struct ti_hdc_emul_cfg ti_hdc_emul_cfg_##n;   \
 	static struct ti_hdc_emul_data ti_hdc_emul_data_##n;       \
 	EMUL_DT_INST_DEFINE(n, ti_hdc_emul_init,                   \
 			    &ti_hdc_emul_data_##n,                 \
 			    &ti_hdc_emul_cfg_##n,                  \
-			    &ti_hdc_emul_api, NULL)
+			    &ti_hdc_emul_api,                      \
+			    &ti_hdc_emul_backend_api)
 
 DT_INST_FOREACH_STATUS_OKAY(TI_HDC_EMUL)
