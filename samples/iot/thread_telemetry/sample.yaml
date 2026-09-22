@@ -10,6 +10,10 @@ common:
     - coffeecaller_nrf52/nrf52840
   build_only: true
 tests:
+  # Without a suffix the sample is the skeleton -- a shell and the sensor, and
+  # nothing that runs by itself. It is what a build with a forgotten
+  # FILE_SUFFIX produces, so it is worth keeping compilable.
+  sample.iot.thread_telemetry: {}
   # The three stages of the workshop. A module that is switched off is not
   # compiled, so each stage is a genuinely different image and worth building.
   sample.iot.thread_telemetry.sensor:
@@ -18,10 +22,14 @@ tests:
   sample.iot.thread_telemetry.display:
     extra_args:
       - FILE_SUFFIX=display
-  sample.iot.thread_telemetry: {}
+  sample.iot.thread_telemetry.mesh:
+    extra_args:
+      - FILE_SUFFIX=mesh
   # Nothing in the workshop builds without the shell, but the modules are
-  # meant to survive it, so keep it covered.
+  # meant to survive it, so keep it covered on the full node.
   sample.iot.thread_telemetry.no_shell:
+    extra_args:
+      - FILE_SUFFIX=mesh
     extra_configs:
       - CONFIG_SHELL=n
       - CONFIG_OPENTHREAD_SHELL=n

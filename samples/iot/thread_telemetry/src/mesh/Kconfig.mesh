@@ -12,7 +12,7 @@ menuconfig TELEMETRY_MESH
 	  any radio at all.
 
 	  Joining the mesh itself is OpenThread's business, configured with the
-	  CONFIG_OPENTHREAD_* options and the credentials in prj.conf.
+	  CONFIG_OPENTHREAD_* options and the credentials in prj_mesh.conf.
 
 if TELEMETRY_MESH
 

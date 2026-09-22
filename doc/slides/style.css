@@ -285,3 +285,226 @@ figcaption.mt-3.text-center.text-xs,
   color: var(--color-dark-teal);
   font-weight: 500;
 }
+
+/* --- "Your turn": the steps a participant has to carry out ---------------- */
+
+/* Used on the hands-on slides. Everything a participant has to type lives in
+   this box and nothing else does, so the steps are findable from the back of
+   the room without reading the slide. */
+.your-turn {
+  background-color: #fff8ec;
+  border: 1px solid #edcf9b;
+  border-left: 6px solid #d9901f;
+  border-radius: 0.375rem;
+  padding: 0.55rem 0.9rem 0.75rem;
+  margin: 0 0 0.6rem;
+}
+
+.your-turn .yt-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+  color: #9a6b16;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.your-turn .yt-head .yt-time {
+  color: var(--color-text-grey);
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* One step: a numbered badge and the instruction, with its commands below. */
+.your-turn .yt-step {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  color: var(--color-dark-teal);
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.your-turn .yt-step:first-of-type {
+  margin-top: 0;
+}
+
+.your-turn .yt-num {
+  flex: 0 0 auto;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: 9999px;
+  background-color: #d9901f;
+  color: var(--color-white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.4rem;
+  text-align: center;
+}
+
+/* Commands sit directly under the step they belong to, on white so they stay
+   readable on the tinted background. */
+.your-turn .slidev-code-wrapper,
+.your-turn pre {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0 !important;
+}
+
+.your-turn pre.slidev-code,
+.your-turn pre.shiki {
+  background-color: #ffffff !important;
+  border: 1px solid #f0e0c4;
+}
+
+/* --- Inline diagrams ------------------------------------------------------ */
+
+/* Drawn inline rather than loaded as an <img>, so they inherit the deck's
+   font and palette -- an <img> SVG is isolated and would fall back to the
+   system sans. */
+.diagram {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.diagram text {
+  font-family: 'Fira Sans', sans-serif;
+  fill: var(--color-dark-teal);
+}
+
+.diagram .dg-mono {
+  font-family: 'Fira Code', monospace;
+}
+
+.diagram .dg-box {
+  fill: #f7f9fa;
+  stroke: #c9d4d7;
+  stroke-width: 2;
+}
+
+.diagram .dg-panel {
+  fill: #ffffff;
+  stroke: #d7dfe1;
+  stroke-width: 2;
+}
+
+.diagram .dg-title {
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.diagram .dg-sub {
+  font-size: 23px;
+  font-weight: 380;
+  fill: #6b7a7e;
+}
+
+.diagram .dg-chip {
+  fill: #ffffff;
+  stroke: #c9d4d7;
+  stroke-width: 2;
+}
+
+.diagram .dg-chip-text {
+  font-size: 24px;
+  font-weight: 400;
+}
+
+/* The steps a participant performs are amber, like the "Your turn" box. */
+.diagram .dg-act {
+  stroke: #d9901f;
+  stroke-width: 3;
+  fill: none;
+}
+
+.diagram .dg-act-head {
+  fill: #d9901f;
+  stroke: none;
+}
+
+.diagram .dg-act-text {
+  font-size: 24px;
+  font-weight: 600;
+  fill: #9a6b16;
+}
+
+.diagram .dg-hit {
+  fill: #fff3dd;
+  stroke: #d9901f;
+  stroke-width: 2;
+}
+
+/* Filled silhouettes rather than line art: they stay legible once the diagram
+   is scaled down into half a column. */
+.diagram .dg-glyph {
+  fill: #aebbbf;
+  stroke: none;
+}
+
+.diagram .dg-row {
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.diagram .dg-note {
+  font-size: 22px;
+  font-weight: 380;
+  fill: #6b7a7e;
+}
+
+/* Drag-and-drop: the drop target, the file riding the cursor, and the path
+   between them. */
+.diagram .dg-drop {
+  fill: #fff3dd;
+  stroke: #d9901f;
+  stroke-width: 2.5;
+  stroke-dasharray: 8 6;
+}
+
+.diagram .dg-sel {
+  fill: #eef2f3;
+  stroke: none;
+}
+
+.diagram .dg-ghost {
+  fill: #ffffff;
+  stroke: #d9901f;
+  stroke-width: 2;
+  stroke-dasharray: 7 5;
+}
+
+.diagram .dg-path {
+  fill: none;
+  stroke: #d9901f;
+  stroke-width: 3;
+  stroke-dasharray: 10 7;
+  stroke-linecap: round;
+}
+
+.diagram .dg-muted {
+  fill: #9aa7ab;
+}
+
+/* A link that is itself a step -- same panel as the commands next to it. */
+.your-turn .yt-link {
+  margin-top: 0.25rem;
+  padding: 0.4rem 0.8rem;
+  background-color: #ffffff;
+  border: 1px solid #f0e0c4;
+  border-radius: 0.3rem;
+  font-family: 'Fira Code', monospace;
+  font-size: 1.05rem;
+}
+
+.your-turn .yt-link .yt-hint {
+  font-family: 'Fira Sans', sans-serif;
+  font-size: 0.95rem;
+  color: var(--color-text-grey);
+}
