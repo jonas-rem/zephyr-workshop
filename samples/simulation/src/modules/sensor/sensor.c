@@ -177,7 +177,22 @@ static int cmd_sensor_latest(const struct shell *sh, size_t argc, char **argv)
 	return 0;
 }
 
+static int cmd_sensor_read(const struct shell *sh, size_t argc, char **argv)
+{
+	ARG_UNUSED(argc);
+	ARG_UNUSED(argv);
+
+	if (sensor_device == NULL || !device_is_ready(sensor_device)) {
+		shell_error(sh, "Sensor device not ready");
+		return -ENODEV;
+	}
+
+	perform_read();
+	return 0;
+}
+
 SHELL_STATIC_SUBCMD_SET_CREATE(sensor_commands,
+	SHELL_CMD(read, NULL, "Read the sensor and publish the result", cmd_sensor_read),
 	SHELL_CMD(latest, NULL, "Show the latest sensor lifecycle event", cmd_sensor_latest),
 	SHELL_CMD(info, NULL, "Log sensor module state", cmd_sensor_info),
 	SHELL_SUBCMD_SET_END);
