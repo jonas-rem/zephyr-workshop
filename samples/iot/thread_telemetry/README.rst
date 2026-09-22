@@ -39,12 +39,12 @@ certificate handling -- far more stack than a temperature reading justifies.
 
    **This sample is not a production configuration.**
 
-   The Thread network key is hard-coded in :file:`prj.conf` and therefore
-   identical on every board and published in this repository. Anyone in radio
-   range can join the mesh, decrypt all traffic and inject their own. That is
-   an acceptable trade for a workshop -- it removes commissioning from the
-   exercise -- but a real deployment must commission each device instead, for
-   example with Thread's in-band joiner flow
+   The Thread network key is hard-coded in :file:`prj_mesh.conf` and
+   therefore identical on every board and published in this repository.
+   Anyone in radio range can join the mesh, decrypt all traffic and inject
+   their own. That is an acceptable trade for a workshop -- it removes
+   commissioning from the exercise -- but a real deployment must commission
+   each device instead, for example with Thread's in-band joiner flow
    (``CONFIG_OPENTHREAD_JOINER`` plus a per-device PSKd) or by provisioning the
    operational dataset out of band.
 
@@ -59,7 +59,7 @@ Requirements
   CoAP-to-MQTT bridge listening on the ``telemetry`` resource.
   :ref:`iot_collector` is both: an nRF52840 DK as a Radio Co-Processor and a
   Docker Compose stack that reads the credentials straight out of this
-  sample's :file:`prj.conf`.
+  sample's :file:`prj_mesh.conf`.
 
 The ``openthread`` module must be present in the workspace. It is in the
 manifest allowlist, so a plain ``west update`` is enough:
@@ -71,23 +71,30 @@ manifest allowlist, so a plain ``west update`` is enough:
 Building and running
 ********************
 
+Every build of this sample selects a workshop stage with ``FILE_SUFFIX``. The
+finished node is the last one:
+
 .. code-block:: console
 
-   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry
+   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=mesh
    west flash
 
 For the first prototype run of the board, select the revision explicitly:
 
 .. code-block:: console
 
-   west build -b coffeecaller_nrf52@0.9.0/nrf52840 samples/iot/thread_telemetry
+   west build -b coffeecaller_nrf52@0.9.0/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=mesh
+
+Leaving the suffix out builds the skeleton of `Workshop stages`_ below rather
+than the finished node -- a shell and the sensor, and no radio.
 
 Workshop stages
 ***************
 
-The node is built up in three stages, and each one is a complete image on its
-own. A module that is not part of a stage is not compiled into it, so the
-difference is visible in the memory report rather than only in the behaviour:
+The node is built up in three stages on top of a skeleton, and each one is a
+complete image on its own. A module that is not part of a stage is not
+compiled into it, so the difference is visible in the memory report rather
+than only in the behaviour:
 
 .. list-table::
    :header-rows: 1
@@ -96,6 +103,10 @@ difference is visible in the memory report rather than only in the behaviour:
      - Build
      - The node is
      - Flash
+   * - 0
+     - (no argument)
+     - the skeleton: shell and sensor
+     - ~92 KB
    * - 1
      - ``-DFILE_SUFFIX=sensor``
      - sensor, console, name, shell
@@ -105,15 +116,27 @@ difference is visible in the memory report rather than only in the behaviour:
      - stage 1 plus the LED strip
      - ~110 KB
    * - 3
-     - (no argument)
+     - ``-DFILE_SUFFIX=mesh``
      - the whole node, on the mesh
      - ~340 KB
 
 .. code-block:: console
 
+   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry
    west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=sensor
    west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=display
-   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry
+   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=mesh
+
+Each stage is a self-contained :file:`prj_<stage>.conf`, and ``FILE_SUFFIX``
+picks one *instead of* :file:`prj.conf` rather than on top of it. So the files
+do not build on each other -- each one lists everything its stage needs, which
+is what makes the four of them readable side by side.
+
+**Stage 0** is :file:`prj.conf`, and it is what a build with a forgotten
+suffix produces. Deliberately not the finished node: a shell, a log backend
+and the sensor driver, with nothing that runs on its own. ``telemetry sensor``
+reads the SHT4x on demand and ``telemetry status`` has exactly one line. The
+stages below are what fills it in.
 
 **Stage 1** is :file:`prj_sensor.conf`: no radio at all. The node reads the
 SHT4x every five seconds and prints it, and the shell already works:
@@ -131,7 +154,7 @@ display module appears in ``menuconfig`` and is built. The two gradients are
 arrays at the top of :file:`src/display/display.c`; changing the colours means
 editing them, while the ranges and the brightness are Kconfig options.
 
-**Stage 3** is :file:`prj.conf`, which brings in OpenThread. ``CONFIG_TELEMETRY_MESH``
+**Stage 3** is :file:`prj_mesh.conf`, which brings in OpenThread. ``CONFIG_TELEMETRY_MESH``
 becomes available with it, and ``CONFIG_TELEMETRY_PUBLISH`` on top of that, so
 the node joins the mesh and starts posting. The console log switches itself off
 once publishing is on, because the publishing module logs its own payload --
@@ -187,8 +210,8 @@ and survives a reboot and a re-flash:
    Publish   : every 15 s
 
 Each of those lines comes from the module it describes, so the output shrinks
-with the build: in stage 1 there are three of them. See `Composing the status
-command`_.
+with the build: in stage 1 there are three of them, and in the skeleton one.
+See `Composing the status command`_.
 
 Without a stored name the node falls back to one derived from the device ID,
 such as ``node-a1b2c3``, so two unconfigured boards never collide on the
@@ -703,7 +726,7 @@ Troubleshooting
 
 **The node never attaches** (``ot state`` stays ``detached`` or ``disabled``).
 OpenThread prefers the operational dataset stored in NVS over the values in
-:file:`prj.conf`, so a board that was previously flashed with different
+:file:`prj_mesh.conf`, so a board that was previously flashed with different
 credentials keeps the old ones. Clear it and reboot:
 
 .. code-block:: console

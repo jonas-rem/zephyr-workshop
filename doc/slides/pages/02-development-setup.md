@@ -69,9 +69,11 @@ Virtual Machines in combination with embedded hardware can bring their own probl
 
 <div>
 
-Start your own Codespaces Instance now!
+Start your own Codespaces Instance or Cloud IDE now!
 
 [github.com/jonas-rem/zephyr-workshop](https://github.com/jonas-rem/zephyr-workshop)
+
+[Cloud IDE by inovex](https://start.ide.training-zephyr.fra.ics.inovex.io/)
 
 Setup will take a few minutes..
 
@@ -90,3 +92,7 @@ west build -t run
 </div>
 
 </div>
+
+<Footnotes y="col">
+  <Footnote :number=1><a href="https://start.ide.training-zephyr.fra.ics.inovex.io/">https://start.ide.training-zephyr.fra.ics.inovex.io/</a></Footnote>
+</Footnotes>

@@ -19,4 +19,5 @@ manifest:
           - tf-psa-crypto
           - hal_nordic
           - hal_rpi_pico
+          - openthread # required by samples/iot/thread_telemetry
           - segger

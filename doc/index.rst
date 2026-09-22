@@ -44,6 +44,12 @@ deck and code examples are ideal to conduct trainings.
    samples/basics/07_display_cfb/README
    samples/basics/08_sys_init/README
 
+.. toctree::
+   :caption: IoT Demo
+   :maxdepth: 1
+
+   samples/iot/thread_telemetry/README
+
 
 .. note::
 
