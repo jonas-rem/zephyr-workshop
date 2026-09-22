@@ -1,19 +1,19 @@
-config APP_TEST_BUTTON
+config APP_SIM_BUTTON
 	bool "Button module"
 	default y
 	depends on GPIO && ZBUS
 
-if APP_TEST_BUTTON
+if APP_SIM_BUTTON
 
-module = APP_TEST_BUTTON
+module = APP_SIM_BUTTON
 module-str = BUTTON
 source "subsys/logging/Kconfig.template.log_config"
 
-config APP_TEST_BUTTON_INIT_PRIORITY
+config APP_SIM_BUTTON_INIT_PRIORITY
 	int "Button initialization priority"
 	default 80
 
-config APP_TEST_BUTTON_SHELL
+config APP_SIM_BUTTON_SHELL
 	bool "Button emulator shell command"
 	default y
 	depends on SHELL && GPIO_EMUL

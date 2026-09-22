@@ -1,15 +1,15 @@
-config APP_TEST_LED
+config APP_SIM_LED
 	bool "LED module"
 	default y
 	depends on GPIO && ZBUS && ZBUS_MSG_SUBSCRIBER
 
-if APP_TEST_LED
+if APP_SIM_LED
 
-module = APP_TEST_LED
+module = APP_SIM_LED
 module-str = LED
 source "subsys/logging/Kconfig.template.log_config"
 
-config APP_TEST_LED_THREAD_PRIORITY
+config APP_SIM_LED_THREAD_PRIORITY
 	int "LED thread priority"
 	default 5
 

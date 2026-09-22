@@ -14,7 +14,7 @@
 
 #include "message_channel.h"
 
-LOG_MODULE_REGISTER(app_simulation_button, CONFIG_APP_TEST_BUTTON_LOG_LEVEL);
+LOG_MODULE_REGISTER(app_simulation_button, CONFIG_APP_SIM_BUTTON_LOG_LEVEL);
 
 #define SW0_NODE DT_ALIAS(sw0)
 #define DEBOUNCE_MS 10
@@ -105,7 +105,7 @@ static int button_init(void)
 	return 0;
 }
 
-#ifdef CONFIG_APP_TEST_BUTTON_SHELL
+#ifdef CONFIG_APP_SIM_BUTTON_SHELL
 #include <zephyr/shell/shell.h>
 
 static int set_emulated_button(bool pressed)
@@ -152,4 +152,4 @@ SHELL_STATIC_SUBCMD_SET_CREATE(button_commands,
 SHELL_CMD_REGISTER(button, &button_commands, "Button commands", NULL);
 #endif
 
-SYS_INIT(button_init, APPLICATION, CONFIG_APP_TEST_BUTTON_INIT_PRIORITY);
+SYS_INIT(button_init, APPLICATION, CONFIG_APP_SIM_BUTTON_INIT_PRIORITY);
