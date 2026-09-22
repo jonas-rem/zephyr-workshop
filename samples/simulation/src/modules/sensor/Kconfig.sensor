@@ -1,19 +1,19 @@
-config APP_TEST_SENSOR
+config APP_SIM_SENSOR
 	bool "Temperature and humidity sensor module"
 	default y
 	depends on SENSOR && ZBUS && ZBUS_MSG_SUBSCRIBER
 
-if APP_TEST_SENSOR
+if APP_SIM_SENSOR
 
-module = APP_TEST_SENSOR
+module = APP_SIM_SENSOR
 module-str = SENSOR
 source "subsys/logging/Kconfig.template.log_config"
 
-config APP_TEST_SENSOR_THREAD_PRIORITY
+config APP_SIM_SENSOR_THREAD_PRIORITY
 	int "Sensor thread priority"
 	default 5
 
-config APP_TEST_SENSOR_SHELL
+config APP_SIM_SENSOR_SHELL
 	bool "Sensor shell commands"
 	default y
 	depends on SHELL

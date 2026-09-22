@@ -9,14 +9,14 @@ zephyr_include_directories(src/common)
 target_sources(app PRIVATE src/main.c)
 add_subdirectory(src/common common)
 
-if(CONFIG_APP_TEST_BUTTON)
+if(CONFIG_APP_SIM_BUTTON)
   add_subdirectory(src/modules/button button)
 endif()
 
-if(CONFIG_APP_TEST_SENSOR)
+if(CONFIG_APP_SIM_SENSOR)
   add_subdirectory(src/modules/sensor sensor)
 endif()
 
-if(CONFIG_APP_TEST_LED)
+if(CONFIG_APP_SIM_LED)
   add_subdirectory(src/modules/led led)
 endif()

@@ -10,7 +10,7 @@
 
 #include "message_channel.h"
 
-LOG_MODULE_REGISTER(app_simulation_led, CONFIG_APP_TEST_LED_LOG_LEVEL);
+LOG_MODULE_REGISTER(app_simulation_led, CONFIG_APP_SIM_LED_LOG_LEVEL);
 
 #define LED0_NODE DT_ALIAS(led0)
 
@@ -104,4 +104,4 @@ static void led_thread(void *p1, void *p2, void *p3)
 }
 
 K_THREAD_DEFINE(led_thread_id, 1024, led_thread, NULL, NULL, NULL,
-		CONFIG_APP_TEST_LED_THREAD_PRIORITY, 0, 0);
+		CONFIG_APP_SIM_LED_THREAD_PRIORITY, 0, 0);

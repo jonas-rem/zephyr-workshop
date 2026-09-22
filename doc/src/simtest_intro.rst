@@ -7,16 +7,13 @@ This chapter is the Simulation & Testing track reference. Commands are in
 The session maps software-in-the-loop (SiL) test methods to Zephyr primitives.
 Participants with testing experience can share and discuss strategies that work.
 
-The workshop application ``app`` runs unit, component, and E2E tests on
-``native_sim``.
+The workshop application ``samples/simulation`` runs component and E2E tests
+on ``native_sim``.
 
-Draft:
-"Today is about building the architectural blueprint for hardware-free testing.
-We aren't going to spend time writing C code or fighting CMake syntax—AI tools
-can generate test suites and mocks in seconds. Our job today as system
-architects is to understand the Zephyr primitives (native_sim, ztest, Zbus,
-driver emulators) so we know what architecture to design and what instructions
-to give our tools."
+The session covers the architecture for hardware-free testing, not the test
+code itself. AI tools generate test suites and mocks. The architect needs to
+know the Zephyr primitives (native_sim, Ztest, ZBus, driver emulators) to
+choose the design and to instruct those tools.
 
 
 Framing Questions
@@ -107,7 +104,7 @@ Names on the left are given. Fill what each one stands in for.
 Testable or not
 ===============
 
-Both columns start empty. Add architecture choices, not tools.
+The list starts empty. Add architecture choices, not tools.
 
 ::
 
@@ -129,4 +126,3 @@ References
 - `BabbleSim <https://docs.zephyrproject.org/latest/develop/test/bsim.html>`_
 - `Simulation options compared <https://docs.zephyrproject.org/latest/boards/native/doc/arch_soc.html#comparison-with-other-options>`_
 - :doc:`testing`
-- :doc:`architecture`

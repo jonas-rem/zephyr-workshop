@@ -153,7 +153,7 @@ static threads (sensor, LED) and main()
 **button.c:**
 ```c
 SYS_INIT(button_init, APPLICATION,
-         CONFIG_APP_TEST_BUTTON_INIT_PRIORITY);
+         CONFIG_APP_SIM_BUTTON_INIT_PRIORITY);
 ```
 
 **Boot log:**

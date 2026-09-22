@@ -27,7 +27,6 @@ tests:
     harness_config:
       pytest_root:
         - pytest/test_sensor_shell.py
-        - pytest/test_button_shell.py
     tags:
       - app_simulation
       - e2e

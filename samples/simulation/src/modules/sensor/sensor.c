@@ -12,7 +12,7 @@
 
 #include "message_channel.h"
 
-LOG_MODULE_REGISTER(app_simulation_sensor, CONFIG_APP_TEST_SENSOR_LOG_LEVEL);
+LOG_MODULE_REGISTER(app_simulation_sensor, CONFIG_APP_SIM_SENSOR_LOG_LEVEL);
 
 static const struct device *sensor_device;
 static uint32_t read_count;
@@ -112,9 +112,9 @@ static void sensor_thread(void *p1, void *p2, void *p3)
 }
 
 K_THREAD_DEFINE(sensor_thread_id, 1024, sensor_thread, NULL, NULL, NULL,
-		CONFIG_APP_TEST_SENSOR_THREAD_PRIORITY, 0, 0);
+		CONFIG_APP_SIM_SENSOR_THREAD_PRIORITY, 0, 0);
 
-#ifdef CONFIG_APP_TEST_SENSOR_SHELL
+#ifdef CONFIG_APP_SIM_SENSOR_SHELL
 #include <zephyr/shell/shell.h>
 
 static int cmd_sensor_info(const struct shell *sh, size_t argc, char **argv)

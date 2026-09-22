@@ -1,4 +1,4 @@
-menu "Test application"
+menu "Simulation application"
 
 rsource "src/modules/button/Kconfig.button"
 rsource "src/modules/sensor/Kconfig.sensor"

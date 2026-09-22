@@ -50,7 +50,8 @@ struct ti_hdc_emul_data {
 	uint16_t reg_manufid;    /* reg 0xFE */
 	uint16_t reg_deviceid;   /* reg 0xFF */
 	uint32_t sample_count;   /* number of temperature readings generated */
-	bool fixed_sample;       /* sample was set through the sensor emulator API */
+	bool fixed_temp;         /* set through the sensor emulator API */
+	bool fixed_humidity;     /* set through the sensor emulator API */
 	struct k_mutex sample_lock;
 };
 
@@ -67,13 +68,17 @@ static uint16_t rand_in_range(uint16_t min, uint16_t max)
 static void ti_hdc_emul_generate_sample(struct ti_hdc_emul_data *data)
 {
 	/* First 10 readings: 3-5°C, following readings: 4-7°C */
-	if (data->sample_count < 10) {
-		data->reg_temp = rand_in_range(TEMP_RAW_3C, TEMP_RAW_5C);
-	} else {
-		data->reg_temp = rand_in_range(TEMP_RAW_4C, TEMP_RAW_7C);
+	if (!data->fixed_temp) {
+		if (data->sample_count < 10) {
+			data->reg_temp = rand_in_range(TEMP_RAW_3C, TEMP_RAW_5C);
+		} else {
+			data->reg_temp = rand_in_range(TEMP_RAW_4C, TEMP_RAW_7C);
+		}
 	}
 	data->sample_count++;
-	data->reg_humidity = rand_in_range(HUM_RAW_MIN, HUM_RAW_MAX);
+	if (!data->fixed_humidity) {
+		data->reg_humidity = rand_in_range(HUM_RAW_MIN, HUM_RAW_MAX);
+	}
 }
 
 /**
@@ -170,7 +175,7 @@ static int ti_hdc_emul_transfer(const struct emul *target,
 	/* Pattern B: write-only (sample trigger) — generate new readings */
 	if (num_msgs == 1) {
 		k_mutex_lock(&data->sample_lock, K_FOREVER);
-		if (data->cur_reg == TI_HDC_REG_TEMP && !data->fixed_sample) {
+		if (data->cur_reg == TI_HDC_REG_TEMP) {
 			ti_hdc_emul_generate_sample(data);
 		}
 		k_mutex_unlock(&data->sample_lock);
@@ -250,7 +255,7 @@ static int ti_hdc_emul_set_channel(const struct emul *target, struct sensor_chan
 		raw = DIV_ROUND_CLOSEST((scaled - lower) * BIT64(16), 165LL * BIT64(31));
 		k_mutex_lock(&data->sample_lock, K_FOREVER);
 		data->reg_temp = MIN(raw, UINT16_MAX);
-		data->fixed_sample = true;
+		data->fixed_temp = true;
 		k_mutex_unlock(&data->sample_lock);
 		break;
 	case SENSOR_CHAN_HUMIDITY:
@@ -263,7 +268,7 @@ static int ti_hdc_emul_set_channel(const struct emul *target, struct sensor_chan
 		raw = DIV_ROUND_CLOSEST(scaled * BIT64(16), upper);
 		k_mutex_lock(&data->sample_lock, K_FOREVER);
 		data->reg_humidity = MIN(raw, UINT16_MAX);
-		data->fixed_sample = true;
+		data->fixed_humidity = true;
 		k_mutex_unlock(&data->sample_lock);
 		break;
 	default:
