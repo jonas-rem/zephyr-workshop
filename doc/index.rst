@@ -27,7 +27,8 @@ deck and code examples are ideal to conduct trainings.
    :caption: Simulation & Testing Track
    :maxdepth: 1
 
-   src/simtest_intro
+   src/simtest_course
+   src/simtest_moderation
    src/simtest_cheatsheet
 
 

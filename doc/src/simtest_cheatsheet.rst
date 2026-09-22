@@ -1,5 +1,5 @@
-Testing Cheat Sheet
-###################
+Cheat Sheet
+###########
 
 This page gives raw commands that execute the tests inside the Codespaces
 environment. Run them from ``zephyr-workshop``.
@@ -11,14 +11,28 @@ Build and Run
 
    $ west build -b native_sim samples/simulation -p
    $ west build -t run
+   uart connected to pseudotty: /dev/pts/4
 
-The ``native_sim`` console accepts these shell commands:
+``native_sim`` maps the shell to a pseudo terminal, logs stay in the terminal
+running the app. The number changes between runs, so read it from the boot
+output.
+
+Attach from a second terminal, quit ``picocom`` with ``Ctrl+a Ctrl+x``:
 
 .. code-block:: console
 
+   $ picocom /dev/pts/4
+
+The shell accepts these commands:
+
+.. code-block:: console
+
+   uart:~$ sensor read
    uart:~$ sensor latest
    uart:~$ sensor info
    uart:~$ button emulate
+   uart:~$ sensor_emul set temp 30
+   uart:~$ sensor_emul set humidity 50
 
 Twister
 *******
@@ -40,8 +54,7 @@ Twister
    $ west twister -T samples/simulation -s app_simulation.e2e.native_sim --integration
 
    # End-to-end test on reel_board
-   $ west twister -T samples/simulation -s app_simulation.e2e.hil -p reel_board \
-     --device-testing --device-serial /dev/ttyACM0 -X workshop_app
+   $ west twister -T samples/simulation -s app_simulation.e2e.hil -p reel_board --device-testing --device-serial /dev/ttyACM0 -X workshop_app
 
    # App boot test
    $ west twister -T samples/simulation -s app_simulation.basic --integration
