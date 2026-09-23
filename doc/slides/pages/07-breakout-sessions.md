@@ -18,6 +18,19 @@ layout: default
 
 ## Track 2 - IoT
 
+**Content:**
+- From sensor to dashboard: a Thread/CoAP telemetry node on the CoffeeCaller
+- Thread mesh networking and border routers
+- Why CoAP on the node and MQTT past the border router
+- Modular application structure with Kconfig, `SYS_INIT` and the shell
+
+**Approach:**
+- Hands-on: flash your own node, in three stages
+- Name your board and find it on the shared dashboard of the room
+- Short presentations between the stages
+- Discuss what a production deployment would do differently
+
+
 <div class="absolute bottom-0 text-sm opacity-50">Presented by Dr. Tobias Kästner and Andreas Kurz</div>
 
 ---
