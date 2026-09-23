@@ -7,8 +7,20 @@ level: 1
 
 ---
 
-
 ## Track 1 - HW Bringup
+
+**Content:**
+- In three steps to a fully featured and verified RP2350-Matrix board
+- The Zephyr Shell is the backbone for your hardware evaluation and bring up
+- How Zephyr provides generic access to specific components (Sensor, LED, Display)
+- The goal: combine new hardware components with a game "Test your balancing skill"
+
+**Approach:**
+- Hands-on: expand your own board (RP2350-Matrix)
+- Enable access to the 6DOF IMU sensor in Device Tree and verify your results
+- Enable access to the LED strip with 8x8 WB2812 and verify your results
+- Use the LED strip as an ordinary RGB display for different applications
+
 
 <div class="absolute bottom-0 text-sm opacity-50">Presented by Stephan Linz and Jan Behrens</div>
 
