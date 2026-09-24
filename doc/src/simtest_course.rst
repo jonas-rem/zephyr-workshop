@@ -101,7 +101,7 @@ for details.
 1. The Modular Application
 **************************
 
-The application consists of three modules that only communicate through ZBus
+The application consists of three modules that only communicate through zbus
 channels. No module calls another module directly.
 
 ::
@@ -115,7 +115,7 @@ channels. No module calls another module directly.
        ├── pytest/                   # end-to-end test script
        └── src/
            ├── main.c
-           ├── common/               # ZBus channels and message types
+           ├── common/               # zbus channels and message types
            └── modules/
                ├── button/tests/
                ├── led/tests/
@@ -176,7 +176,7 @@ Press the emulated button, then read the result:
    uart:~$ sensor latest
 
 Watch the log lines in the first terminal: button, sensor and LED react to each
-other through ZBus.
+other through zbus.
 
 
 3. Sensor Emulation
@@ -262,9 +262,9 @@ for the full list.
 ``src/modules/sensor/tests`` builds the sensor module alone, without the button
 and LED modules. The test in ``src/test_sensor.c`` replaces the neighbours:
 
-- It publishes a ``button_event`` on ZBus instead of pressing a button.
+- It publishes a ``button_event`` on zbus instead of pressing a button.
 - It sets temperature and humidity through the emulator backend API.
-- A ZBus listener catches the ``sensor_event`` and the test asserts its values.
+- A zbus listener catches the ``sensor_event`` and the test asserts its values.
 
 .. literalinclude:: ../samples/simulation/src/modules/sensor/tests/src/test_sensor.c
    :language: c
@@ -346,6 +346,6 @@ References
 - `Pytest harness <https://docs.zephyrproject.org/latest/develop/test/pytest.html>`_
 - `native_sim <https://docs.zephyrproject.org/latest/boards/native/native_sim/doc/index.html>`_
 - `Emulators <https://docs.zephyrproject.org/latest/hardware/emulator/index.html>`_
-- `ZBus <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_
+- `zbus <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_
 - `BabbleSim <https://docs.zephyrproject.org/latest/develop/test/bsim.html>`_
 - :doc:`testing`
