@@ -133,21 +133,21 @@ Building and Running
 
   .. code-block:: console
 
-     host:~$ west build -b waveshare_rp2350_matrix/rp2350a/m33 samples/hweval/colorwheel -p
+     host:~$ west build --board waveshare_rp2350_matrix/rp2350a/m33 samples/hweval/colorwheel -p
      host:~$ west flash
 
 * On RP2350-Matrix_ board, on **Hazard3 RISC-V (RV32IMAC+)**:
 
   .. code-block:: console
 
-     host:~$ west build -b waveshare_rp2350_matrix/rp2350a/hazard3 samples/hweval/colorwheel -p
+     host:~$ west build --board waveshare_rp2350_matrix/rp2350a/hazard3 samples/hweval/colorwheel -p
      host:~$ west flash
 
 * On RP2040-Matrix_ board, on **ARM Cortex-M33**:
 
   .. code-block:: console
 
-     host:~$ west build -b rp2040_matrix/rp2040 -S cdc-acm-console samples/hweval/colorwheel -p
+     host:~$ west build --board rp2040_matrix/rp2040 -S cdc-acm-console samples/hweval/colorwheel -p
      host:~$ west flash -r uf2
 
 Sample output

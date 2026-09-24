@@ -80,8 +80,8 @@ Setup will take a few minutes..
 **Test your setup with the Hello World example:**
 
 ```shell
-west build -b native_sim zephyr/samples/hello_world -p
-west build -t run
+west build --board native_sim zephyr/samples/hello_world --pristine
+west build --target run
 ```
 
 </div>
