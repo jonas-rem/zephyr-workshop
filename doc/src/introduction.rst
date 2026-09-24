@@ -37,7 +37,7 @@ Similarity to GNU/Linux
 Linux is widely used in the embedded industry. Linux unified this fragmented
 landscape by providing a common kernel, standardized interfaces, and portable
 abstractions across diverse SoCs and architectures. The key concepts that
-resulted in this achievment have been adopted by Zephyr.
+resulted in this achievement have been adopted by Zephyr.
 
 Key concepts from the Linux kernel adopted in Zephyr:
 
