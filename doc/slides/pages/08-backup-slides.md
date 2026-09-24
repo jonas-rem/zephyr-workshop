@@ -28,7 +28,7 @@ git bisect start
 git bisect good v4.0.0
 git bisect bad 7fc9c26fb0d
 west update && \
-west build -b reel_board@2 samples/subsys/display/lvgl/ -p && \
+west build --board reel_board@2 samples/subsys/display/lvgl/ --pristine && \
 west flash
 # -> After flashing, test console and display to see if the sample works
 git bisect good|bad

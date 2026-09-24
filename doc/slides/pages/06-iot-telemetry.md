@@ -75,7 +75,7 @@ level: 1
 <div>
 
 ```shell
-west build -b coffeecaller_nrf52/nrf52840 \
+west build --board coffeecaller_nrf52/nrf52840 \
   samples/iot/thread_telemetry -p -- -DFILE_SUFFIX=mesh
 # then drag build/zephyr/zephyr.uf2 onto the board
 ```
@@ -215,15 +215,15 @@ Forget the suffix and you get the skeleton, not the finished node.
 
 ```shell
 # Stage 1
-west build -b coffeecaller_nrf52/nrf52840 \
+west build --board coffeecaller_nrf52/nrf52840 \
   samples/iot/thread_telemetry -p -- -DFILE_SUFFIX=sensor
 
 # Stage 2
-west build -b coffeecaller_nrf52/nrf52840 \
+west build --board coffeecaller_nrf52/nrf52840 \
   samples/iot/thread_telemetry -p -- -DFILE_SUFFIX=display
 
 # Stage 3
-west build -b coffeecaller_nrf52/nrf52840 \
+west build --board coffeecaller_nrf52/nrf52840 \
   samples/iot/thread_telemetry -p -- -DFILE_SUFFIX=mesh
 ```
 
@@ -250,7 +250,7 @@ Each stage is a complete, self-contained `prj_<stage>.conf`, used *instead of*
 <div class="yt-step"><span class="yt-num">1</span> Build blinky for your board</div>
 
 ```shell
-west build -b coffeecaller_nrf52/nrf52840 \
+west build --board coffeecaller_nrf52/nrf52840 \
   zephyr/samples/basic/blinky -p
 ```
 
@@ -350,7 +350,7 @@ after every rebuild for the rest of the session.
 <div class="yt-step"><span class="yt-num">1</span> Build it</div>
 
 ```shell
-west build -b coffeecaller_nrf52/nrf52840 \
+west build --board coffeecaller_nrf52/nrf52840 \
   samples/iot/thread_telemetry -p \
   -- -DFILE_SUFFIX=sensor
 ```
@@ -411,7 +411,7 @@ Node name : bench-window
 <div class="yt-step"><span class="yt-num">1</span> Rebuild with the display stage</div>
 
 ```shell
-west build -b coffeecaller_nrf52/nrf52840 \
+west build --board coffeecaller_nrf52/nrf52840 \
   samples/iot/thread_telemetry -p \
   -- -DFILE_SUFFIX=display
 ```
@@ -469,7 +469,7 @@ never overlap, so a glance tells you which quantity is on display.
 <div class="yt-step"><span class="yt-num">1</span> Rebuild with the mesh stage</div>
 
 ```shell
-west build -b coffeecaller_nrf52/nrf52840 \
+west build --board coffeecaller_nrf52/nrf52840 \
   samples/iot/thread_telemetry -p \
   -- -DFILE_SUFFIX=mesh
 ```

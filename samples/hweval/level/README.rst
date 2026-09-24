@@ -194,14 +194,14 @@ Building and Running
 
   .. code-block:: console
 
-     host:~$ west build -b waveshare_rp2350_matrix/rp2350a/m33 samples/hweval/level -p
+     host:~$ west build --board waveshare_rp2350_matrix/rp2350a/m33 samples/hweval/level -p
      host:~$ west flash
 
 * On RP2350-Matrix_ board, on **Hazard3 RISC-V (RV32IMAC+)**:
 
   .. code-block:: console
 
-     host:~$ west build -b waveshare_rp2350_matrix/rp2350a/hazard3 samples/hweval/level -p
+     host:~$ west build --board waveshare_rp2350_matrix/rp2350a/hazard3 samples/hweval/level -p
      host:~$ west flash
 
 Sample output

@@ -37,7 +37,7 @@ This application can be built and executed on native_sim as follows:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/basics/08_sys_init -p
+   host:~$ west build --board native_sim samples/basics/08_sys_init -p
 
 
 Check Init Levels
@@ -57,7 +57,7 @@ been executed. Therefore the execution order of the example should be:
 
 .. code-block:: console
 
-   host:~$ west build -t initlevels
+   host:~$ west build --target initlevels
    -- west build: running target initlevels
    [2/3] cd
    /home/jonas/git/zephyrproject/zephyr-workshop/buil...roject/zephyr-workshop/build/zephyr/zephyr.exe
@@ -78,7 +78,7 @@ Sample Output
 
 .. code-block:: console
 
-   host:~$ west build -t run
+   host:~$ west build --target run
 
    *** Booting Zephyr OS build v4.3.0 ***
    Module 1 initialized (level: APPLICATION, priority: 0)

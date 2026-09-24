@@ -9,8 +9,8 @@ Build and Run
 
 .. code-block:: console
 
-   $ west build -b native_sim samples/simulation -p
-   $ west build -t run
+   $ west build --board native_sim samples/simulation -p
+   $ west build --target run
    uart connected to pseudotty: /dev/pts/4
 
 ``native_sim`` maps the shell to a pseudo terminal, logs stay in the terminal
@@ -54,7 +54,7 @@ Twister
    $ west twister -T samples/simulation -s app_simulation.e2e.native_sim --integration
 
    # End-to-end test on reel_board
-   $ west twister -T samples/simulation -s app_simulation.e2e.hil -p reel_board --device-testing --device-serial /dev/ttyACM0 -X workshop_app
+   $ west twister -T samples/simulation -s app_simulation.e2e.hil --pristine reel_board --device-testing --device-serial /dev/ttyACM0 -X workshop_app
 
    # App boot test
    $ west twister -T samples/simulation -s app_simulation.basic --integration
@@ -77,19 +77,19 @@ Manual Test Execution
 *********************
 
 Manual test execution prints the test log directly to the console. After a code
-change, ``west build -t run`` performs an incremental build and executes the
+change, ``west build --target run`` performs an incremental build and executes the
 test.
 
 .. code-block:: console
 
    # Button
-   $ west build -b native_sim samples/simulation/src/modules/button/tests -p
-   $ west build -t run
+   $ west build --board native_sim samples/simulation/src/modules/button/tests -p
+   $ west build --target run
 
    # LED
-   $ west build -b native_sim samples/simulation/src/modules/led/tests -p
-   $ west build -t run
+   $ west build --board native_sim samples/simulation/src/modules/led/tests -p
+   $ west build --target run
 
    # Sensor
-   $ west build -b native_sim samples/simulation/src/modules/sensor/tests -p
-   $ west build -t run
+   $ west build --board native_sim samples/simulation/src/modules/sensor/tests -p
+   $ west build --target run

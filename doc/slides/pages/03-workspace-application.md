@@ -226,7 +226,7 @@ arduino_i2c: &i2c0 {
 ## Zephyr Hardware Abstraction - Header generation at compile time
 
 ```bash
-zephyr$ west build -b reel_board samples/subsys/shell/shell_module -p
+zephyr$ west build --board reel_board samples/subsys/shell/shell_module -p
 [..]
 -- Board: reel_board, Revision: 1, qualifiers: nrf52840
 -- Found Dtc: /home/j.remmert/zephyr-sdk-0.17.4/sysroots/x86_64-pokysdk-linux/usr/bin/dtc (found

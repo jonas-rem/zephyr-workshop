@@ -103,7 +103,7 @@ Build and run the tracing sample:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/subsys/tracing -- \
+   host:~$ west build --board native_sim samples/subsys/tracing -- \
                -DCONF_FILE=prj_native_ctf.conf
    host:~$ ./build/zephyr/zephyr.exe -trace-file=traces/channel0_0
 
@@ -283,8 +283,8 @@ Build and run:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/simulation -p -- -DEXTRA_CONF_FILE=prj_native_ctf.conf
-   host:~$ mkdir -p traces
+   host:~$ west build --board native_sim samples/simulation --pristine -- -DEXTRA_CONF_FILE=prj_native_ctf.conf
+   host:~$ mkdir --pristine traces
    host:~$ ./build/zephyr/zephyr.exe -trace-file=traces/channel0_0
 
 Stop the application after a few seconds. The ``traces/`` directory now contains
@@ -304,7 +304,7 @@ Build and flash to the board:
 
 .. code-block:: console
 
-   host:~$ west build -b nrf52840dk/nrf52840 samples/simulation -p -- -DEXTRA_CONF_FILE=prj_usb_ctf.conf
+   host:~$ west build --board nrf52840dk/nrf52840 samples/simulation --pristine -- -DEXTRA_CONF_FILE=prj_usb_ctf.conf
    host:~$ west flash
 
 Connect the board's USB port to your host. The board will enumerate as a USB
@@ -343,7 +343,7 @@ board.
 
 .. code-block:: console
 
-   host:~$ python3 ../zephyr/scripts/tracing/trace_capture_usb.py -v 0x2FE3 -p 0x0001 -o traces/channel0_0
+   host:~$ python3 ../zephyr/scripts/tracing/trace_capture_usb.py -v 0x2FE3 --pristine 0x0001 -o traces/channel0_0
 
 Let it run for some time, then press :kbd:`CTRL+C` to stop. The ``traces/``
 directory now contains the trace data file and can be opened in Trace Compass.
@@ -367,7 +367,7 @@ Build and flash to the board:
 
 .. code-block:: console
 
-   host:~$ west build -b nrf52840dk/nrf52840 samples/simulation -p -- -DEXTRA_CONF_FILE=prj_sysview_rtt.conf
+   host:~$ west build --board nrf52840dk/nrf52840 samples/simulation --pristine -- -DEXTRA_CONF_FILE=prj_sysview_rtt.conf
    host:~$ west flash
 
 **SystemView Software Installation:**

@@ -35,14 +35,14 @@ For reel_board@2 (has onboard sensor):
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/basics/05_sensor -p
+   host:~$ west build --board reel_board@2 samples/basics/05_sensor -p
    host:~$ west flash
 
 For other boards with external sensor:
 
 .. code-block:: console
 
-   host:~$ west build -b nucleo_l496zg samples/basics/05_sensor -p
+   host:~$ west build --board nucleo_l496zg samples/basics/05_sensor -p
    host:~$ west flash
 
 Changing Emulated Values
@@ -52,7 +52,7 @@ On ``native_sim``, run the application with the shell on ``uart1``:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/basics/05_sensor -p
+   host:~$ west build --board native_sim samples/basics/05_sensor -p
    host:~$ ./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
 
 Connect to the shell from another terminal and set the sensor channels:
