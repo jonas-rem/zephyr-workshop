@@ -76,14 +76,14 @@ finished node is the last one:
 
 .. code-block:: console
 
-   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=mesh
+   west build --board coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=mesh
    west flash
 
 For the first prototype run of the board, select the revision explicitly:
 
 .. code-block:: console
 
-   west build -b coffeecaller_nrf52@0.9.0/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=mesh
+   west build --board coffeecaller_nrf52@0.9.0/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=mesh
 
 Leaving the suffix out builds the skeleton of `Workshop stages`_ below rather
 than the finished node -- a shell and the sensor, and no radio.
@@ -122,10 +122,10 @@ than only in the behaviour:
 
 .. code-block:: console
 
-   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry
-   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=sensor
-   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=display
-   west build -b coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=mesh
+   west build --board coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry
+   west build --board coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=sensor
+   west build --board coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=display
+   west build --board coffeecaller_nrf52/nrf52840 samples/iot/thread_telemetry -- -DFILE_SUFFIX=mesh
 
 Each stage is a self-contained :file:`prj_<stage>.conf`, and ``FILE_SUFFIX``
 picks one *instead of* :file:`prj.conf` rather than on top of it. So the files

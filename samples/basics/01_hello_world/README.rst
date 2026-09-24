@@ -22,14 +22,14 @@ This application can be built and executed on native_sim as follows:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/basics/01_hello_world -p
-   host:~$ west build -t run
+   host:~$ west build --board native_sim samples/basics/01_hello_world -p
+   host:~$ west build --target run
 
 To build for a real board (e.g., reel_board@2), use:
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/basics/01_hello_world -p
+   host:~$ west build --board reel_board@2 samples/basics/01_hello_world -p
    host:~$ west flash
 
 Sample Output

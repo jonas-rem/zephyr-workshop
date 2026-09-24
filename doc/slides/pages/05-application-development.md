@@ -237,8 +237,8 @@ SYS_INIT(button_init, APPLICATION,
 
 **Terminal 1:** app and logs
 ```text
-$ west build -b native_sim samples/simulation -p
-$ west build -t run
+$ west build --board native_sim samples/simulation -p
+$ west build --target run
 uart connected to pseudotty: /dev/pts/2
 *** Booting Zephyr OS build v4.4.0 ***
 <inf> app_simulation: App simulation booted
@@ -286,8 +286,8 @@ Humidity: 40.344 %
 
 **Terminal 1:** sensor module alone, logs
 ```text
-$ west build -b native_sim samples/simulation -p -- -DCONFIG_APP_SIM_BUTTON=n -DCONFIG_APP_SIM_LED=n
-$ west build -t run
+$ west build --board native_sim samples/simulation --pristine -- -DCONFIG_APP_SIM_BUTTON=n -DCONFIG_APP_SIM_LED=n
+$ west build --target run
 <dbg> app_simulation_sensor.perform_read: Read 1: 29999 mC, 55703 m%
 ```
 
@@ -349,8 +349,8 @@ west twister -T samples/simulation/src/modules/button/tests --integration
 west twister -T samples/simulation/src/modules --integration
 
 # Log on the console
-west build -b native_sim samples/simulation/src/modules/button/tests
-west build -t run
+west build --board native_sim samples/simulation/src/modules/button/tests
+west build --target run
 ```
 
 </div>

@@ -37,7 +37,7 @@ Building
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/basics/07_display_cfb -p
+   host:~$ west build --board reel_board@2 samples/basics/07_display_cfb -p
    host:~$ west flash
 
 Sample Output

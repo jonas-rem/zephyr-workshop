@@ -29,8 +29,8 @@ This application can be built and executed on QEMU x86 as follows:
 
 .. code-block:: console
 
-   host:~$ west build -b qemu_x86 samples/hweval/myshell -p
-   host:~$ west build -t run
+   host:~$ west build --board qemu_x86 samples/hweval/myshell -p
+   host:~$ west build --target run
 
 To exit QEMU, press :kbd:`CTRL+a` followed by :kbd:`x`.
 
@@ -38,7 +38,7 @@ To build for a real board (e.g., reel_board@2), use:
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/hweval/myshell -p
+   host:~$ west build --board reel_board@2 samples/hweval/myshell -p
    host:~$ west flash
 
 Sample Output

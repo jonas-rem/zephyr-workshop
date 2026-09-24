@@ -41,14 +41,14 @@ Building
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 samples/basics/06_ble -p
+   host:~$ west build --board reel_board@2 samples/basics/06_ble -p
    host:~$ west flash
 
 Or for nRF52 DK:
 
 .. code-block:: console
 
-   host:~$ west build -b nrf52dk_nrf52832 samples/basics/06_ble -p
+   host:~$ west build --board nrf52dk_nrf52832 samples/basics/06_ble -p
    host:~$ west flash
 
 Sample Output

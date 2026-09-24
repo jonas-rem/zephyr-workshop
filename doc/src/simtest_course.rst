@@ -154,8 +154,8 @@ neighbours?
 
 .. code-block:: console
 
-   $ west build -b native_sim samples/simulation -p
-   $ west build -t run
+   $ west build --board native_sim samples/simulation -p
+   $ west build --target run
    uart connected to pseudotty: /dev/pts/4
 
 The shell runs on a pseudo terminal. Attach from a second terminal with the
@@ -206,8 +206,8 @@ Build the sensor module alone, without the button and LED modules:
 
 .. code-block:: console
 
-   $ west build -b native_sim samples/simulation -p -- -DCONFIG_APP_SIM_BUTTON=n -DCONFIG_APP_SIM_LED=n
-   $ west build -t run
+   $ west build --board native_sim samples/simulation --pristine -- -DCONFIG_APP_SIM_BUTTON=n -DCONFIG_APP_SIM_LED=n
+   $ west build --target run
 
 As in step 2, attach ``picocom`` in a second terminal to the pseudo terminal
 from the boot output. Quit it with ``Ctrl+a Ctrl+x``.
@@ -273,10 +273,10 @@ and LED modules. The test in ``src/test_sensor.c`` replaces the neighbours:
 
 .. code-block:: console
 
-   $ west build -b native_sim samples/simulation/src/modules/sensor/tests -p
-   $ west build -t run
+   $ west build --board native_sim samples/simulation/src/modules/sensor/tests -p
+   $ west build --target run
 
-Change an expected value in the test and run ``west build -t run`` again to see
+Change an expected value in the test and run ``west build --target run`` again to see
 a failure. The button and LED tests follow the same pattern with the GPIO
 emulator.
 

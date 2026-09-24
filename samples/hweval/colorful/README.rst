@@ -103,7 +103,7 @@ Below is an example on how to build for a ``nrf52840dk`` board with a
 
 .. code-block:: console
 
-   host:~$ west build -b nrf52840dk/nrf52840 --shield adafruit_2_8_tft_touch_v2 samples/hweval/colorful -p
+   host:~$ west build --board nrf52840dk/nrf52840 --shield adafruit_2_8_tft_touch_v2 samples/hweval/colorful -p
    host:~$ west flash
 
 For testing purpose without the need of any hardware, the ``native_sim/native/64``
@@ -111,8 +111,8 @@ board is also supported and can be built as follows:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim/native/64 samples/hweval/colorful -p
-   host:~$ west build -t run
+   host:~$ west build --board native_sim/native/64 samples/hweval/colorful -p
+   host:~$ west build --target run
 
 .. rubric:: Sample Output
 
@@ -133,8 +133,8 @@ the Display API. The user must add these instructions manually:
 
 .. code-block:: console
 
-   host:~$ west build -b qemu_x86 samples/hweval/colorful -p
-   host:~$ west build -t run
+   host:~$ west build --board qemu_x86 samples/hweval/colorful -p
+   host:~$ west build --target run
 
 .. rubric:: Sample Output
 
