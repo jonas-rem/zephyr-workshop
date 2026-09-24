@@ -197,7 +197,7 @@ samples/simulation/
 ```text
 Kernel
   ↓
-drivers / ZBus channels
+drivers / zbus channels
   ↓
 SYS_INIT (button)
   ↓
