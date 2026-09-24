@@ -22,7 +22,7 @@ level: 1
 **Testability:**
 - Build testable modular applications
 - Many things can run with native_sim
-- Testability on multiple levels via ZTest
+- Testability on multiple levels via Ztest
 </v-clicks>
 </div>
 
