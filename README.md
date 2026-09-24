@@ -11,7 +11,7 @@ explains basic RTOS concepts with examples.
 Resources to get started with Zephyr:
 
 - [Zephyr Documentation](https://docs.zephyrproject.org/latest/)
-- [Supported Boards](https://docs.zephyrproject.org/latest/boards/)
+- [Supported boards](https://docs.zephyrproject.org/latest/boards/)
 - [Samples and Demos](https://docs.zephyrproject.org/latest/samples/)
 - [Zephyr GitHub Repository](https://github.com/zephyrproject-rtos/zephyr)
 

@@ -13,7 +13,7 @@ level: 1
 
 <div>
 
-**Workspace application** or **Out of tree** build<sup>1</sup>
+**Workspace application** or **out of tree** build<sup>1</sup>
 
 Separate application from Zephyr repository
 

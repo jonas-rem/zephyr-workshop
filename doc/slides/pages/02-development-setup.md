@@ -30,7 +30,7 @@ GitHub Codespaces
 
 - Cloud hosted development environment based on devcontainers
 - VS Code integration
-- Workshop Samples, Zephyr Repo, tooling, SDK pre-setup in a pre-build container
+- Workshop samples, Zephyr repo, tooling, SDK pre-setup in a pre-build container
 
 </div>
 
@@ -59,7 +59,7 @@ Virtual Machines in combination with embedded hardware can bring their own probl
 **Prioritize a local environment over a cloud environment**
 - Hardware is better accessible
 - Better integration of your own tools
-- Check vendor tools that can enhance your Zephyr Dev Environment
+- Check vendor tools that can enhance your Zephyr dev environment
 
 ---
 
