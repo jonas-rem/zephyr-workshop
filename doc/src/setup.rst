@@ -57,4 +57,4 @@ Once your Codespace is ready, test it with the Hello World example.
 
 This output confirms that the Zephyr build was successfull. The command ``west
 build -t run`` executes ``build//zephyr/zephyr.exe``. Zephyr Version
-(``v4.4.2``) as well as the Board (``native_sim/native``) is printed.
+(``v4.4.2``) as well as the board (``native_sim/native``) is printed.

@@ -11,7 +11,7 @@ explains basic RTOS concepts with examples.
 Resources to get started with Zephyr:
 
 - [Zephyr Documentation](https://docs.zephyrproject.org/latest/)
-- [Supported Boards](https://docs.zephyrproject.org/latest/boards/)
+- [Supported boards](https://docs.zephyrproject.org/latest/boards/)
 - [Samples and Demos](https://docs.zephyrproject.org/latest/samples/)
 - [Zephyr GitHub Repository](https://github.com/zephyrproject-rtos/zephyr)
 
@@ -25,7 +25,7 @@ Resources to get started with Zephyr:
 ### Application
 
 The application demonstrates a button-driven sensor read. The button publishes
-a typed ZBus event, the sensor reads the emulated HDC, and the LED shows the
+a typed zbus event, the sensor reads the emulated HDC, and the LED shows the
 read activity. The modules can be built and tested on `native_sim`.
 ([source](https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/simulation))
 

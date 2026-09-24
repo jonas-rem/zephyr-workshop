@@ -4,25 +4,25 @@ Testing
 Zephyr has an extensive testing infrastructure. The CI that tests every pull
 request in the GitHub repository uses this test infrastructure to run build
 tests and unit tests. The main framework for that is the Zephyr Test Framework
-(ZTest_). Twister_ is a test runner that collects all tests and platforms,
+(Ztest_). Twister_ is a test runner that collects all tests and platforms,
 composes them into test runs and generates reports after a completed test run.
 
-The workshop shows how to test the `app`_ application with ZTest. ZTest can be
+The workshop shows how to test the `app`_ application with Ztest. Ztest can be
 used to test on several levels (unit-, integration- and E2E-tests). The main
 test platform for all those levels is ``native_sim``. Since there is no hardware
-dependency and ``native_sim`` runs on any Linux Host it can easily be used to
+dependency and ``native_sim`` runs on any Linux host it can easily be used to
 create a CI pipeline.
 
 For tests that must run on hardware, frameworks like ``pytest`` or ``Robot`` can
 be configured to work with Twister_ and Zephyr's Shell Subsystem.
 
-This workshop demonstrates **Component Testing** with ZTest, based on ZBus
+This workshop demonstrates **Component Testing** with Ztest, based on zbus
 messages. This allows testing components in an isolated fashion, and validates
-their interface to other components (ZBus messages).
+their interface to other components (zbus messages).
 
-ZTest also supports E2E-testing in a simulated environment by utilizing
+Ztest also supports E2E-testing in a simulated environment by utilizing
 emulators. This workshop showcases emulators in sample `05_sensor`_ where a TI
-HDC1010 Temperature sensor is emulated. ZTest can connect with those emulators
+HDC1010 Temperature sensor is emulated. Ztest can connect with those emulators
 (button, led, sensor) and validate the behavior of the whole application.
 
 All of those levels have their place and the ``native_sim`` environment in
@@ -35,7 +35,7 @@ Additional Resources
 **Zephyr Documentation:**
 
 - Twister_
-- ZTest_
+- Ztest_
 - Pytest_
 
 **Links to source code from the zephyr-workshop repo**
@@ -44,7 +44,7 @@ Additional Resources
 - `05_sensor`_ - Sensor emulator sample with E2E testing
 
 .. _Twister: https://docs.zephyrproject.org/latest/develop/test/twister.html
-.. _ZTest: https://docs.zephyrproject.org/latest/develop/test/ztest.html
+.. _Ztest: https://docs.zephyrproject.org/latest/develop/test/ztest.html
 .. _Pytest: https://docs.zephyrproject.org/latest/develop/test/pytest.html
 .. _app: https://github.com/jonas-rem/zephyr-workshop/tree/main/samples/simulation
 

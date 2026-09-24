@@ -5,7 +5,7 @@ Goals of the Workshop
 ---------------------
 
 This Workshop shows methods that enable anyone to work with Zephyr efficiently.
-Applying fundamental concepts like devicetree or KConfig can lead to a good
+Applying fundamental concepts like devicetree or Kconfig can lead to a good
 abstraction of complexity and superior maintainability.
 
 The official `Zephyr Project Documentation
@@ -23,7 +23,7 @@ How is Zephyr different?
 ------------------------
 
 Zephyr is more than an RTOS, it is an infrastructure with many components such
-as RF and networking stacks (TCP/IP, BLE ..), Shell-, Sensor- or Modem subsystem
+as RF and networking stacks (TCP/IP, BLE ..), shell-, sensor- or modem subsystem
 and many more. It offers generic abstractions that enable to develop code
 independently on the SoC and even CPU architecture. Traditional RTOS often lock
 developers into vendor-specific ecosystems with proprietary APIs and limited
@@ -34,23 +34,23 @@ reducing vendor lock-in.
 Similarity to GNU/Linux
 -----------------------
 
-Linux is widely used in the Embedded industry. Linux unified this fragmented
+Linux is widely used in the embedded industry. Linux unified this fragmented
 landscape by providing a common kernel, standardized interfaces, and portable
 abstractions across diverse SoCs and architectures. The key concepts that
-resulted in this achievment have been adopted by Zephyr.
+resulted in this achievement have been adopted by Zephyr.
 
-Key Concepts from the Linux Kernel adopted in Zephyr:
+Key concepts from the Linux kernel adopted in Zephyr:
 
 - Devicetree
-- KConfig
+- Kconfig
 - Unified driver model with standardized APIs
 
 Other similarities:
 
 - coding style
-- Modular architecture
+- modular architecture
 
 Those similarities make it easy to adopt Zephyr, if developers already have a
-Linux background. However, if a project can afford to use Linux (Applications
-processors with an MMU) it should. Eventhough Zephyr runs on Application
+Linux background. However, if a project can afford to use Linux (applications
+processors with an MMU) it should. Even though Zephyr runs on application
 processors as well, the main focus area are SoCs with microcontrollers.
