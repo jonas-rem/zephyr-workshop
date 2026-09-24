@@ -10,7 +10,7 @@ composes them into test runs and generates reports after a completed test run.
 The workshop shows how to test the `app`_ application with Ztest. Ztest can be
 used to test on several levels (unit-, integration- and E2E-tests). The main
 test platform for all those levels is ``native_sim``. Since there is no hardware
-dependency and ``native_sim`` runs on any Linux Host it can easily be used to
+dependency and ``native_sim`` runs on any Linux host it can easily be used to
 create a CI pipeline.
 
 For tests that must run on hardware, frameworks like ``pytest`` or ``Robot`` can
