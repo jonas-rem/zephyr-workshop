@@ -3,7 +3,9 @@ sample:
     module initialization
   name: sys_init
 common:
-  tags: sys_init initialization
+  tags:
+    - sys_init
+    - initialization
   integration_platforms:
     - native_sim
     - reel_board
@@ -17,4 +19,6 @@ common:
       - "Hello World!.*"
 tests:
   sample.basic.sys_init:
-    tags: sys_init initialization
+    tags:
+      - sys_init
+      - initialization
