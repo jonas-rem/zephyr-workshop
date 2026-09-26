@@ -73,4 +73,4 @@ Resources
 *********
 
 - `Zephyr Display API Documentation <https://docs.zephyrproject.org/latest/hardware/peripherals/display/index.html>`_
-- `Character Frame Buffer API <https://docs.zephyrproject.org/latest/hardware/peripherals/display/cfb.html>`_
+- `Character Frame Buffer API <https://docs.zephyrproject.org/latest/doxygen/html/group__monochrome__character__framebuffer.html>`_

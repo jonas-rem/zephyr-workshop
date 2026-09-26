@@ -15,7 +15,7 @@ figureFootnoteNumber: 1
 ## Getting Started Guide
 
 <Footnotes y="col">
-  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/getting_started/index.html">docs.zephyrproject.org/latest/getting_started/index.html</a></Footnote>
+  <Footnote :number=1><a href="https://docs.zephyrproject.org/latest/develop/getting_started/index.html">docs.zephyrproject.org/latest/develop/getting_started/index.html</a></Footnote>
 </Footnotes>
 
 ---

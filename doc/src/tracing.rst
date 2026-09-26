@@ -103,7 +103,7 @@ Build and run the tracing sample:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim samples/subsys/tracing -- \
+   host:~$ west build -b native_sim samples/subsys/tracing/basic -- \
                -DCONF_FILE=prj_native_ctf.conf
    host:~$ ./build/zephyr/zephyr.exe -trace-file=traces/channel0_0
 
@@ -401,7 +401,7 @@ References
 ----------
 
 .. _subsys/tracing: https://docs.zephyrproject.org/latest/services/tracing/index.html
-.. _tracing_sample: https://docs.zephyrproject.org/latest/samples/subsys/tracing/README.html
+.. _tracing_sample: https://docs.zephyrproject.org/latest/samples/subsys/tracing/basic/README.html
 .. _subsys/instrumentation: https://docs.zephyrproject.org/latest/services/instrumentation/index.html
 .. _zephyr_tracecompass_parser: https://github.com/ostrodivski/zephyr-tracecompass-parser
 
