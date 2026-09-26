@@ -1,0 +1,40 @@
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="{{ _('Versions') }}">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> {{ _('Version') }}</span>
+    {{ current_version }}
+    <span class="fa fa-caret-down"></span>
+  </span>
+  {%- if docs_base_url %}
+  <div class="rst-other-versions">
+    <dl id="docs-versions">
+      <dt>{{ _('Versions') }}</dt>
+    </dl>
+  </div>
+  <script>
+    (function () {
+      var list = document.getElementById("docs-versions");
+      var page = "{{ pagename }}.html";
+      fetch("{{ docs_base_url }}versions.json")
+        .then(function (r) { return r.json(); })
+        .then(function (versions) {
+          versions.forEach(function (v) {
+            var item = document.createElement("dd");
+            var link = document.createElement("a");
+            link.href = v.url + page;
+            link.textContent = v.name;
+            if (v.name === "{{ current_version }}") link.style.fontWeight = "bold";
+            link.addEventListener("click", function (e) {
+              e.preventDefault();
+              fetch(link.href, { method: "HEAD" })
+                .then(function (r) { window.location.href = r.ok ? link.href : v.url; })
+                .catch(function () { window.location.href = v.url; });
+            });
+            item.appendChild(link);
+            list.appendChild(item);
+          });
+        })
+        .catch(function () {});
+    })();
+  </script>
+  {%- endif %}
+</div>

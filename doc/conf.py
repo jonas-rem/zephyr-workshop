@@ -9,6 +9,9 @@ from docutils.parsers.rst import Directive
 
 sys.path.insert(0, os.path.abspath('.'))
 
+version = os.environ.get("DOCS_VERSION", "local")
+release = version
+
 # Mock directive for zephyr-app-commands used in sample READMEs
 class ZephyrAppCommands(Directive):
     has_content = True
@@ -43,11 +46,17 @@ html_theme = "sphinx_rtd_theme"
 html_title = project
 # html_favicon = "_static/images/favicon.png"
 html_static_path = ["_static"]
+templates_path = ["_templates"]
 html_extra_path = ["slides_dist"]
 
 html_theme_options = {
     # "logo_only": True,
     "prev_next_buttons_location": None
+}
+
+html_context = {
+    "current_version": version,
+    "docs_base_url": os.environ.get("DOCS_BASE_URL", ""),
 }
 
 # -- Options for LaTeX/PDF output ---------------------------------------------
