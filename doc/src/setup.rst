@@ -3,7 +3,7 @@ Workshop Setup
 
 For detailed setup instructions how to setup Zephyr on your machine, refer the
 `Zephyr Getting Started Guide
-<https://docs.zephyrproject.org/latest/getting_started/index.html>`_.
+<https://docs.zephyrproject.org/latest/develop/getting_started/index.html>`_.
 
 Starting the Dev Environment
 ----------------------------

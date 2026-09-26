@@ -64,4 +64,4 @@ Sample Output
 Resources
 *********
 
-- `Zephyr Sensor API Documentation <https://docs.zephyrproject.org/latest/hardware/peripherals/sensor.html>`_
+- `Zephyr Sensor API Documentation <https://docs.zephyrproject.org/latest/hardware/peripherals/sensor/index.html>`_
