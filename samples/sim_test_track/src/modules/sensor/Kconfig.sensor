@@ -1,0 +1,21 @@
+config SIM_TEST_TRACK_SENSOR
+	bool "Temperature and humidity sensor module"
+	default y
+	depends on SENSOR && ZBUS && ZBUS_MSG_SUBSCRIBER
+
+if SIM_TEST_TRACK_SENSOR
+
+module = SIM_TEST_TRACK_SENSOR
+module-str = SENSOR
+source "subsys/logging/Kconfig.template.log_config"
+
+config SIM_TEST_TRACK_SENSOR_THREAD_PRIORITY
+	int "Sensor thread priority"
+	default 5
+
+config SIM_TEST_TRACK_SENSOR_SHELL
+	bool "Sensor shell commands"
+	default y
+	depends on SHELL
+
+endif
