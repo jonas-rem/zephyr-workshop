@@ -202,14 +202,12 @@ Hardware Abstraction
 On native_sim, the application uses:
 
 - **GPIO Emulator** (zephyr,gpio-emul) for button and LED
-- **PTY UART** for shell on separate console
+- **PTY UART** for the shell, logs stay on the terminal
 - **Devicetree Overlay** to define button alias and UART configuration
 
 The overlay file (``boards/native_sim.overlay``) defines:
 
 - ``sw0`` alias for the button
-- ``uart1`` enabled for shell
-- Shell UART mapped to ``zephyr,shell-uart``
 
 Build/Run
 *********
@@ -223,21 +221,15 @@ Build the application for native_sim:
 
    host:~$ west build -b native_sim app -p
 
-Run the application with shell on a separate UART/console:
+Run the application and link the shell to ``/tmp/zephyr_shell``:
 
 .. code-block:: console
 
-   host:~$ ./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
+   host:~$ ./build/zephyr/zephyr.exe -attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
 
-When you run the application, it creates two pseudo-terminals (PTYs):
-
-- **uart_0** (/dev/pts/X) - Main console (logs and shell if not redirected)
-- **uart_1** (/dev/pts/Y) - Shell console when using ``-uart_1_attach_uart_cmd``
-
-With the ``-uart_1_attach_uart_cmd`` option, the shell UART is redirected to a
-separate PTY and linked to ``/tmp/zephyr_shell``. The main UART output (logs)
-remains on the terminal where you started the application, check `native_sim
-PTY UART`_ to get more information.
+The shell runs on ``uart0``, a pseudo-terminal (PTY) that the option links to
+``/tmp/zephyr_shell``. The logs stay on the terminal where you started the
+application, check `native_sim PTY UART`_ to get more information.
 
 Connect to the shell using:
 
@@ -385,7 +377,7 @@ And run with:
 
 .. code-block:: console
 
-   host:~$ ./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
+   host:~$ ./build/zephyr/zephyr.exe -attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
    *** Booting Zephyr OS build v4.3.0-6940-g8c06719191f5 ***
    <inf> led_component: LED component initialized
    <inf> app: System booted. Main thread going to sleep.

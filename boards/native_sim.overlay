@@ -3,7 +3,6 @@
  *
  * - HDC1010 sensor on emulated I2C bus (for sensor samples)
  * - Button sw0 alias (for app button module)
- * - Shell on uart1 (separate console for app)
  */
 
 &i2c0 {
@@ -19,10 +18,6 @@
 		sw0 = &button0;
 		led0 = &led0;
 		led1 = &led1;
-	};
-
-	chosen {
-		zephyr,shell-uart = &uart1;
 	};
 
 	buttons {
@@ -44,8 +39,4 @@
 			label = "LED 1 (events)";
 		};
 	};
-};
-
-&uart1 {
-	status = "okay";
 };
