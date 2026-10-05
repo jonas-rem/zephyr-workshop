@@ -16,9 +16,9 @@ create a CI pipeline.
 For tests that must run on hardware, frameworks like ``pytest`` or ``Robot`` can
 be configured to work with Twister_ and Zephyr's Shell Subsystem.
 
-This workshop demonstrates **Component Testing** with Ztest, based on ZBus
+This workshop demonstrates **Component Testing** with Ztest, based on zbus
 messages. This allows testing components in an isolated fashion, and validates
-their interface to other components (ZBus messages).
+their interface to other components (zbus messages).
 
 Ztest also supports E2E-testing in a simulated environment by utilizing
 emulators. This workshop showcases emulators in sample `05_sensor`_ where a TI

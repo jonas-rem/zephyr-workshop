@@ -40,7 +40,7 @@ device.
 Architecture
 ************
 
-Two ZBus channels connect all components:
+Two zbus channels connect all components:
 
 - ``event_ch`` carries events: button presses, sensor readings, temperature
   alerts. The message is a ``struct event_msg`` with an event type and an
@@ -50,7 +50,7 @@ Two ZBus channels connect all components:
   changes.
 
 .. code-block:: text
-   :caption: ZBus channel connections between all components
+   :caption: zbus channel connections between all components
 
    event_ch                                     sys_ctl_ch
       │               ┌────────────┐                  │
@@ -162,7 +162,7 @@ sensor_log.
 
 **What to implement:**
 
-- Subscribe to ``event_ch`` (ZBus listener), filter for ``SYS_SENSOR_READING``
+- Subscribe to ``event_ch`` (zbus listener), filter for ``SYS_SENSOR_READING``
 - Track consecutive readings above the threshold (configurable via
   ``CONFIG_TEMP_ALERT_THRESHOLD``, default 5 °C)
 - After 2 consecutive readings above the threshold, publish ``SYS_TEMP_ALERT``

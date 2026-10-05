@@ -13,7 +13,7 @@ When the button is pressed, the system toggles between two states:
 - **Active**: LED blinks continuously (50ms on, 500ms off)
 
 The application showcases a modular design with inter-component communication
-via `ZBus <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_,
+via `zbus <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_,
 allowing the Button component to notify the LED component of state changes
 without direct coupling. This decoupled architecture enables testing individual
 components in isolation.
@@ -21,7 +21,7 @@ components in isolation.
 This application is useful for:
 
 - Understanding modular architecture in Zephyr
-- Learning about ZBus for inter-component communication
+- Learning about zbus for inter-component communication
 - Using `Zephyr System Initialization`_ (SYS_INIT) for application
   initialization
 - Testing with `native_sim Board`_ and `Twister`_
@@ -81,12 +81,12 @@ function using the ``SYS_INIT`` macro. This allows components to inject their
 initialization routines into the OS boot sequence automatically.
 
 Each component uses ``SYS_INIT()`` with ``APPLICATION`` priority to register itself
-after drivers and ZBus are operational.
+after drivers and zbus are operational.
 
 This initialization pattern ensures:
 
 - Components start automatically without explicit calls from ``main()``
-- Dependencies (drivers, ZBus) are ready before component initialization
+- Dependencies (drivers, zbus) are ready before component initialization
 - ``main.c`` remains a lightweight placeholder, decoupled from application logic
 - Each component can be tested in isolation by simply including it via Kconfig
 
@@ -147,7 +147,7 @@ The application implements two system states:
 - **Sleep** (``SYS_SLEEP``): LED is off, system waits for events
 - **Active** (``SYS_ACTIVE``): LED blinks, system is active
 
-Button presses toggle between these states via ZBus messages.
+Button presses toggle between these states via zbus messages.
 
 Component Configuration
 =======================
@@ -191,7 +191,7 @@ shell commands are not activated they will not be compiled into the binary.
 Component Communication
 =======================
 
-Components communicate via ZBus channels:
+Components communicate via zbus channels:
 
 - ``event_ch``: Different events events (publisher: Button component, subscriber: sys_ctrl)
 - ``sys_ctl_ch``: System state changes (publisher: sys_ctrl, subscriber: LED component)
@@ -291,7 +291,7 @@ The button component provides commands for testing button functionality:
 
 .. code-block:: console
 
-   uart:~$ button press    # Simulate a button press event via ZBus
+   uart:~$ button press    # Simulate a button press event via zbus
 
 **Button Press** publishes a ``SYS_BUTTON_PRESSED`` event to the button channel,
 which triggers the same logic as a physical button press.
@@ -304,7 +304,7 @@ The system controller provides commands to inspect and manipulate system state:
 .. code-block:: console
 
    uart:~$ sysctrl state   # Display current system state
-   uart:~$ sysctrl button  # Simulate button press via ZBus
+   uart:~$ sysctrl button  # Simulate button press via zbus
 
 **State Display** shows whether the system is in ``SLEEP`` or ``ACTIVE`` state.
 
@@ -335,7 +335,7 @@ The application uses a multi-level testing approach:
 
 2. **Component Tests** (in ``app/src/components/*/tests/``):
    Tests based on ZTest that test components in isolation on native_sim. These
-   tests publish/subscribe to ZBus channels directly and read emulated devices
+   tests publish/subscribe to zbus channels directly and read emulated devices
    (e.g. sensor, button, led). Here it is possible to cover many scenarios and edge
    cases and test them in a reproducible and automatic way in CI (e.g. multiple
    button presses in rapid succession).
@@ -387,9 +387,9 @@ Component Tests
 ===============
 
 These are **integration tests** for individual components. Each component is
-tested with its real dependencies (ZBus, GPIO emulator) to verify:
+tested with its real dependencies (zbus, GPIO emulator) to verify:
 
-- Correct ZBus message publication/subscription
+- Correct zbus message publication/subscription
 - Proper interaction with emulated hardware
 - State machine behavior
 
@@ -412,7 +412,7 @@ As an example we have a closer look at the button test:
 Button Component Tests (``component.button``):
 
 - ``test_button_component_initialized``: Verifies GPIO is ready
-- ``test_button_press_creates_event``: Simulates GPIO press and verifies ZBus event
+- ``test_button_press_creates_event``: Simulates GPIO press and verifies zbus event
 - ``test_event_type_is_correct``: Confirms event is ``SYS_BUTTON_PRESSED``
 - ``test_multiple_presses_generate_multiple_events``: Tests debounce and event generation
 
@@ -521,7 +521,7 @@ results and artifacts.
 Resources
 *********
 
-- `Zephyr ZBus Documentation <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_
+- `Zephyr zbus Documentation <https://docs.zephyrproject.org/latest/services/zbus/index.html>`_
 - `native_sim Board <https://docs.zephyrproject.org/latest/boards/native/native_sim/doc/index.html>`_
 - `native_sim PTY UART <https://docs.zephyrproject.org/latest/boards/native/native_sim/doc/index.html#pty-uart>`_
 - Zephyr Testing with `Twister <https://docs.zephyrproject.org/latest/develop/test/twister.html>`_
