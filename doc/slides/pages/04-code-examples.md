@@ -43,8 +43,8 @@ level: 1
 **Build and run:**
 
 ```shell
-west build -b native_sim samples/01_hello_world -p
-west build -t run
+west build --board native_sim samples/01_hello_world -p
+west build --target run
 ```
 
 </div>
@@ -114,7 +114,7 @@ int main(void)
 ## 01_hello_world Application Build Output
 
 ```shell
-west build -b native_sim samples/01_hello_world/ -p
+west build --board native_sim samples/01_hello_world/ -p
 -- Found host-tools: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
 -- Found toolchain: zephyr 0.17.0 (/home/jonas/zephyr-sdk-0.17.0)
 [..]
@@ -633,8 +633,8 @@ Build and run the samples<sup>1</sup>:
 
 ```shell
 cd zephyr-workshop
-west build -b native_sim samples/04_shell -p
-west build -t run
+west build --board native_sim samples/04_shell -p
+west build --target run
   uart connected to pseudotty: /dev/pts/6
   <inf> emul: Registering 1 emulator(s) for i2c@100
 ```

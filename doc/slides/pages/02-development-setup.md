@@ -75,14 +75,14 @@ Build and flash the application with `west`
 
 ```shell
 cd ~/zephyrproject/zephyr
-west build -b reel_board@2 samples/basic/blinky -p
+west build --board reel_board@2 samples/basic/blinky -p
 west flash
 ```
 
 ```shell
 cd ~/zephyrproject/zephyr
-west build -b native_sim samples/hello_world/ -p
-west build -t run
+west build --board native_sim samples/hello_world/ -p
+west build --target run
 
 *** Booting Zephyr OS build v4.1.0 ***
 Hello World! native_sim/native
@@ -177,8 +177,8 @@ Setup will take a few minutes..
 **Test your setup with the Hello World example:**
 
 ```shell
-west build -b native_sim zephyr/samples/hello_world -p
-west build -t run
+west build --board native_sim zephyr/samples/hello_world --pristine
+west build --target run
 ```
 
 </div>
