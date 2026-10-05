@@ -48,12 +48,13 @@ For other boards with external sensor:
 Changing Emulated Values
 ************************
 
-On ``native_sim``, run the application with the shell on ``uart1``:
+On ``native_sim``, run the application and link the shell to
+``/tmp/zephyr_shell``:
 
 .. code-block:: console
 
    host:~$ west build -b native_sim samples/05_sensor -p
-   host:~$ ./build/zephyr/zephyr.exe -uart_1_attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
+   host:~$ ./build/zephyr/zephyr.exe -attach_uart_cmd='ln -sf %s /tmp/zephyr_shell'
 
 Connect to the shell from another terminal and set the sensor channels:
 

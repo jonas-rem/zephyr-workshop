@@ -636,14 +636,13 @@ cd zephyr-workshop
 west build -b native_sim samples/04_shell -p
 west build -t run
   uart connected to pseudotty: /dev/pts/6
-  uart_1 connected to pseudotty: /dev/pts/8
   <inf> emul: Registering 1 emulator(s) for i2c@100
 ```
 
-The shell is connected to **uart_1**, access via the displayed **/dev/pts/'n'**, e.g.:
+The shell is connected to **uart**, access via the displayed **/dev/pts/'n'**, e.g.:
 
 ```shell
-tio /dev/pts/8
+tio /dev/pts/6
 uart:~$
 ```
 
@@ -682,7 +681,7 @@ devices:
 
 uart:~$ sensor get ti_hdc@43
 ```
-<div class="text-xs text-center mt-2">Zephyr shell on /dev/pts/8</div>
+<div class="text-xs text-center mt-2">Zephyr shell on /dev/pts/6</div>
 
 
 </div>
