@@ -18,8 +18,8 @@ slides-build: doc/slides/node_modules/.installed
 	npm --prefix doc/slides --cache $(NPM_CACHE) run build -- --base ./ --out ../slides_dist/zephyr-workshop_slides
 	npm --prefix doc/slides --cache $(NPM_CACHE) run export -- --output ../slides_dist/zephyr-workshop_slides/zephyr-workshop_slides.pdf
 
-doc/slides/node_modules/.installed: doc/slides/package.json
-	npm --prefix doc/slides --cache $(NPM_CACHE) install --no-save --package-lock=false
+doc/slides/node_modules/.installed: doc/slides/package.json doc/slides/package-lock.json
+	npm --prefix doc/slides --cache $(NPM_CACHE) ci
 	touch $@
 
 doc-clean:
