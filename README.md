@@ -26,7 +26,7 @@ Resources to get started with Zephyr:
 
 The [Application] is a minimal firmware example, consisting of 3 components.
 A button-controlled state machine (Sleep / Standby) with an LED, built using a
-modular architecture. Components communicate via ZBus, keeping button and LED
+modular architecture. Components communicate via zbus, keeping button and LED
 logic decoupled and independently testable.
 ([source](https://github.com/jonas-rem/zephyr-workshop/tree/main/app))
 

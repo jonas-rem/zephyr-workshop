@@ -8,7 +8,7 @@ level: 1
 ---
 ---
 
-## IPC Mechanisms and Zephyr bus (Zbus)
+## IPC Mechanisms and Zephyr bus (zbus)
 
 <div class="grid grid-cols-2 gap-4">
 
@@ -19,7 +19,7 @@ level: 1
 - Conditional Variables, Message Queues
 - Polling API to wait for any out of multiple conditions
 
-**Zbus**
+**zbus**
 - Comparable to D-Bus in Linux
 - Many-to-many communication
 - Simplifies thread synchronization
@@ -28,7 +28,7 @@ level: 1
 
 <div class="flex flex-col items-center justify-center">
   <img src="../public/images/zbus_zephyr.svg" class="h-60 object-contain" />
-  <div class="text-xs text-center mt-2">Zbus overview</div>
+  <div class="text-xs text-center mt-2">zbus overview</div>
 </div>
 
 </div>
@@ -71,7 +71,7 @@ level: 1
 <div>
 
 - **General:** Code reuse, maintainability, readability
-- **IPC:** Communication via Zbus
+- **IPC:** Communication via zbus
 - **Context:** Each component can be controlled independently
 - **Testing:** Components can be tested separately
 
@@ -116,14 +116,14 @@ app/
 
 **Automatic Initialization**
 
-- Runs after drivers/ZBus, before `main()`
+- Runs after drivers/zbus, before `main()`
 - Configurable priority
 
 **Boot Sequence:**
 ```text
 Kernel
   ↓
-drivers/ZBus
+drivers/zbus
   ↓
 SYS_INIT functions via priority
   ↓
@@ -181,7 +181,7 @@ SYS_INIT(init, APPLICATION,
 - Zephyr Test framework (`Ztest`)
 - represents an integration test
 - co-located with components
-- Interfaces abstracted via Zbus
+- Interfaces abstracted via zbus
 - Hardware emulation via `native_sim`
 
 **Test Structure:**
