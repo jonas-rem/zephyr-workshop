@@ -1,0 +1,16 @@
+config SIM_TEST_TRACK_LED
+	bool "LED module"
+	default y
+	depends on GPIO && ZBUS && ZBUS_MSG_SUBSCRIBER
+
+if SIM_TEST_TRACK_LED
+
+module = SIM_TEST_TRACK_LED
+module-str = LED
+source "subsys/logging/Kconfig.template.log_config"
+
+config SIM_TEST_TRACK_LED_THREAD_PRIORITY
+	int "LED thread priority"
+	default 5
+
+endif

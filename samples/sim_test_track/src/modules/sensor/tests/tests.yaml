@@ -1,0 +1,12 @@
+tests:
+  sim_test_track.component.sensor:
+    platform_allow:
+      - native_sim
+    integration_platforms:
+      - native_sim
+    tags:
+      - sim_test_track
+      - component
+      - sensor
+      - zbus
+    timeout: 5

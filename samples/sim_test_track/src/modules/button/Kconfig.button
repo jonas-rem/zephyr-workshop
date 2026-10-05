@@ -1,0 +1,21 @@
+config SIM_TEST_TRACK_BUTTON
+	bool "Button module"
+	default y
+	depends on GPIO && ZBUS
+
+if SIM_TEST_TRACK_BUTTON
+
+module = SIM_TEST_TRACK_BUTTON
+module-str = BUTTON
+source "subsys/logging/Kconfig.template.log_config"
+
+config SIM_TEST_TRACK_BUTTON_INIT_PRIORITY
+	int "Button initialization priority"
+	default 80
+
+config SIM_TEST_TRACK_BUTTON_SHELL
+	bool "Button emulator shell command"
+	default y
+	depends on SHELL && GPIO_EMUL
+
+endif
