@@ -65,7 +65,7 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
         run: |
-          npm --prefix slides install --no-save --package-lock=false
+          npm --prefix slides ci
           touch slides/node_modules/.installed
         working-directory: doc
 
