@@ -5,6 +5,7 @@
   },
   "workspaceFolder": "/workspaces",
   "onCreateCommand": "bash /workspaces/zephyr-workshop/.devcontainer/post-create.sh",
+  "postStartCommand": "bash /workspaces/zephyr-workshop/.devcontainer/post-start.sh",
   "hostRequirements": {
     "cpus": 4,
     "memory": "8gb"
