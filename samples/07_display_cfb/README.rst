@@ -28,7 +28,7 @@ Requirements
 
 - A board with CFB-supporting display (e.g., reel_board@2)
 
-Supported Boards:
+Supported boards:
 
 - reel_board@2 (has onboard passive display)
 
