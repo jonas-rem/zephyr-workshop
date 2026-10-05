@@ -32,6 +32,14 @@ deck and code examples are ideal to conduct trainings.
    src/task_app_extension
 
 .. toctree::
+   :caption: Sim and Testing Track
+   :maxdepth: 1
+
+   src/sim_test_track_course
+   src/sim_test_track_moderation
+   src/sim_test_track_cheatsheet
+
+.. toctree::
    :caption: Samples
    :maxdepth: 1
 
