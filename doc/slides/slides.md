@@ -59,10 +59,14 @@ src: ./pages/05-application-development.md
 ---
 
 ---
-src: ./pages/06-summary.md
+src: ./pages/06-sim-test-track.md
 ---
 
 ---
-src: ./pages/07-backup-slides.md
+src: ./pages/07-summary.md
+---
+
+---
+src: ./pages/08-backup-slides.md
 hideInToc: true
 ---
