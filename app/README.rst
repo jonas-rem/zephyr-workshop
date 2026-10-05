@@ -219,7 +219,7 @@ Build the application for native_sim:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim app -p
+   host:~$ west build --board native_sim app -p
 
 Run the application and link the shell to ``/tmp/zephyr_shell``:
 
@@ -274,7 +274,7 @@ To build for the reel_board (e.g., ``reel_board@2``), use:
 
 .. code-block:: console
 
-   host:~$ west build -b reel_board@2 app -p
+   host:~$ west build --board reel_board@2 app -p
    host:~$ west flash
 
 Shell Commands
@@ -370,8 +370,8 @@ Build with a specific test configuration:
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim app -p -- -DEXTRA_CONF_FILE=test_cfg/button_component.conf
-   host:~$ west build -b native_sim app -p -- -DEXTRA_CONF_FILE=test_cfg/led_component.conf
+   host:~$ west build --board native_sim app -p -- -DEXTRA_CONF_FILE=test_cfg/button_component.conf
+   host:~$ west build --board native_sim app -p -- -DEXTRA_CONF_FILE=test_cfg/led_component.conf
 
 And run with:
 
@@ -427,7 +427,7 @@ Run component tests:
    host:~$ west twister -T app/src/components/button/tests -v --integration
 
    # Run during development (faster)
-   host:~$ west build -b native_sim app/src/components/button/tests -p && west build -t run
+   host:~$ west build --board native_sim app/src/components/button/tests -p && west build --target run
 
 Build Tests
 ===========

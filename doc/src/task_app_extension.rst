@@ -282,20 +282,20 @@ Each group works independently on their component:
 
    .. code-block:: console
 
-      host:~$ west build -b native_sim app/src/components/tempsense/tests -p
+      host:~$ west build --board native_sim app/src/components/tempsense/tests -p
       or
-      host:~$ west build -b native_sim app/src/components/temp_alert/tests -p
+      host:~$ west build --board native_sim app/src/components/temp_alert/tests -p
       or
-      host:~$ west build -b native_sim app/src/components/sensor_log/tests -p
+      host:~$ west build --board native_sim app/src/components/sensor_log/tests -p
 
       Execute the build on native_sim:
-      host:~$ west build -t run
+      host:~$ west build --target run
 
 3. **Implement** the component to make the tests pass
 4. **Run the test again** — it should pass now
 
 Tip:
-   it is sufficient to run ``west build -t run`` after an initial build, if
+   it is sufficient to run ``west build --target run`` after an initial build, if
    only .c/.h files have been changed.
 
 5. **Enable the component** in ``prj.conf`` and build the full application
@@ -304,14 +304,14 @@ Tip:
 
    .. code-block:: console
 
-      host:~$ west build -b native_sim app -p -- -DCONF_FILE=test_cfg/tempsense.conf
+      host:~$ west build --board native_sim app -p -- -DCONF_FILE=test_cfg/tempsense.conf
       or
-      host:~$ west build -b native_sim app -p -- -DCONF_FILE=test_cfg/temp_alert.conf
+      host:~$ west build --board native_sim app -p -- -DCONF_FILE=test_cfg/temp_alert.conf
       or
-      host:~$ west build -b native_sim app -p -- -DCONF_FILE=test_cfg/sensor_log.conf
+      host:~$ west build --board native_sim app -p -- -DCONF_FILE=test_cfg/sensor_log.conf
 
       Execute the build on native_sim:
-      host:~$ west build -t run
+      host:~$ west build --target run
 
       Open the console in another terminal (number in the boot-log):
       host:~$ tio dev/pts/<n>
@@ -344,14 +344,14 @@ Running Tests
 .. code-block:: console
 
    # Single component test (during development, faster)
-   host:~$ west build -b native_sim app/src/components/tempsense/tests -p
-   host:~$ west build -t run
+   host:~$ west build --board native_sim app/src/components/tempsense/tests -p
+   host:~$ west build --target run
    # If only .c/.h files changed, just re-run (incremental build):
-   host:~$ west build -t run
+   host:~$ west build --target run
 
    # Build a component in isolation for interacting via shell (without the ZTest setup)
-   host:~$ west build -b native_sim app -p -- -DCONF_FILE=test_cfg/tempsense.conf
-   host:~$ west build -t run
+   host:~$ west build --board native_sim app -p -- -DCONF_FILE=test_cfg/tempsense.conf
+   host:~$ west build --target run
 
    # Single component test via Twister
    host:~$ west twister -T app/src/components/tempsense/tests --integration -p native_sim
@@ -360,5 +360,5 @@ Running Tests
    host:~$ west twister -T app/src/components/ --integration -p native_sim
 
    # Full application with all components
-   host:~$ west build -b native_sim app -p
-   host:~$ west build -t run
+   host:~$ west build --board native_sim app -p
+   host:~$ west build --target run

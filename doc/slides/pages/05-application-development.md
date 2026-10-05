@@ -212,8 +212,8 @@ west twister -T app/src/components/button/tests \
 west twister -T app/src/components/ --integration
 
 # Use existing build artifacts for faster testing
-west build -b native_sim app/src/components/button/tests
-west build -t run
+west build --board native_sim app/src/components/button/tests
+west build --target run
   *** Booting Zephyr OS build v4.3.0 ***
   START - test_button_press_sleep_to_standby
   [00:00:00.060,000] <inf> sys_ctrl: System state sleep

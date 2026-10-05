@@ -48,9 +48,9 @@ Once your Codespace is ready, test it with the Hello World example.
 
 .. code-block:: console
 
-   host:~$ west build -b native_sim zephyr/samples/hello_world -p
+   host:~$ west build --board native_sim zephyr/samples/hello_world -p
      building..
-   host:~$ west build -t run
+   host:~$ west build --target run
      *** Booting Zephyr OS build v4.3.0 ***
      Hello World! native_sim/native
 
