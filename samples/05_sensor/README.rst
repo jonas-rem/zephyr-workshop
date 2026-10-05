@@ -64,7 +64,7 @@ Connect to the shell from another terminal and set the sensor channels:
    uart:~$ sensor_emul set humidity 62.5
 
 The application reads these values through the TI HDC driver and Sensor API.
-Explicitly setting a channel disables random sample generation until restart.
+Setting a channel disables random values for that channel until restart.
 
 Sample Output
 *************
