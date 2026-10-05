@@ -41,4 +41,18 @@ jobs:
 
       - name: Build and Test
         run: |
-          west twister -T app -T samples --integration --exclude-tag workshop
+          west twister -T app -T samples --integration --exclude-tag workshop --inline-logs
+
+      - name: Upload Twister logs
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: twister-logs
+          path: |
+            twister-out/**/build.log
+            twister-out/**/handler.log
+            twister-out/**/twister_harness.log
+            twister-out/*.json
+            twister-out/*.xml
+          if-no-files-found: warn
+          retention-days: 7
